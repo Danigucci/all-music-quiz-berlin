@@ -49,7 +49,7 @@ exports.handler = async (event) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'All Music Quiz Berlin <onboarding@resend.dev>',
+      from: 'All Music Quiz Berlin <noreply@allmusicquiz.com>',
       to: [email],
       subject: 'Регистрация подтверждена — All Music Quiz Berlin',
       html,
