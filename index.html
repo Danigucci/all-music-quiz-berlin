@@ -280,7 +280,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
       </div>
       <div class="grid sm:grid-cols-2 gap-5">
         <div>
-          <label class="text-white/80 text-sm font-semibold block mb-1.5">Имя капитана</label>
+          <label class="text-white/80 text-sm font-semibold block mb-1.5" id="captain-label">Имя капитана</label>
           <input type="text" name="captain" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="Ваше имя">
         </div>
         <div>
@@ -531,6 +531,7 @@ const teamNameInput = document.getElementById('team-name-input');
 const playersInput = document.getElementById('players-input');
 const playersLabel = document.getElementById('players-label');
 const noTeamFlag = document.getElementById('no-team-flag');
+const captainLabel = document.getElementById('captain-label');
 
 noTeamCheckbox.addEventListener('change', () => {
   const noTeam = noTeamCheckbox.checked;
@@ -545,6 +546,7 @@ noTeamCheckbox.addEventListener('change', () => {
     playersInput.max = '2';
     playersInput.placeholder = '1–2';
     playersLabel.textContent = 'Число человек (макс. 2)';
+    captainLabel.textContent = 'Имя игрока';
   } else {
     teamNameField.classList.remove('hidden');
     teamNameInput.setAttribute('required', 'true');
@@ -553,6 +555,7 @@ noTeamCheckbox.addEventListener('change', () => {
     playersInput.max = '10';
     playersInput.placeholder = '2–10';
     playersLabel.textContent = 'Число игроков';
+    captainLabel.textContent = 'Имя капитана';
   }
 });
 
