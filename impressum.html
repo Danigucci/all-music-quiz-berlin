@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Импрессум • All Music Quiz Berlin</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h1 class="display text-4xl sm:text-5xl font-extrabold mb-10 break-words">Импрессум</h1>
+
+  <div class="space-y-8 text-[15px] leading-relaxed">
+    <section>
+      <h2 class="font-bold text-lg mb-2 text-navy">Сведения согласно § 5 DDG (Digitale-Dienste-Gesetz)</h2>
+      <p>
+        All Music Quiz Berlin<br>
+        Inhaber: Danil Lappo<br>
+        Konrad-Zuse-Str. 17<br>
+        12489 Berlin<br>
+        Германия
+      </p>
+    </section>
+
+    <section>
+      <h2 class="font-bold text-lg mb-2 text-navy">Контакты</h2>
+      <p>
+        Telefon: <a href="tel:+4915779548470" class="text-[color:var(--pink)] hover:underline">+49 1577 9548470</a><br>
+        E-Mail: <a href="mailto:danlappo@yahoo.com" class="text-[color:var(--pink)] hover:underline">danlappo@yahoo.com</a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="font-bold text-lg mb-2 text-navy">Разрешение споров</h2>
+      <p>
+        Мы не обязаны и не намерены участвовать в процедурах разрешения споров перед третейским органом по защите
+        прав потребителей (Verbraucherschlichtungsstelle).
+      </p>
+    </section>
+  </div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 All Music Quiz Berlin</span>
+  </div>
+</footer>
+
+</body>
+</html>
