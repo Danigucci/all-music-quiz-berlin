@@ -221,9 +221,13 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <span class="flex items-center gap-2">Игра #2: 90е и 00е <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
           <span class="text-white/60">17.09.2026, 19:00</span>
         </button>
-        <button onclick="showMusicMixModal()" class="w-full flex items-center justify-between py-3 text-white text-left group">
+        <button onclick="showMusicMixModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex items-center gap-2">Игра #3: music mix <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
           <span class="text-white/60">01.10.2026, 19:00</span>
+        </button>
+        <button onclick="showAllOnAModal()" class="w-full flex items-center justify-between py-3 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #4: Всё на А <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">15.10.2026, 19:00</span>
         </button>
         <p class="text-white/40 text-xs mt-4">Следите за афишей в Instagram — точные даты публикуются заранее.</p>
       </div>
@@ -303,6 +307,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <option value="08.09.2026, 19:00 — 2010-2025 lite" data-datetime="2026-09-08T19:00:00+02:00" class="text-navy">08.09.2026, 19:00 (вторник) — Игра #1: 2010-2025 lite(а может и не лайт)</option>
           <option value="17.09.2026, 19:00 — 90е и 00е" data-datetime="2026-09-17T19:00:00+02:00" class="text-navy">17.09.2026, 19:00 — Игра #2: 90е и 00е</option>
           <option value="01.10.2026, 19:00 — music mix" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix</option>
+          <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
         </select>
       </div>
       <button type="submit" id="register-submit-btn" class="w-full grad-brand text-navy font-bold py-3.5 rounded-xl hover:opacity-90 transition">Отправить заявку</button>
@@ -464,6 +469,33 @@ function showNinetiesModal() {
         </div>
         <div class="border-t border-white/10 p-6 text-center shrink-0">
           <button onclick="document.getElementById('nineties-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
+        </div>
+      </div>
+    </div>`;
+  const div = document.createElement('div');
+  div.innerHTML = modalHTML;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function showAllOnAModal() {
+  const modalHTML = `
+    <div id="all-on-a-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
+      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-8 sm:p-10 overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <i class="fa-solid fa-music"></i> Игра #4 · 15.10.2026, 19:00
+            </span>
+            <button onclick="document.getElementById('all-on-a-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
+          </div>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">Всё <span class="grad-brand-text">на А</span></h3>
+          <p class="text-white/70 leading-relaxed">
+            Целая игра, посвящённая исполнителям и песням на букву «А» — от классики до самых свежих хитов.
+            Механики туров держим в секрете — приходи и проверь, насколько хорошо ты знаешь музыку на эту букву.
+          </p>
+        </div>
+        <div class="border-t border-white/10 p-6 text-center shrink-0">
+          <button onclick="document.getElementById('all-on-a-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
         </div>
       </div>
     </div>`;
