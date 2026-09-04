@@ -211,9 +211,12 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
     <div class="grid md:grid-cols-2 gap-6 mt-12">
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
         <h3 class="text-brand-yellow font-bold text-lg mb-4"><i class="fa-regular fa-calendar mr-2"></i>Ближайшие игры</h3>
-        <button onclick="showTwentyTenModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+        <button onclick="showTwentyTenModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white/50 text-left group">
           <span class="flex items-center gap-2">Игра #1: 2010-2025 lite(а может и не лайт) <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
-          <span class="text-white/60 text-right">08.09.2026, 19:00<br><span class="text-xs text-white/40">вторник</span></span>
+          <span class="text-right">
+            <span class="block text-red-400 text-xs font-semibold uppercase tracking-wide">Мест нет</span>
+            <span class="text-white/40 text-xs">08.09.2026, 19:00, вторник</span>
+          </span>
         </button>
         <button onclick="showNinetiesModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex items-center gap-2">Игра #2: 90е и 00е <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
@@ -288,7 +291,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
         <label class="text-white/80 text-sm font-semibold block mb-1.5">На какую игру записаться</label>
         <select name="game" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]">
           <option value="" disabled selected class="text-navy">Выберите игру</option>
-          <option value="08.09.2026, 19:00 — 2010-2025 lite" data-datetime="2026-09-08T19:00:00+02:00" class="text-navy">08.09.2026, 19:00 (вторник) — Игра #1: 2010-2025 lite(а может и не лайт)</option>
+          <option value="08.09.2026, 19:00 — 2010-2025 lite" data-datetime="2026-09-08T19:00:00+02:00" disabled class="text-navy">08.09.2026, 19:00 — Игра #1: 2010-2025 lite — мест нет</option>
           <option value="17.09.2026, 19:00 — 90е и 00е" data-datetime="2026-09-17T19:00:00+02:00" class="text-navy">17.09.2026, 19:00 — Игра #2: 90е и 00е</option>
           <option value="01.10.2026, 19:00 — music mix" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix</option>
           <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
