@@ -313,6 +313,15 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
         </select>
       </div>
+      <label class="flex items-start gap-3 cursor-pointer select-none">
+        <input type="checkbox" name="terms_accepted" required class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+        <span class="text-white/70 text-sm">
+          Я согласен(-на) с
+          <a href="teilnahmebedingungen.html" target="_blank" class="text-brand-yellow hover:underline">условиями участия</a>
+          и
+          <a href="datenschutz.html" target="_blank" class="text-brand-yellow hover:underline">политикой конфиденциальности</a>
+        </span>
+      </label>
       <button type="submit" id="register-submit-btn" class="w-full grad-brand text-navy font-bold py-3.5 rounded-xl hover:opacity-90 transition">Отправить заявку</button>
     </form>
 
