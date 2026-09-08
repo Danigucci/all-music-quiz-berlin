@@ -111,6 +111,14 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 #scroll-top:hover{ transform:scale(1.08); }
 
 .dot{ width:8px; height:8px; border-radius:9999px; background:var(--yellow); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
 </style>
 </head>
 <body class="overflow-x-hidden">
@@ -335,11 +343,32 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 
 <section id="results" class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
   <h2 class="display text-3xl sm:text-4xl font-extrabold text-center">Результаты игр</h2>
-  <div class="max-w-lg mx-auto mt-10 bg-white border border-zinc-100 rounded-2xl p-10 text-center shadow-sm">
-    <div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fa-solid fa-chart-simple"></i></div>
-    <h3 class="font-bold text-xl">Результаты скоро</h3>
-    <p class="text-zinc-500 mt-2">Таблица команд появится здесь после первой игры в Берлине.</p>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">Игра #1 · 08.09.2026 · 2010-2025 lite</p>
+
+  <div class="max-w-4xl mx-auto mt-10 bg-navy border border-white/10 rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[720px]">
+        <thead>
+          <tr class="border-b border-white/10">
+            <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Место</th>
+            <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Команда</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т1</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т2</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т3</th>
+            <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 3</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т4</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т5</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т6</th>
+            <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 6</th>
+            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т7</th>
+            <th class="py-4 px-4 text-right text-xs uppercase tracking-wider text-white/40 font-semibold whitespace-nowrap">Итого</th>
+          </tr>
+        </thead>
+        <tbody id="results-table"></tbody>
+      </table>
+    </div>
   </div>
+  <p class="text-center text-zinc-500 text-sm mt-6">Следующая таблица результатов появится после Игры #2 (17.09.2026)</p>
 </section>
 
 <section id="social" class="bg-navy-deep navy-noise">
@@ -401,6 +430,54 @@ function disablePastGames() {
   }
 }
 disablePastGames();
+
+function renderResultsTable() {
+  const results = [
+    { place: 1, team: 'Sukafrukty', t1: 16, t2: 13, t3: 14, sum3: 43, t4: 14, t5: 12, t6: 17, sum6: 86, t7: 20, total: 106 },
+    { place: 2, team: 'Не знали, но не забыли', t1: 16, t2: 13, t3: 12, sum3: 41, t4: 12, t5: 11, t6: 14, sum6: 76, t7: 14, total: 90 },
+    { place: 3, team: 'В яблочко', t1: 16, t2: 9, t3: 8, sum3: 33, t4: 12, t5: 10, t6: 15, sum6: 70, t7: 10, total: 80 },
+    { place: 4, team: 'Молодежь', t1: 14, t2: 11, t3: 8, sum3: 33, t4: 11, t5: 11, t6: 12, sum6: 67, t7: 13, total: 80 },
+    { place: 5, team: 'Давай Попозже', t1: 16, t2: 11, t3: 10, sum3: 37, t4: 9, t5: 11, t6: 9, sum6: 67, t7: 7, total: 74 },
+    { place: 6, team: 'Бублики', t1: 13, t2: 10, t3: 9, sum3: 32, t4: 11, t5: 9, t6: 12, sum6: 62, t7: 10, total: 72 },
+    { place: 7, team: 'Джон Мамкович', t1: 8, t2: 6, t3: 10, sum3: 24, t4: 11, t5: 10, t6: 9, sum6: 48, t7: 7, total: 55 },
+    { place: 9, team: 'Дельфины Дона Симона', t1: 7, t2: 8, t3: 7, sum3: 22, t4: 8, t5: 8, t6: 9, sum6: 45, t7: 7, total: 52 },
+    { place: 10, team: 'Вопросы но не повторяются', t1: 10, t2: 7, t3: 8, sum3: 25, t4: 8, t5: 8, t6: 9, sum6: 47, t7: 5, total: 52 },
+    { place: 10, team: 'Бюро тефтелек', t1: 11, t2: 5, t3: 4, sum3: 20, t4: 8, t5: 7, t6: 8, sum6: 43, t7: 5, total: 48 },
+    { place: 11, team: 'Медведь на ухо наступил', t1: 7, t2: 6, t3: 4, sum3: 17, t4: 5, t5: 8, t6: 8, sum6: 31, t7: 8, total: 39 },
+  ];
+
+  const tbody = document.getElementById('results-table');
+  if (!tbody) return;
+
+  tbody.innerHTML = results.map((r, i) => {
+    let medal = '';
+    if (r.place === 1) medal = '<i class="fa-solid fa-trophy text-amber-400"></i>';
+    else if (r.place === 2) medal = '<i class="fa-solid fa-trophy text-zinc-300"></i>';
+    else if (r.place === 3) medal = '<i class="fa-solid fa-trophy text-orange-700"></i>';
+    const zebra = i % 2 === 1 ? 'bg-white/[0.03]' : '';
+    return `
+      <tr class="${zebra} hover:bg-white/5 transition-colors">
+        <td class="py-3 px-4">
+          <div class="flex items-center gap-2">
+            <span class="rank-badge">${r.place}</span>
+            ${medal}
+          </div>
+        </td>
+        <td class="py-3 px-4 font-semibold text-white whitespace-nowrap">${r.team}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t1}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t2}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t3}</td>
+        <td class="py-3 px-3 text-center text-brand-yellow font-semibold">${r.sum3}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t4}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t5}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t6}</td>
+        <td class="py-3 px-3 text-center text-brand-yellow font-semibold">${r.sum6}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t7}</td>
+        <td class="py-3 px-4 text-right"><span class="font-display text-lg text-brand-yellow">${r.total}</span></td>
+      </tr>`;
+  }).join('');
+}
+renderResultsTable();
 
 const menuBtn = document.getElementById('menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
