@@ -335,32 +335,18 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 
 <section id="results" class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
   <h2 class="display text-3xl sm:text-4xl font-extrabold text-center">Результаты игр</h2>
-  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">Игра #1 · 08.09.2026 · 2010-2025 lite</p>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">Выбери игру, чтобы увидеть таблицу результатов</p>
 
-  <div class="max-w-4xl mx-auto mt-10 bg-navy border border-white/10 rounded-2xl overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full min-w-[720px]">
-        <thead>
-          <tr class="border-b border-white/10">
-            <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Место</th>
-            <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Команда</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т1</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т2</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т3</th>
-            <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 3</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т4</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т5</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т6</th>
-            <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 6</th>
-            <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т7</th>
-            <th class="py-4 px-4 text-right text-xs uppercase tracking-wider text-white/40 font-semibold whitespace-nowrap">Итого</th>
-          </tr>
-        </thead>
-        <tbody id="results-table"></tbody>
-      </table>
-    </div>
+  <div class="flex justify-center mt-8">
+    <select id="results-select" onchange="showGameResults()" class="bg-navy border border-white/15 text-white px-7 py-3.5 rounded-full text-base focus:border-[color:var(--pink)] outline-none cursor-pointer">
+      <option value="game1">Игра #1 · 08.09.2026 · 2010-2025 lite</option>
+      <option value="game2">Игра #2 · 17.09.2026 · 90е и 00е</option>
+      <option value="game3">Игра #3 · 01.10.2026 · music mix</option>
+      <option value="game4">Игра #4 · 15.10.2026 · Всё на А</option>
+    </select>
   </div>
-  <p class="text-center text-zinc-500 text-sm mt-6">Следующая таблица результатов появится после Игры #2 (17.09.2026)</p>
+
+  <div id="results-container" class="max-w-4xl mx-auto mt-10"></div>
 </section>
 
 <section id="social" class="bg-navy-deep navy-noise">
@@ -423,8 +409,8 @@ function disablePastGames() {
 }
 disablePastGames();
 
-function renderResultsTable() {
-  const results = [
+const gameResults = {
+  game1: [
     { place: 1, team: 'Sukafrukty', t1: 16, t2: 13, t3: 14, sum3: 43, t4: 14, t5: 12, t6: 17, sum6: 86, t7: 20, total: 106 },
     { place: 2, team: 'Не знали, но не забыли', t1: 16, t2: 13, t3: 12, sum3: 41, t4: 12, t5: 11, t6: 14, sum6: 76, t7: 14, total: 90 },
     { place: 3, team: 'Молодежь', t1: 14, t2: 11, t3: 8, sum3: 33, t4: 11, t5: 11, t6: 12, sum6: 67, t7: 13, total: 80 },
@@ -436,12 +422,14 @@ function renderResultsTable() {
     { place: 10, team: 'Вопросы но не повторяются', t1: 10, t2: 7, t3: 8, sum3: 25, t4: 8, t5: 8, t6: 9, sum6: 47, t7: 5, total: 52 },
     { place: 10, team: 'Бюро тефтелек', t1: 11, t2: 5, t3: 4, sum3: 20, t4: 8, t5: 7, t6: 8, sum6: 43, t7: 5, total: 48 },
     { place: 11, team: 'Медведь на ухо наступил', t1: 7, t2: 6, t3: 4, sum3: 17, t4: 5, t5: 8, t6: 8, sum6: 31, t7: 8, total: 39 },
-  ];
+  ],
+  game2: null,
+  game3: null,
+  game4: null,
+};
 
-  const tbody = document.getElementById('results-table');
-  if (!tbody) return;
-
-  tbody.innerHTML = results.map((r, i) => {
+function renderResultsTableHTML(results) {
+  const rows = results.map((r, i) => {
     let medal = '';
     if (r.place === 1) medal = '<i class="fa-solid fa-trophy text-amber-400"></i>';
     else if (r.place === 2) medal = '<i class="fa-solid fa-trophy text-zinc-300"></i>';
@@ -468,8 +456,49 @@ function renderResultsTable() {
         <td class="py-3 px-4 text-right"><span class="font-display text-lg text-brand-yellow">${r.total}</span></td>
       </tr>`;
   }).join('');
+
+  return `
+    <div class="bg-navy border border-white/10 rounded-2xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[720px]">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Место</th>
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Команда</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т1</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т2</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т3</th>
+              <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 3</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т4</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т5</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т6</th>
+              <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 6</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т7</th>
+              <th class="py-4 px-4 text-right text-xs uppercase tracking-wider text-white/40 font-semibold whitespace-nowrap">Итого</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
 }
-renderResultsTable();
+
+function renderResultsPlaceholderHTML() {
+  return `
+    <div class="bg-white border border-zinc-100 rounded-2xl p-10 text-center shadow-sm">
+      <div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fa-solid fa-chart-simple"></i></div>
+      <h3 class="font-bold text-xl">Результаты скоро</h3>
+      <p class="text-zinc-500 mt-2">Таблица появится здесь сразу после этой игры.</p>
+    </div>`;
+}
+
+function showGameResults() {
+  const select = document.getElementById('results-select');
+  const container = document.getElementById('results-container');
+  const results = gameResults[select.value];
+  container.innerHTML = results ? renderResultsTableHTML(results) : renderResultsPlaceholderHTML();
+}
+showGameResults();
 
 const menuBtn = document.getElementById('menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
