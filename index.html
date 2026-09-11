@@ -221,18 +221,44 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
     <div class="grid md:grid-cols-2 gap-6 mt-12">
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
         <h3 class="text-brand-yellow font-bold text-lg mb-4"><i class="fa-regular fa-calendar mr-2"></i>Ближайшие игры</h3>
+        <div class="max-h-80 overflow-y-auto pr-1">
         <button onclick="showNinetiesModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex items-center gap-2">Игра #2: 90е и 00е <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
           <span class="text-white/60">17.09.2026, 19:00</span>
         </button>
         <button onclick="showMusicMixModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
-          <span class="flex items-center gap-2">Игра #3: music mix <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="flex items-center gap-2">Игра #3: Музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
           <span class="text-white/60">01.10.2026, 19:00</span>
         </button>
-        <button onclick="showAllOnAModal()" class="w-full flex items-center justify-between py-3 text-white text-left group">
+        <button onclick="showAllOnAModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex items-center gap-2">Игра #4: Всё на А <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
           <span class="text-white/60">15.10.2026, 19:00</span>
         </button>
+        <button onclick="showHalloweenModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #5: Halloween Music Party <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">29.10.2026, 19:00</span>
+        </button>
+        <button onclick="showRomantikModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #6: Romantik Collection <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">12.11.2026, 19:00</span>
+        </button>
+        <button onclick="showKinoModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #7: Музыка в кино <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">26.11.2026, 19:00</span>
+        </button>
+        <button onclick="showAlphabetModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #8: Музыкальный алфавит <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">10.12.2026, 19:00</span>
+        </button>
+        <button onclick="showAroundWorldModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #9: Вокруг света <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">22.12.2026, 19:00</span>
+        </button>
+        <button onclick="showNewYearMixModal()" class="w-full flex items-center justify-between py-3 text-white text-left group">
+          <span class="flex items-center gap-2">Игра #10: Новогодний музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="text-white/60">29.12.2026, 19:00</span>
+        </button>
+        </div>
         <p class="text-white/40 text-xs mt-4">Следите за афишей в Instagram — точные даты публикуются заранее.</p>
       </div>
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
@@ -311,6 +337,12 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <option value="17.09.2026, 19:00 — 90е и 00е" data-datetime="2026-09-17T19:00:00+02:00" class="text-navy">17.09.2026, 19:00 — Игра #2: 90е и 00е</option>
           <option value="01.10.2026, 19:00 — music mix" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix</option>
           <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
+          <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party</option>
+          <option value="12.11.2026, 19:00 — Romantik Collection" data-datetime="2026-11-12T19:00:00+01:00" class="text-navy">12.11.2026, 19:00 — Игра #6: Romantik Collection</option>
+          <option value="26.11.2026, 19:00 — Музыка в кино" data-datetime="2026-11-26T19:00:00+01:00" class="text-navy">26.11.2026, 19:00 — Игра #7: Музыка в кино</option>
+          <option value="10.12.2026, 19:00 — Музыкальный алфавит" data-datetime="2026-12-10T19:00:00+01:00" class="text-navy">10.12.2026, 19:00 — Игра #8: Музыкальный алфавит</option>
+          <option value="22.12.2026, 19:00 — Вокруг света" data-datetime="2026-12-22T19:00:00+01:00" class="text-navy">22.12.2026, 19:00 — Игра #9: Вокруг света</option>
+          <option value="29.12.2026, 19:00 — Новогодний музыкальный микс" data-datetime="2026-12-29T19:00:00+01:00" class="text-navy">29.12.2026, 19:00 — Игра #10: Новогодний музыкальный микс</option>
         </select>
       </div>
       <label class="flex items-start gap-3 cursor-pointer select-none">
@@ -343,6 +375,12 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
       <option value="game2">Игра #2 · 17.09.2026 · 90е и 00е</option>
       <option value="game3">Игра #3 · 01.10.2026 · music mix</option>
       <option value="game4">Игра #4 · 15.10.2026 · Всё на А</option>
+      <option value="game5">Игра #5 · 29.10.2026 · Halloween Music Party</option>
+      <option value="game6">Игра #6 · 12.11.2026 · Romantik Collection</option>
+      <option value="game7">Игра #7 · 26.11.2026 · Музыка в кино</option>
+      <option value="game8">Игра #8 · 10.12.2026 · Музыкальный алфавит</option>
+      <option value="game9">Игра #9 · 22.12.2026 · Вокруг света</option>
+      <option value="game10">Игра #10 · 29.12.2026 · Новогодний музыкальный микс</option>
     </select>
   </div>
 
@@ -426,6 +464,12 @@ const gameResults = {
   game2: null,
   game3: null,
   game4: null,
+  game5: null,
+  game6: null,
+  game7: null,
+  game8: null,
+  game9: null,
+  game10: null,
 };
 
 function renderResultsTableHTML(results) {
@@ -612,6 +656,84 @@ function showAllOnAModal() {
   const div = document.createElement('div');
   div.innerHTML = modalHTML;
   document.body.appendChild(div.firstElementChild);
+}
+
+function showThemeModal(id, badgeText, titleHTML, description) {
+  const modalHTML = `
+    <div id="${id}-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
+      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-8 sm:p-10 overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <i class="fa-solid fa-music"></i> ${badgeText}
+            </span>
+            <button onclick="document.getElementById('${id}-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
+          </div>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">${titleHTML}</h3>
+          <p class="text-white/70 leading-relaxed">${description}</p>
+        </div>
+        <div class="border-t border-white/10 p-6 text-center shrink-0">
+          <button onclick="document.getElementById('${id}-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
+        </div>
+      </div>
+    </div>`;
+  const div = document.createElement('div');
+  div.innerHTML = modalHTML;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function showHalloweenModal() {
+  showThemeModal(
+    'halloween',
+    'Игра #5 · 29.10.2026, 19:00',
+    'Halloween <span class="grad-brand-text">Music Party</span>',
+    'Страшно крутая игра — музыкальный хэллоуин во всей красе. Механики туров держим в секрете, но атмосфера гарантированно жуткая и весёлая одновременно. Костюмы приветствуются!'
+  );
+}
+
+function showRomantikModal() {
+  showThemeModal(
+    'romantik',
+    'Игра #6 · 12.11.2026, 19:00',
+    'Romantik <span class="grad-brand-text">Collection</span>',
+    'Любовь в каждом хите — целая игра о песнях про любовь, разбитые сердца и всё, что между ними. Механики туров держим в секрете — приходи с парой или командой и погрузись в самые романтичные треки.'
+  );
+}
+
+function showKinoModal() {
+  showThemeModal(
+    'kino',
+    'Игра #7 · 26.11.2026, 19:00',
+    'Музыка <span class="grad-brand-text">в кино</span>',
+    'Саундтреки, которые мы любим — от культовых блокбастеров до анимации. Механики туров держим в секрете — приходи проверить, узнаешь ли ты фильм по первым нотам.'
+  );
+}
+
+function showAlphabetModal() {
+  showThemeModal(
+    'alphabet',
+    'Игра #8 · 10.12.2026, 19:00',
+    'Музыкальный <span class="grad-brand-text">алфавит</span>',
+    'От А до Я — вся игра построена вокруг букв алфавита. Механики туров держим в секрете, но будь готов вспомнить исполнителей и треки на самые разные буквы.'
+  );
+}
+
+function showAroundWorldModal() {
+  showThemeModal(
+    'around-world',
+    'Игра #9 · 22.12.2026, 19:00',
+    'Вокруг <span class="grad-brand-text">света</span>',
+    'Музыкальное путешествие — хиты из разных стран и культур со всего мира. Механики туров держим в секрете — собери команду и отправляйся в кругосветку без чемоданов.'
+  );
+}
+
+function showNewYearMixModal() {
+  showThemeModal(
+    'new-year-mix',
+    'Игра #10 · 29.12.2026, 19:00',
+    'Новогодний <span class="grad-brand-text">музыкальный микс</span>',
+    'Праздник уже близко! Завершаем год музыкальным миксом в новогоднем настроении. Механики туров держим в секрете — приходи проводить 2026-й с командой и хитами.'
+  );
 }
 
 function showMusicMixModal() {
