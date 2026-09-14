@@ -231,7 +231,10 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <span class="text-white/60">01.10.2026, 19:00</span>
         </button>
         <button onclick="showAllOnAModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
-          <span class="flex items-center gap-2">Игра #4: Всё на А <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #4: Всё на А <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-brand-yellow text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>Straßenbräu Ausschank 2</span>
+          </span>
           <span class="text-white/60">15.10.2026, 19:00</span>
         </button>
         <button onclick="showHalloweenModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
@@ -642,7 +645,8 @@ function showAllOnAModal() {
             </span>
             <button onclick="document.getElementById('all-on-a-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
           </div>
-          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">Всё <span class="grad-brand-text">на А</span></h3>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-2">Всё <span class="grad-brand-text">на А</span></h3>
+          <p class="text-brand-yellow text-sm font-semibold mb-4"><i class="fa-solid fa-location-dot mr-1"></i>Straßenbräu Ausschank 2</p>
           <p class="text-white/70 leading-relaxed">
             Целая игра, посвящённая исполнителям и песням на букву «А» — от классики до самых свежих хитов.
             Механики туров держим в секрете — приходи и проверь, насколько хорошо ты знаешь музыку на эту букву.
