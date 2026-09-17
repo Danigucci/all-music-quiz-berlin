@@ -222,13 +222,6 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
         <h3 class="text-brand-yellow font-bold text-lg mb-4"><i class="fa-regular fa-calendar mr-2"></i>Ближайшие игры</h3>
         <div class="max-h-80 overflow-y-auto pr-1">
-        <button onclick="showNinetiesModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
-          <span class="flex flex-col">
-            <span class="flex items-center gap-2">Игра #2: 90е и 00е <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
-            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
-          </span>
-          <span class="text-white/60">17.09.2026, 19:00</span>
-        </button>
         <button onclick="showMusicMixModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex flex-col">
             <span class="flex items-center gap-2">Игра #3: Музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
@@ -372,7 +365,6 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
         <label class="text-white/80 text-sm font-semibold block mb-1.5">На какую игру записаться</label>
         <select name="game" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]">
           <option value="" disabled selected class="text-navy">Выберите игру</option>
-          <option value="17.09.2026, 19:00 — 90е и 00е" data-datetime="2026-09-17T18:00:00+02:00" class="text-navy">17.09.2026, 19:00 — Игра #2: 90е и 00е</option>
           <option value="01.10.2026, 19:00 — music mix" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix</option>
           <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
           <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party</option>
@@ -499,7 +491,16 @@ const gameResults = {
     { place: 10, team: 'Бюро тефтелек', t1: 11, t2: 5, t3: 4, sum3: 20, t4: 8, t5: 7, t6: 8, sum6: 43, t7: 5, total: 48 },
     { place: 11, team: 'Медведь на ухо наступил', t1: 7, t2: 6, t3: 4, sum3: 17, t4: 5, t5: 8, t6: 8, sum6: 31, t7: 8, total: 39 },
   ],
-  game2: null,
+  game2: [
+    { place: 1, team: 'Джон Мамкович', t1: 6, t2: 11, t3: 4, sum3: 21, t4: 5, t5: 6, t6: 9, sum6: 41, t7: 18, total: 59 },
+    { place: 2, team: 'Молодежь', t1: 10, t2: 6, t3: 7, sum3: 23, t4: 6, t5: 5, t6: 8, sum6: 42, t7: 9, total: 51 },
+    { place: 3, team: 'Давай Попозже', t1: 8, t2: 10, t3: 6, sum3: 24, t4: 5, t5: 7, t6: 9, sum6: 45, t7: 4, total: 49 },
+    { place: 4, team: 'Майкл Джордан', t1: 11, t2: 9, t3: 5, sum3: 25, t4: 3, t5: 5, t6: 5, sum6: 38, t7: 6, total: 44 },
+    { place: 5, team: 'Бублики', t1: 12, t2: 4, t3: 4, sum3: 20, t4: 5, t5: 4, t6: 8, sum6: 37, t7: 2, total: 39 },
+    { place: 6, team: 'Руки мам!', t1: 6, t2: 4, t3: 4, sum3: 14, t4: 3, t5: 4, t6: 7, sum6: 28, t7: 9, total: 37 },
+    { place: 7, team: 'Бюро тефтелек', t1: 5, t2: 2, t3: 4, sum3: 11, t4: 2, t5: 2, t6: 6, sum6: 21, t7: 6, total: 27 },
+    { place: 8, team: 'В яблочко', t1: 9, t2: 5, t3: 7, sum3: 21, t4: 5, t5: 5, t6: 4, sum6: 35, t7: -32, total: 3 },
+  ],
   game3: null,
   game4: null,
   game5: null,
@@ -634,33 +635,6 @@ function showTwentyTenModal() {
         </div>
         <div class="border-t border-white/10 p-6 text-center shrink-0">
           <button onclick="document.getElementById('twenty-ten-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
-        </div>
-      </div>
-    </div>`;
-  const div = document.createElement('div');
-  div.innerHTML = modalHTML;
-  document.body.appendChild(div.firstElementChild);
-}
-
-function showNinetiesModal() {
-  const modalHTML = `
-    <div id="nineties-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
-      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
-        <div class="p-8 sm:p-10 overflow-y-auto">
-          <div class="flex justify-between items-start mb-6">
-            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-              <i class="fa-solid fa-music"></i> Игра #2 · 17.09.2026, 19:00
-            </span>
-            <button onclick="document.getElementById('nineties-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
-          </div>
-          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">90е <span class="grad-brand-text">и</span> 00е</h3>
-          <p class="text-white/70 leading-relaxed">
-            Целая игра, посвящённая музыке 90-х и 00-х — хиты, которые формировали плейлисты наших родителей
-            и первые кассеты/CD. Механики туров держим в секрете — приходи и вспоминай золотую эпоху вместе с нами.
-          </p>
-        </div>
-        <div class="border-t border-white/10 p-6 text-center shrink-0">
-          <button onclick="document.getElementById('nineties-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
         </div>
       </div>
     </div>`;
