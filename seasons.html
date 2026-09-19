@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сезонный зачёт • All Music Quiz Berlin</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+
+.season-tab{ transition:all .2s ease; }
+.season-tab.active{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); color:var(--navy); border-color:transparent; }
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h1 class="display text-3xl sm:text-5xl font-extrabold text-center break-words">Сезонный зачёт</h1>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">
+    Четыре сезона в году: осень, зима, весна и лето. В последней игре каждого сезона определяется лучшая
+    команда сезона, которая получает суперприз.
+  </p>
+
+  <div class="flex flex-wrap justify-center gap-3 mt-10" id="season-tabs"></div>
+
+  <div id="season-info" class="mt-8"></div>
+  <div id="season-table" class="mt-6"></div>
+
+  <div class="mt-10 bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm text-sm text-zinc-600 leading-relaxed">
+    <h2 class="font-bold text-base text-navy mb-2">Как считается зачёт</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>Победы</strong> — сколько раз команда заняла 1-е место в играх сезона.</li>
+      <li><strong>Очки</strong> — сумма итоговых баллов команды по всем сыгранным играм сезона.</li>
+      <li>Команды в таблице расположены по числу побед, при равенстве — по сумме очков.</li>
+      <li>Команды учитываются по названию: чтобы очки суммировались, играйте под одним и тем же названием.</li>
+    </ul>
+  </div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 All Music Quiz Berlin</span>
+  </div>
+</footer>
+
+<script src="js/results-data.js"></script>
+<script>
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function computeStandings(season) {
+  const played = season.games.filter(id => gameResults[id]);
+  const teams = {};
+  played.forEach(id => {
+    gameResults[id].forEach(r => {
+      const t = teams[r.team] || (teams[r.team] = { team: r.team, wins: 0, games: 0, points: 0 });
+      t.games += 1;
+      t.points += r.total;
+      if (r.place === 1) t.wins += 1;
+    });
+  });
+  const rows = Object.values(teams).sort((a, b) => b.wins - a.wins || b.points - a.points || a.team.localeCompare(b.team, 'ru'));
+  let prev = null, place = 0;
+  rows.forEach((r, i) => {
+    if (!prev || prev.wins !== r.wins || prev.points !== r.points) place = i + 1;
+    r.place = place;
+    prev = r;
+  });
+  return { rows, playedCount: played.length };
+}
+
+function renderSeasonInfo(season, playedCount) {
+  const total = season.games.length;
+  const finalId = season.finalGame;
+  const finalText = finalId
+    ? `Финал сезона: игра #${gameMeta[finalId].n} · ${gameMeta[finalId].date} · ${esc(gameMeta[finalId].name)}`
+    : 'Финальная игра сезона будет объявлена позже';
+  const finished = finalId && gameResults[finalId];
+  return `
+    <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 grad-brand rounded-full flex items-center justify-center text-navy text-lg"><i class="fa-solid ${season.icon}"></i></div>
+        <div>
+          <h2 class="display text-2xl font-extrabold leading-tight">${esc(season.name)}</h2>
+          <p class="text-white/60 text-sm">${esc(season.period)}</p>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-3 mt-6 text-sm">
+        <div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3"><i class="fa-solid fa-flag-checkered text-brand-yellow mr-2"></i>${finalText}</div>
+        <div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3"><i class="fa-solid fa-gamepad text-brand-yellow mr-2"></i>Сыграно игр: ${playedCount}${total ? ' из ' + total : ''}</div>
+      </div>
+      <p class="mt-4 text-sm text-white/70"><i class="fa-solid fa-trophy text-brand-yellow mr-2"></i>${finished ? 'Сезон завершён — победитель получает суперприз.' : 'Лучшая команда сезона получит суперприз в финальной игре.'}</p>
+    </div>`;
+}
+
+function renderStandingsTable(rows) {
+  const body = rows.map((r, i) => {
+    const trophy = r.place === 1 ? '<i class="fa-solid fa-trophy text-yellow-400"></i>'
+      : r.place === 2 ? '<i class="fa-solid fa-trophy text-zinc-300"></i>'
+      : r.place === 3 ? '<i class="fa-solid fa-trophy text-orange-600"></i>' : '';
+    return `
+      <tr class="${i % 2 ? 'bg-white/[0.03]' : ''} border-b border-white/5 last:border-0">
+        <td class="py-3 px-4"><div class="flex items-center gap-2"><span class="rank-badge">${r.place}</span><span class="w-4 text-center">${trophy}</span></div></td>
+        <td class="py-3 px-4 font-semibold text-white">${esc(r.team)}</td>
+        <td class="py-3 px-4 text-center text-white/70">${r.games}</td>
+        <td class="py-3 px-4 text-center font-bold text-brand-yellow">${r.wins}</td>
+        <td class="py-3 px-4 text-right font-bold text-white">${r.points}</td>
+      </tr>`;
+  }).join('');
+  return `
+    <div class="bg-navy rounded-2xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm min-w-[480px]">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Место</th>
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Команда</th>
+              <th class="py-4 px-4 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Игры</th>
+              <th class="py-4 px-4 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Победы</th>
+              <th class="py-4 px-4 text-right text-xs uppercase tracking-wider text-white/40 font-semibold">Очки</th>
+            </tr>
+          </thead>
+          <tbody>${body}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderEmptyState(started) {
+  return `
+    <div class="bg-white border border-zinc-100 rounded-2xl p-10 text-center shadow-sm">
+      <div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fa-solid fa-chart-simple"></i></div>
+      <h3 class="font-bold text-xl">${started ? 'Результатов пока нет' : 'Сезон ещё не начался'}</h3>
+      <p class="text-zinc-500 mt-2">Таблица появится здесь после первой игры сезона.</p>
+    </div>`;
+}
+
+function showSeason(id) {
+  const season = seasons.find(s => s.id === id);
+  document.querySelectorAll('.season-tab').forEach(b => b.classList.toggle('active', b.dataset.season === id));
+  const { rows, playedCount } = computeStandings(season);
+  document.getElementById('season-info').innerHTML = renderSeasonInfo(season, playedCount);
+  document.getElementById('season-table').innerHTML = rows.length ? renderStandingsTable(rows) : renderEmptyState(season.games.length > 0);
+  history.replaceState(null, '', '#' + id);
+}
+
+function currentSeasonId() {
+  const fromHash = location.hash.slice(1);
+  if (seasons.some(s => s.id === fromHash)) return fromHash;
+  const withResults = seasons.filter(s => s.games.some(g => gameResults[g]));
+  return (withResults.length ? withResults[withResults.length - 1] : seasons[0]).id;
+}
+
+document.getElementById('season-tabs').innerHTML = seasons.map(s =>
+  `<button type="button" data-season="${s.id}" onclick="showSeason('${s.id}')" class="season-tab border border-zinc-300 text-navy font-bold px-5 py-2.5 rounded-full hover:border-[color:var(--pink)]"><i class="fa-solid ${s.icon} mr-2"></i>${esc(s.name)}</button>`
+).join('');
+showSeason(currentSeasonId());
+</script>
+
+</body>
+</html>
