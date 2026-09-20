@@ -125,6 +125,12 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
       <ul id="drawn-list" class="mt-3 divide-y divide-zinc-100 text-sm"></ul>
     </div>
 
+    <details class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <summary class="font-bold text-lg cursor-pointer">Все участники (<span id="participants-count">0</span>)</summary>
+      <input id="participants-search" type="search" placeholder="Поиск по номеру, команде или email" class="w-full mt-4 bg-white border border-zinc-300 px-4 py-2.5 rounded-full outline-none focus:border-[color:var(--pink)] text-sm">
+      <ul id="participants-list" class="mt-3 divide-y divide-zinc-100 text-sm max-h-96 overflow-y-auto"></ul>
+    </details>
+
     <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center gap-6">
       <img src="qr/raffle.svg" alt="QR-код розыгрыша" class="w-40 h-40 shrink-0 rounded-xl border border-zinc-200">
       <div class="text-sm text-zinc-600">
@@ -171,6 +177,7 @@ function renderStatus(s) {
   $('btn-close').disabled = !s.open;
   $('btn-close').classList.toggle('opacity-40', !s.open);
   renderDrawn(s.drawn);
+  renderParticipants(s.participants);
 }
 
 function renderDrawn(drawn) {
@@ -180,6 +187,18 @@ function renderDrawn(drawn) {
     '<span class="font-semibold">' + (esc(d.team) || '<span class="text-zinc-400 font-normal">без команды</span>') + '</span>' +
     (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</li>'
   ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
+}
+
+function renderParticipants(list) {
+  const showEmail = $('show-email').checked;
+  const q = $('participants-search').value.trim().toLowerCase();
+  $('participants-count').textContent = list.length;
+  const rows = list.filter((p) => !q || String(p.number) === q || p.team.toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
+  $('participants-list').innerHTML = rows.length ? rows.map((p) =>
+    '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#181454">' + p.number + '</span>' +
+    '<span class="font-semibold">' + (esc(p.team) || '<span class="text-zinc-400 font-normal">без команды</span>') + '</span>' +
+    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(p.email) + '</span>' : '') + '</li>'
+  ).join('') : '<li class="py-2 text-zinc-400">Никого нет</li>';
 }
 
 let lastStatus = null;
@@ -215,7 +234,8 @@ async function login(pw) {
 }
 
 $('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
-$('show-email').addEventListener('change', () => lastStatus && renderDrawn(lastStatus.drawn));
+$('show-email').addEventListener('change', () => { if (lastStatus) { renderDrawn(lastStatus.drawn); renderParticipants(lastStatus.participants); } });
+$('participants-search').addEventListener('input', () => lastStatus && renderParticipants(lastStatus.participants));
 
 $('btn-open').addEventListener('click', async () => {
   if (!confirm('Открыть новую выдачу? Данные предыдущей игры (номера, email, вытянутые) будут удалены.')) return;

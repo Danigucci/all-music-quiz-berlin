@@ -87,6 +87,7 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
       session: state.session,
       max: MAX,
       issued: issued.length,
+      participants: issued.map((r) => ({ number: r.number, team: r.team, email: r.email })),
       drawn: state.drawn.map((n) => ({ number: n, team: byNumber.get(n)?.team || '', email: byNumber.get(n)?.email || '' })),
     };
   }
