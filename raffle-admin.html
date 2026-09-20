@@ -184,7 +184,7 @@ function renderDrawn(drawn) {
   const showEmail = $('show-email').checked;
   $('drawn-list').innerHTML = drawn.length ? drawn.slice().reverse().map((d) =>
     '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#181454">' + d.number + '</span>' +
-    '<span class="font-semibold">' + (esc(d.team) || '<span class="text-zinc-400 font-normal">без команды</span>') + '</span>' +
+    '<span class="font-semibold">' + (esc(d.name) || '—') + '</span><span class="text-zinc-500">' + (esc(d.team) || 'без команды') + '</span>' +
     (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</li>'
   ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
 }
@@ -193,10 +193,10 @@ function renderParticipants(list) {
   const showEmail = $('show-email').checked;
   const q = $('participants-search').value.trim().toLowerCase();
   $('participants-count').textContent = list.length;
-  const rows = list.filter((p) => !q || String(p.number) === q || p.team.toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
+  const rows = list.filter((p) => !q || String(p.number) === q || p.team.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
   $('participants-list').innerHTML = rows.length ? rows.map((p) =>
     '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#181454">' + p.number + '</span>' +
-    '<span class="font-semibold">' + (esc(p.team) || '<span class="text-zinc-400 font-normal">без команды</span>') + '</span>' +
+    '<span class="font-semibold">' + (esc(p.name) || '—') + '</span><span class="text-zinc-500">' + (esc(p.team) || 'без команды') + '</span>' +
     (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(p.email) + '</span>' : '') + '</li>'
   ).join('') : '<li class="py-2 text-zinc-400">Никого нет</li>';
 }
@@ -269,7 +269,7 @@ $('btn-draw').addEventListener('click', async () => {
     if (Date.now() >= end) {
       clearInterval(spin);
       el.textContent = r.data.number;
-      $('draw-team').textContent = r.data.team || 'Без команды';
+      $('draw-team').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
       btn.disabled = false;
       refresh();
     } else {

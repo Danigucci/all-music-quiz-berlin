@@ -27,16 +27,18 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     return { open: state.open, session: state.session, min: MIN, max: MAX };
   }
 
-  async function claim({ email, team, deviceId }) {
+  async function claim({ name, email, team, deviceId }) {
     const state = await readState();
     if (!state.open) return { status: 403, body: { error: 'closed' } };
 
     const cleanEmail = String(email || '').trim().toLowerCase();
+    const cleanName = String(name || '').trim().slice(0, 60);
     const cleanTeam = String(team || '').trim().slice(0, 60);
     const cleanDevice = String(deviceId || '');
     if (!EMAIL_RE.test(cleanEmail) || cleanEmail.length > 200) {
       return { status: 400, body: { error: 'invalid_email' } };
     }
+    if (!cleanName) return { status: 400, body: { error: 'invalid_name' } };
     if (!/^[A-Za-z0-9-]{8,64}$/.test(cleanDevice)) {
       return { status: 400, body: { error: 'invalid_device' } };
     }
@@ -56,7 +58,7 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     while (free.length) {
       const idx = Math.floor(random() * free.length);
       const number = free.splice(idx, 1)[0];
-      const record = { number, team: cleanTeam, email: cleanEmail, at: new Date().toISOString() };
+      const record = { number, name: cleanName, team: cleanTeam, email: cleanEmail, at: new Date().toISOString() };
       const numberKey = `s/${session}/n/${number}`;
       const { modified } = await store.setJSON(numberKey, record, { onlyIfNew: true });
       if (!modified) continue;
@@ -72,7 +74,7 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
         return { status: 409, body: { error: 'conflict' } };
       }
 
-      try { await sendEmail({ email: cleanEmail, team: cleanTeam, number }); } catch (e) { console.error('raffle email failed', e); }
+      try { await sendEmail({ email: cleanEmail, name: cleanName, team: cleanTeam, number }); } catch (e) { console.error('raffle email failed', e); }
       return { status: 200, body: { number, existing: false, session } };
     }
     return { status: 409, body: { error: 'full' } };
@@ -87,8 +89,8 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
       session: state.session,
       max: MAX,
       issued: issued.length,
-      participants: issued.map((r) => ({ number: r.number, team: r.team, email: r.email })),
-      drawn: state.drawn.map((n) => ({ number: n, team: byNumber.get(n)?.team || '', email: byNumber.get(n)?.email || '' })),
+      participants: issued.map((r) => ({ number: r.number, name: r.name || '', team: r.team, email: r.email })),
+      drawn: state.drawn.map((n) => ({ number: n, name: byNumber.get(n)?.name || '', team: byNumber.get(n)?.team || '', email: byNumber.get(n)?.email || '' })),
     };
   }
 
@@ -113,7 +115,7 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     if (!candidates.length) return { status: 409, body: { error: 'nothing_to_draw' } };
     const winner = candidates[Math.floor(random() * candidates.length)];
     await writeState({ ...state, drawn: [...state.drawn, winner.number] });
-    return { status: 200, body: { number: winner.number, team: winner.team, email: winner.email, remaining: candidates.length - 1 } };
+    return { status: 200, body: { number: winner.number, name: winner.name || '', team: winner.team, email: winner.email, remaining: candidates.length - 1 } };
   }
 
   async function adminPurge() {

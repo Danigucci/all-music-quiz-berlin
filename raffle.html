@@ -146,6 +146,8 @@ function renderNumber(number, note) {
 function renderForm(error) {
   app.innerHTML =
     '<form id="claim-form" class="bg-navy rounded-2xl p-6 sm:p-8 text-white space-y-4" novalidate>' +
+      '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-name">Ваше имя *</label>' +
+      '<input id="raffle-name" type="text" required maxlength="60" autocomplete="given-name" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none"></div>' +
       '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-email">Email *</label>' +
       '<input id="raffle-email" type="email" required autocomplete="email" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none" placeholder="you@example.com"></div>' +
       '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-team">Название команды <span class="text-white/40 font-normal">(необязательно)</span></label>' +
@@ -163,16 +165,19 @@ const ERRORS = {
   closed: 'Выдача номеров сейчас закрыта.',
   full: 'Все номера уже разобраны.',
   invalid_email: 'Проверь, пожалуйста, email.',
+  invalid_name: 'Укажи, пожалуйста, своё имя.',
   conflict: 'Не получилось выдать номер, попробуй ещё раз.',
 };
 
 async function onSubmit(e) {
   e.preventDefault();
+  const name = document.getElementById('raffle-name').value.trim();
   const email = document.getElementById('raffle-email').value.trim();
   const team = document.getElementById('raffle-team').value.trim();
   const consent = document.getElementById('raffle-consent').checked;
   const errorEl = document.getElementById('raffle-error');
   const showError = (msg) => { errorEl.textContent = msg; errorEl.classList.remove('hidden'); };
+  if (!name) return showError(ERRORS.invalid_name);
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showError(ERRORS.invalid_email);
   if (!consent) return showError('Нужно согласие с условиями участия.');
 
@@ -182,7 +187,7 @@ async function onSubmit(e) {
     const res = await fetch(API + '/claim', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, team, deviceId: deviceId() }),
+      body: JSON.stringify({ name, email, team, deviceId: deviceId() }),
     });
     const data = await res.json();
     if (!res.ok) {

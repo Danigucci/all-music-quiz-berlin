@@ -22,13 +22,14 @@ function isAdmin(req) {
 const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-async function sendEmail({ email, team, number }) {
+async function sendEmail({ email, name, team, number }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
   const teamLine = team ? `<p style="color:#666;">Команда: ${escapeHtml(team)}</p>` : '';
   const html = `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; text-align:center;">
       <h2 style="color:#181454;">Твой номер для розыгрыша</h2>
+      <p>Привет, ${escapeHtml(name || '')}!</p>
       <div style="font-size:64px; font-weight:800; color:#ff4fa3; margin:16px 0;">${number}</div>
       ${teamLine}
       <p>Сохрани это письмо или сделай скриншот — номер понадобится при розыгрыше призов. Удачи! 🎶</p>
