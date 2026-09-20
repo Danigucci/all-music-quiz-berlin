@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Панель розыгрыша • All Music Quiz Berlin</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+
+</style>
+
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+  <h1 class="display text-3xl sm:text-4xl font-extrabold text-center break-words">Панель розыгрыша</h1>
+
+  <form id="login" class="max-w-sm mx-auto mt-8 flex gap-3">
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="flex-1 min-w-0 bg-white border border-zinc-300 px-4 py-3 rounded-full outline-none focus:border-[color:var(--pink)]">
+    <button class="grad-brand text-navy font-bold px-6 py-3 rounded-full hover:opacity-90 transition">Войти</button>
+  </form>
+  <p id="login-error" class="text-center text-sm text-[color:var(--pink)] mt-3 hidden"></p>
+
+  <div id="panel" class="hidden mt-8 space-y-6">
+    <div class="bg-navy rounded-2xl p-6 text-white">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p id="state-label" class="font-bold text-lg"></p>
+          <p id="state-count" class="text-white/60 text-sm mt-1"></p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="btn-open" class="grad-brand text-navy font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition">Открыть новую выдачу</button>
+          <button id="btn-close" class="border border-white/30 text-white font-bold px-5 py-2.5 rounded-full hover:border-white transition">Закрыть выдачу</button>
+        </div>
+      </div>
+      <p class="text-white/40 text-xs mt-3">«Открыть новую выдачу» удаляет данные предыдущей игры и начинает нумерацию с нуля.</p>
+    </div>
+
+    <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">
+      <p class="text-white/60 text-sm uppercase tracking-widest font-semibold">Вытянутый номер</p>
+      <div id="draw-number" class="display grad-brand-text font-extrabold leading-none my-6" style="font-size:9rem;">—</div>
+      <p id="draw-team" class="text-xl font-semibold min-h-[1.75rem]"></p>
+      <button id="btn-draw" class="grad-brand text-navy font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition mt-6">Вытянуть номер</button>
+      <p id="draw-error" class="text-sm text-[color:var(--pink)] mt-3 hidden"></p>
+    </div>
+
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="font-bold text-lg">Уже вытянуты</h2>
+        <label class="text-sm text-zinc-500 flex items-center gap-2 cursor-pointer"><input id="show-email" type="checkbox" class="accent-[color:var(--pink)]"> показать email</label>
+      </div>
+      <ul id="drawn-list" class="mt-3 divide-y divide-zinc-100 text-sm"></ul>
+    </div>
+
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center gap-6">
+      <img src="qr/raffle.svg" alt="QR-код розыгрыша" class="w-40 h-40 shrink-0 rounded-xl border border-zinc-200">
+      <div class="text-sm text-zinc-600">
+        <p class="font-bold text-navy text-base">QR-код для игроков</p>
+        <p class="mt-1">Ведёт на <span class="font-semibold">allmusicquiz.com/raffle.html</span>. Выведи на экран в баре или распечатай (файлы <span class="font-semibold">qr/raffle.svg</span> и <span class="font-semibold">qr/raffle.png</span>).</p>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button id="btn-purge" class="text-sm text-zinc-500 hover:text-[color:var(--pink)] underline transition">Удалить все данные розыгрыша</button>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 All Music Quiz Berlin</span>
+  </div>
+</footer>
+
+<script>
+const API = '/api/raffle/admin/';
+let password = '';
+let timer = null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+async function call(action) {
+  const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password } });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function renderStatus(s) {
+  $('state-label').textContent = s.open ? 'Выдача номеров открыта' : (s.session ? 'Выдача закрыта' : 'Нет активной игры');
+  $('state-label').className = 'font-bold text-lg ' + (s.open ? 'text-brand-yellow' : 'text-white');
+  $('state-count').textContent = 'Выдано номеров: ' + s.issued + ' из ' + s.max + ' · вытянуто: ' + s.drawn.length;
+  $('btn-close').disabled = !s.open;
+  $('btn-close').classList.toggle('opacity-40', !s.open);
+  renderDrawn(s.drawn);
+}
+
+function renderDrawn(drawn) {
+  const showEmail = $('show-email').checked;
+  $('drawn-list').innerHTML = drawn.length ? drawn.slice().reverse().map((d) =>
+    '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#181454">' + d.number + '</span>' +
+    '<span class="font-semibold">' + (esc(d.team) || '<span class="text-zinc-400 font-normal">без команды</span>') + '</span>' +
+    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</li>'
+  ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
+}
+
+let lastStatus = null;
+async function refresh() {
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере (RAFFLE_ADMIN_PASSWORD).');
+  if (r.ok) { lastStatus = r.data; renderStatus(r.data); }
+}
+
+function logout(msg) {
+  clearInterval(timer);
+  try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  password = '';
+  $('panel').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('login-error').textContent = msg || '';
+  $('login-error').classList.toggle('hidden', !msg);
+}
+
+async function login(pw) {
+  password = pw;
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере (RAFFLE_ADMIN_PASSWORD).');
+  if (!r.ok) return logout('Ошибка сервера, попробуй ещё раз.');
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  $('login').classList.add('hidden');
+  $('login-error').classList.add('hidden');
+  $('panel').classList.remove('hidden');
+  lastStatus = r.data; renderStatus(r.data);
+  timer = setInterval(refresh, 5000);
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+$('show-email').addEventListener('change', () => lastStatus && renderDrawn(lastStatus.drawn));
+
+$('btn-open').addEventListener('click', async () => {
+  if (!confirm('Открыть новую выдачу? Данные предыдущей игры (номера, email, вытянутые) будут удалены.')) return;
+  const r = await call('open'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); resetDraw(); }
+});
+$('btn-close').addEventListener('click', async () => {
+  const r = await call('close'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); }
+});
+$('btn-purge').addEventListener('click', async () => {
+  if (!confirm('Удалить ВСЕ данные розыгрыша (номера, email, команды)? Это необратимо.')) return;
+  const r = await call('purge'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); resetDraw(); }
+});
+
+function resetDraw() { $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
+
+$('btn-draw').addEventListener('click', async () => {
+  const btn = $('btn-draw');
+  btn.disabled = true;
+  $('draw-error').classList.add('hidden');
+  const r = await call('draw');
+  if (!r.ok) {
+    btn.disabled = false;
+    $('draw-error').textContent = r.data.error === 'nothing_to_draw' ? 'Больше нет номеров для розыгрыша.' : (r.data.error === 'no_session' ? 'Сначала открой выдачу номеров.' : 'Ошибка, попробуй ещё раз.');
+    $('draw-error').classList.remove('hidden');
+    return;
+  }
+  $('draw-team').textContent = '';
+  const el = $('draw-number');
+  const end = Date.now() + 2200;
+  const spin = setInterval(() => {
+    if (Date.now() >= end) {
+      clearInterval(spin);
+      el.textContent = r.data.number;
+      $('draw-team').textContent = r.data.team || 'Без команды';
+      btn.disabled = false;
+      refresh();
+    } else {
+      el.textContent = 1 + Math.floor(Math.random() * 90);
+    }
+  }, 70);
+});
+
+try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
+</script>
+
+</body>
+</html>

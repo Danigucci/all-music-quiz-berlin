@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Розыгрыш призов • All Music Quiz Berlin</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+  </div>
+</header>
+
+<main class="max-w-md mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h1 class="display text-3xl sm:text-4xl font-extrabold text-center break-words">Розыгрыш призов</h1>
+  <p class="text-zinc-500 text-center mt-3">Получи свой номер — в конце игры разыграем призы.</p>
+
+  <div id="raffle-app" class="mt-10"></div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 All Music Quiz Berlin</span>
+  </div>
+</footer>
+
+<script>
+const API = '/api/raffle';
+const DEVICE_KEY = 'amq_device';
+const CLAIM_KEY = 'amq_raffle';
+const app = document.getElementById('raffle-app');
+
+function store(key, value) {
+  try {
+    if (value === undefined) return JSON.parse(localStorage.getItem(key));
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) { return null; }
+}
+
+function deviceId() {
+  let id = store(DEVICE_KEY);
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(16).slice(2) + Date.now().toString(16));
+    store(DEVICE_KEY, id);
+  }
+  return id;
+}
+
+function card(inner) {
+  return '<div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">' + inner + '</div>';
+}
+
+function renderMessage(icon, title, text) {
+  app.innerHTML = card(
+    '<div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-navy text-2xl mx-auto mb-4"><i class="fa-solid ' + icon + '"></i></div>' +
+    '<h2 class="display text-2xl font-extrabold">' + title + '</h2>' +
+    '<p class="text-white/70 mt-2">' + text + '</p>');
+}
+
+function renderNumber(number, note) {
+  app.innerHTML = card(
+    '<p class="text-white/60 text-sm uppercase tracking-widest font-semibold">Твой номер</p>' +
+    '<div class="display grad-brand-text text-8xl font-extrabold leading-none my-6" id="my-number"></div>' +
+    '<p class="text-white/70 text-sm">' + note + '</p>');
+  document.getElementById('my-number').textContent = number;
+}
+
+function renderForm(error) {
+  app.innerHTML =
+    '<form id="claim-form" class="bg-navy rounded-2xl p-6 sm:p-8 text-white space-y-4" novalidate>' +
+      '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-email">Email *</label>' +
+      '<input id="raffle-email" type="email" required autocomplete="email" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none" placeholder="you@example.com"></div>' +
+      '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-team">Название команды <span class="text-white/40 font-normal">(необязательно)</span></label>' +
+      '<input id="raffle-team" type="text" maxlength="60" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none"></div>' +
+      '<label class="flex items-start gap-3 text-xs text-white/70 leading-relaxed"><input id="raffle-consent" type="checkbox" required class="mt-0.5 shrink-0 accent-[color:var(--pink)]">' +
+      '<span>Я согласен(на) с <a href="teilnahmebedingungen.html" target="_blank" class="text-brand-yellow hover:underline">условиями участия</a> и обработкой данных согласно <a href="datenschutz.html" target="_blank" class="text-brand-yellow hover:underline">политике конфиденциальности</a>. Один номер на человека.</span></label>' +
+      '<p id="raffle-error" class="text-sm text-[color:var(--pink)]' + (error ? '' : ' hidden') + '"></p>' +
+      '<button type="submit" class="w-full grad-brand text-navy font-bold px-7 py-3.5 rounded-full hover:opacity-90 transition">Получить номер</button>' +
+    '</form>';
+  if (error) document.getElementById('raffle-error').textContent = error;
+  document.getElementById('claim-form').addEventListener('submit', onSubmit);
+}
+
+const ERRORS = {
+  closed: 'Выдача номеров сейчас закрыта.',
+  full: 'Все номера уже разобраны.',
+  invalid_email: 'Проверь, пожалуйста, email.',
+  conflict: 'Не получилось выдать номер, попробуй ещё раз.',
+};
+
+async function onSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('raffle-email').value.trim();
+  const team = document.getElementById('raffle-team').value.trim();
+  const consent = document.getElementById('raffle-consent').checked;
+  const errorEl = document.getElementById('raffle-error');
+  const showError = (msg) => { errorEl.textContent = msg; errorEl.classList.remove('hidden'); };
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showError(ERRORS.invalid_email);
+  if (!consent) return showError('Нужно согласие с условиями участия.');
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true; btn.textContent = 'Секунду…';
+  try {
+    const res = await fetch(API + '/claim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, team, deviceId: deviceId() }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      if (data.error === 'closed') return renderMessage('fa-lock', 'Выдача закрыта', ERRORS.closed);
+      if (data.error === 'full') return renderMessage('fa-ticket', 'Номера закончились', ERRORS.full);
+      btn.disabled = false; btn.textContent = 'Получить номер';
+      return showError(ERRORS[data.error] || 'Что-то пошло не так, попробуй ещё раз.');
+    }
+    store(CLAIM_KEY, { session: data.session, number: data.number });
+    renderNumber(data.number, data.existing
+      ? 'Ты уже получал(а) номер — вот он.'
+      : 'Сделай скриншот. Мы также отправили номер на твой email.');
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Получить номер';
+    showError('Нет связи с сервером, попробуй ещё раз.');
+  }
+}
+
+async function init() {
+  renderMessage('fa-spinner fa-spin', 'Загрузка…', '');
+  let status;
+  try {
+    status = await (await fetch(API + '/status', { cache: 'no-store' })).json();
+  } catch (e) {
+    return renderMessage('fa-triangle-exclamation', 'Нет связи', 'Не удалось загрузить страницу, обнови её.');
+  }
+  const saved = store(CLAIM_KEY);
+  if (saved && status.session && saved.session === status.session) {
+    return renderNumber(saved.number, 'Ты уже получил(а) номер на этой игре.');
+  }
+  if (!status.open) {
+    return renderMessage('fa-lock', 'Выдача закрыта', 'Розыгрыш сейчас не идёт. Сканируй QR-код на игре, когда выдача откроется.');
+  }
+  renderForm();
+}
+init();
+</script>
+
+</body>
+</html>
