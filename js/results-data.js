@@ -51,3 +51,17 @@ const seasons = [
   { id: 'spring', name: 'Весна', period: 'март — май 2027', icon: 'fa-seedling', games: [], finalGame: null },
   { id: 'summer', name: 'Лето', period: 'июнь — август 2027', icon: 'fa-sun', games: [], finalGame: null },
 ];
+
+// Fill in a Spotify playlist URL (e.g. https://open.spotify.com/playlist/XXXX) once it exists for a game.
+const gamePlaylists = {
+  game1: null,
+  game2: null,
+  game3: null,
+  game4: null,
+  game5: null,
+  game6: null,
+  game7: null,
+  game8: null,
+  game9: null,
+  game10: null,
+};

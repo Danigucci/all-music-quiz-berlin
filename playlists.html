@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Плейлисты • All Music Quiz Berlin</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h1 class="display text-3xl sm:text-5xl font-extrabold text-center break-words">Плейлисты</h1>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">
+    После каждой игры собираем треки, которые звучали на квизе, в плейлист на Spotify — слушай и вспоминай.
+  </p>
+
+  <div id="playlists-list" class="mt-12 space-y-8"></div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 All Music Quiz Berlin</span>
+  </div>
+</footer>
+
+<script src="js/results-data.js"></script>
+<script>
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function spotifyEmbedUrl(url) {
+  const m = /open\.spotify\.com\/(?:intl-[a-z-]+\/)?playlist\/([A-Za-z0-9]+)/.exec(String(url || ''));
+  return m ? `https://open.spotify.com/embed/playlist/${m[1]}?utm_source=generator&theme=0` : null;
+}
+
+function renderCard(id, meta, playlist) {
+  const embed = spotifyEmbedUrl(playlist);
+  const body = embed
+    ? `<iframe src="${embed}" width="100%" height="352" style="border-radius:12px; border:0; display:block;" allowfullscreen loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="Плейлист — ${esc(meta.name)}"></iframe>`
+    : `<div class="bg-navy rounded-2xl p-10 text-center text-white/60">
+        <i class="fa-solid fa-record-vinyl text-3xl text-brand-yellow mb-3"></i>
+        <p>Плейлист появится здесь после игры.</p>
+      </div>`;
+  return `
+    <div>
+      <div class="flex items-baseline justify-between gap-3 flex-wrap mb-3">
+        <h2 class="display text-xl sm:text-2xl font-extrabold text-navy">Игра #${meta.n}: ${esc(meta.name)}</h2>
+        <span class="text-zinc-400 text-sm shrink-0">${esc(meta.date)}</span>
+      </div>
+      ${body}
+    </div>`;
+}
+
+const order = Object.keys(gameMeta).sort((a, b) => gameMeta[a].n - gameMeta[b].n);
+document.getElementById('playlists-list').innerHTML = order
+  .map((id) => renderCard(id, gameMeta[id], gamePlaylists[id]))
+  .join('');
+</script>
+
+</body>
+</html>
