@@ -55,7 +55,7 @@ const seasons = [
 // Fill in a Spotify playlist URL (e.g. https://open.spotify.com/playlist/XXXX) once it exists for a game.
 const gamePlaylists = {
   game1: 'https://open.spotify.com/playlist/0PfZSDR8UuZcKdNxnhzSUm',
-  game2: null,
+  game2: 'https://open.spotify.com/playlist/5dqVegNKwzALAJtGflw8Os',
   game3: null,
   game4: null,
   game5: null,
