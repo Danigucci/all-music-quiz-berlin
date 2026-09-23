@@ -150,8 +150,8 @@ function renderForm(error) {
       '<input id="raffle-name" type="text" required maxlength="60" autocomplete="given-name" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none"></div>' +
       '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-email">Email *</label>' +
       '<input id="raffle-email" type="email" required autocomplete="email" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none" placeholder="you@example.com"></div>' +
-      '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-team">Название команды <span class="text-white/40 font-normal">(необязательно)</span></label>' +
-      '<input id="raffle-team" type="text" maxlength="60" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none"></div>' +
+      '<div><label class="block text-sm font-semibold mb-1.5" for="raffle-team">Название команды *</label>' +
+      '<input id="raffle-team" type="text" required maxlength="60" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-xl focus:border-[color:var(--pink)] outline-none"></div>' +
       '<label class="flex items-start gap-3 text-xs text-white/70 leading-relaxed"><input id="raffle-consent" type="checkbox" required class="mt-0.5 shrink-0 accent-[color:var(--pink)]">' +
       '<span>Я согласен(на) с <a href="teilnahmebedingungen.html" target="_blank" class="text-brand-yellow hover:underline">условиями участия</a> и обработкой данных согласно <a href="datenschutz.html" target="_blank" class="text-brand-yellow hover:underline">политике конфиденциальности</a>. Один номер на человека.</span></label>' +
       '<p id="raffle-error" class="text-sm text-[color:var(--pink)]' + (error ? '' : ' hidden') + '"></p>' +
@@ -166,6 +166,7 @@ const ERRORS = {
   full: 'Все номера уже разобраны.',
   invalid_email: 'Проверь, пожалуйста, email.',
   invalid_name: 'Укажи, пожалуйста, своё имя.',
+  invalid_team: 'Укажи, пожалуйста, название команды.',
   conflict: 'Не получилось выдать номер, попробуй ещё раз.',
 };
 
@@ -178,6 +179,7 @@ async function onSubmit(e) {
   const errorEl = document.getElementById('raffle-error');
   const showError = (msg) => { errorEl.textContent = msg; errorEl.classList.remove('hidden'); };
   if (!name) return showError(ERRORS.invalid_name);
+  if (!team) return showError(ERRORS.invalid_team);
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showError(ERRORS.invalid_email);
   if (!consent) return showError('Нужно согласие с условиями участия.');
 

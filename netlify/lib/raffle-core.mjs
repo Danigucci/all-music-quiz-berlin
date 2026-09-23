@@ -39,6 +39,7 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
       return { status: 400, body: { error: 'invalid_email' } };
     }
     if (!cleanName) return { status: 400, body: { error: 'invalid_name' } };
+    if (!cleanTeam) return { status: 400, body: { error: 'invalid_team' } };
     if (!/^[A-Za-z0-9-]{8,64}$/.test(cleanDevice)) {
       return { status: 400, body: { error: 'invalid_device' } };
     }
