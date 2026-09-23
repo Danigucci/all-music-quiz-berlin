@@ -65,11 +65,11 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
   if (!res.ok) throw new Error(`Resend API error ${res.status}: ${await res.text()}`);
 }
 
-export default async () => {
-  const siteId = process.env.SITE_ID;
-  const token = process.env.NETLIFY_API_TOKEN;
+export default async (req, context) => {
+  const siteId = context?.site?.id || process.env.SITE_ID;
+  const token = process.env.NETLIFY_FORMS_TOKEN;
   if (!siteId || !token) {
-    console.error('game-reminders: SITE_ID or NETLIFY_API_TOKEN not set');
+    console.error(`game-reminders: missing config (siteId=${Boolean(siteId)}, token=${Boolean(token)})`);
     return new Response('misconfigured', { status: 500 });
   }
 
