@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экран розыгрыша • All Music Quiz Berlin</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:var(--navy-deep); color:#fff; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+</style>
+</head>
+<body class="overflow-x-hidden min-h-screen flex flex-col">
+
+<form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
+  <div class="display text-2xl font-extrabold">All Music Quiz <span class="text-brand-yellow">Berlin</span></div>
+  <p class="text-white/50 text-sm">Экран розыгрыша</p>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-full text-center outline-none focus:border-[color:var(--pink)]">
+  <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>
+  <p id="login-error" class="text-sm text-[color:var(--pink)] hidden"></p>
+</form>
+
+<div id="stage" class="hidden flex-1 flex flex-col items-center justify-center px-5 py-10 text-center">
+  <div id="prize-badge" class="min-h-[4rem] flex items-center justify-center mb-4"></div>
+  <div id="number" class="display grad-brand-text font-extrabold leading-none" style="font-size:min(38vw, 20rem);">—</div>
+  <p id="winner" class="text-2xl sm:text-3xl font-semibold mt-4 min-h-[2.5rem]"></p>
+  <button id="btn-draw" class="grad-brand text-navy font-bold text-xl sm:text-2xl px-12 py-5 rounded-full hover:opacity-90 transition mt-10">Вытянуть номер</button>
+  <p id="error" class="text-[color:var(--pink)] mt-4 hidden"></p>
+</div>
+
+<audio id="draw-audio" src="audio/draw-music.mp3" preload="auto"></audio>
+<button id="btn-logout" class="hidden fixed top-4 right-4 text-white/30 hover:text-white/70 text-sm transition">Выйти</button>
+
+<script>
+const API = '/api/raffle/admin/';
+let password = '';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+async function call(action) {
+  const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password } });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function prizeBadge(index, total, name) {
+  return `
+    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-8 py-4">
+      <span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-gift mr-2"></i>Приз №${index} из ${total}</span>
+      <span class="display grad-brand-text text-3xl sm:text-4xl font-extrabold leading-tight">${esc(name)}</span>
+    </div>`;
+}
+
+function renderPrizeBadge(s) {
+  const el = $('prize-badge');
+  if (!s.prizes || !s.prizes.length) { el.innerHTML = ''; return; }
+  el.innerHTML = s.nextPrize
+    ? prizeBadge(s.nextPrizeIndex + 1, s.prizes.length, s.nextPrize)
+    : '<span class="text-brand-yellow text-lg font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-2"></i>Все призы разыграны</span>';
+}
+
+function logout(msg) {
+  password = '';
+  try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  $('stage').classList.add('hidden');
+  $('btn-logout').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('login-error').textContent = msg || '';
+  $('login-error').classList.toggle('hidden', !msg);
+}
+
+async function login(pw) {
+  password = pw;
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере.');
+  if (!r.ok) return logout('Ошибка сервера, попробуй ещё раз.');
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  $('login').classList.add('hidden');
+  $('stage').classList.remove('hidden');
+  $('btn-logout').classList.remove('hidden');
+  renderPrizeBadge(r.data);
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+$('btn-logout').addEventListener('click', () => logout());
+
+$('btn-draw').addEventListener('click', async () => {
+  const btn = $('btn-draw');
+  btn.disabled = true;
+  $('error').classList.add('hidden');
+  const r = await call('draw');
+  if (!r.ok) {
+    btn.disabled = false;
+    $('error').textContent = r.data.error === 'nothing_to_draw' ? 'Больше нет номеров для розыгрыша.' : (r.data.error === 'no_session' ? 'Выдача номеров ещё не открыта.' : 'Ошибка, попробуй ещё раз.');
+    $('error').classList.remove('hidden');
+    return;
+  }
+
+  const audio = $('draw-audio');
+  try { audio.currentTime = 0; await audio.play(); } catch (e) {}
+
+  $('winner').textContent = '';
+  const el = $('number');
+  const end = Date.now() + 3200;
+  const spin = setInterval(async () => {
+    if (Date.now() >= end) {
+      clearInterval(spin);
+      el.textContent = r.data.number;
+      $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
+      btn.disabled = false;
+      audio.pause();
+      const st = await call('status');
+      if (st.ok) renderPrizeBadge(st.data);
+    } else {
+      el.textContent = 1 + Math.floor(Math.random() * 90);
+    }
+  }, 70);
+});
+
+try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
+</script>
+
+</body>
+</html>
