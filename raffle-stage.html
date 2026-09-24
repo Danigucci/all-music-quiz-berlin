@@ -70,7 +70,7 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
   <p id="error" class="text-[color:var(--pink)] mt-4 hidden"></p>
 </div>
 
-<audio id="draw-audio" src="audio/draw-music.mp3" preload="auto"></audio>
+<audio id="draw-audio" src="audio/draw-music.mp3" preload="auto" loop></audio>
 <button id="btn-logout" class="hidden fixed top-4 right-4 text-white/30 hover:text-white/70 text-sm transition">Выйти</button>
 
 <script>
@@ -105,6 +105,7 @@ function renderPrizeBadge(s) {
 function logout(msg) {
   password = '';
   try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  $('draw-audio').pause();
   $('stage').classList.add('hidden');
   $('btn-logout').classList.add('hidden');
   $('login').classList.remove('hidden');
@@ -141,7 +142,7 @@ $('btn-draw').addEventListener('click', async () => {
   }
 
   const audio = $('draw-audio');
-  try { audio.currentTime = 0; await audio.play(); } catch (e) {}
+  if (audio.paused) { try { await audio.play(); } catch (e) {} }
 
   $('winner').textContent = '';
   const el = $('number');
@@ -152,7 +153,6 @@ $('btn-draw').addEventListener('click', async () => {
       el.textContent = r.data.number;
       $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
       btn.disabled = false;
-      audio.pause();
       const st = await call('status');
       if (st.ok) renderPrizeBadge(st.data);
     } else {
