@@ -109,8 +109,18 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
       <p class="text-white/40 text-xs mt-3">«Открыть новую выдачу» удаляет данные предыдущей игры и начинает нумерацию с нуля.</p>
     </div>
 
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <h2 class="font-bold text-lg">Призы</h2>
+      <p class="text-zinc-500 text-sm mt-1">По одному призу на строку, в порядке розыгрыша. Список сохраняется между играми — меняй его, когда призы другие.</p>
+      <textarea id="prizes-input" rows="4" placeholder="Порция пельменей&#10;Депиляция&#10;Сертификат в бар" class="w-full mt-3 bg-white border border-zinc-300 px-4 py-3 rounded-xl outline-none focus:border-[color:var(--pink)] text-sm font-mono"></textarea>
+      <div class="flex items-center gap-3 mt-3">
+        <button id="btn-save-prizes" class="grad-brand text-navy font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition text-sm">Сохранить список</button>
+        <span id="prizes-saved" class="text-sm text-zinc-400 hidden">Сохранено</span>
+      </div>
+    </div>
+
     <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">
-      <p class="text-white/60 text-sm uppercase tracking-widest font-semibold">Вытянутый номер</p>
+      <p id="draw-prize-label" class="text-white/60 text-sm uppercase tracking-widest font-semibold min-h-[1.25rem]"></p>
       <div id="draw-number" class="display grad-brand-text font-extrabold leading-none my-6" style="font-size:9rem;">—</div>
       <p id="draw-team" class="text-xl font-semibold min-h-[1.75rem]"></p>
       <button id="btn-draw" class="grad-brand text-navy font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition mt-6">Вытянуть номер</button>
@@ -163,8 +173,13 @@ let timer = null;
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-async function call(action) {
-  const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password } });
+async function call(action, body) {
+  const opts = { method: 'POST', headers: { 'x-admin-password': password } };
+  if (body !== undefined) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(API + action, opts);
   let data = {};
   try { data = await res.json(); } catch (e) {}
   return { ok: res.ok, status: res.status, data };
@@ -178,14 +193,27 @@ function renderStatus(s) {
   $('btn-close').classList.toggle('opacity-40', !s.open);
   renderDrawn(s.drawn);
   renderParticipants(s.participants);
+  renderNextPrizeLabel(s);
+  if (document.activeElement !== $('prizes-input')) {
+    $('prizes-input').value = (s.prizes || []).join('\n');
+  }
+}
+
+function renderNextPrizeLabel(s) {
+  if (!s.prizes || !s.prizes.length) { $('draw-prize-label').textContent = ''; return; }
+  $('draw-prize-label').textContent = s.nextPrize
+    ? `Приз №${s.nextPrizeIndex + 1} из ${s.prizes.length}: ${s.nextPrize}`
+    : 'Все призы разыграны';
 }
 
 function renderDrawn(drawn) {
   const showEmail = $('show-email').checked;
   $('drawn-list').innerHTML = drawn.length ? drawn.slice().reverse().map((d) =>
-    '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#181454">' + d.number + '</span>' +
+    '<li class="py-2"><div class="flex items-center gap-3">' +
+    '<span class="rank-badge" style="background:#181454">' + d.number + '</span>' +
     '<span class="font-semibold">' + (esc(d.name) || '—') + '</span><span class="text-zinc-500">' + (esc(d.team) || 'без команды') + '</span>' +
-    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</li>'
+    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</div>' +
+    (d.prize ? '<div class="text-xs text-[color:var(--pink)] font-semibold mt-1 ml-11">' + esc(d.prize) + '</div>' : '') + '</li>'
   ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
 }
 
@@ -251,6 +279,16 @@ $('btn-purge').addEventListener('click', async () => {
 
 function resetDraw() { $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
 
+$('btn-save-prizes').addEventListener('click', async () => {
+  const prizes = $('prizes-input').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  const r = await call('prizes', { prizes });
+  if (r.ok) {
+    lastStatus = r.data; renderStatus(r.data);
+    $('prizes-saved').classList.remove('hidden');
+    setTimeout(() => $('prizes-saved').classList.add('hidden'), 2000);
+  }
+});
+
 $('btn-draw').addEventListener('click', async () => {
   const btn = $('btn-draw');
   btn.disabled = true;
@@ -263,6 +301,7 @@ $('btn-draw').addEventListener('click', async () => {
     return;
   }
   $('draw-team').textContent = '';
+  $('draw-prize-label').textContent = r.data.prize ? `Приз №${r.data.prizeIndex + 1}: ${r.data.prize}` : '';
   const el = $('draw-number');
   const end = Date.now() + 2200;
   const spin = setInterval(() => {

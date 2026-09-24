@@ -76,6 +76,11 @@ export default async (req) => {
       const { status, body } = await raffle.adminDraw();
       return json(status, body);
     }
+    if (action === 'prizes') {
+      let data;
+      try { data = await req.json(); } catch { return json(400, { error: 'bad_request' }); }
+      return json(200, await raffle.adminSetPrizes(data?.prizes));
+    }
   }
 
   return json(404, { error: 'not_found' });

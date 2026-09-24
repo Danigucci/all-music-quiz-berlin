@@ -8,8 +8,14 @@ const sha256 = (s) => createHash('sha256').update(s).digest('hex');
 
 export function createRaffle(store, { random = Math.random, sendEmail = async () => {} } = {}) {
   const readState = async () =>
-    (await store.get('state', { type: 'json' })) || { open: false, session: null, drawn: [] };
+    (await store.get('state', { type: 'json' })) || { open: false, session: null, drawn: [], prizes: [] };
   const writeState = (state) => store.setJSON('state', state);
+
+  const cleanPrizeList = (list) =>
+    (Array.isArray(list) ? list : [])
+      .map((p) => String(p || '').trim().slice(0, 120))
+      .filter(Boolean)
+      .slice(0, 200);
 
   const listIssued = async (session) => {
     const { blobs } = await store.list({ prefix: `s/${session}/n/` });
@@ -85,20 +91,37 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     const state = await readState();
     const issued = state.session ? await listIssued(state.session) : [];
     const byNumber = new Map(issued.map((r) => [r.number, r]));
+    const prizes = state.prizes || [];
     return {
       open: state.open,
       session: state.session,
       max: MAX,
       issued: issued.length,
       participants: issued.map((r) => ({ number: r.number, name: r.name || '', team: r.team, email: r.email })),
-      drawn: state.drawn.map((n) => ({ number: n, name: byNumber.get(n)?.name || '', team: byNumber.get(n)?.team || '', email: byNumber.get(n)?.email || '' })),
+      drawn: state.drawn.map((n, i) => ({
+        number: n,
+        name: byNumber.get(n)?.name || '',
+        team: byNumber.get(n)?.team || '',
+        email: byNumber.get(n)?.email || '',
+        prize: prizes[i] || null,
+      })),
+      prizes,
+      nextPrizeIndex: state.drawn.length,
+      nextPrize: prizes[state.drawn.length] || null,
     };
   }
 
   async function adminOpen() {
+    const prior = await readState();
     await purgeAll();
     const session = `${Date.now().toString(36)}${randomBytes(3).toString('hex')}`;
-    await writeState({ open: true, session, drawn: [] });
+    await writeState({ open: true, session, drawn: [], prizes: prior.prizes || [] });
+    return adminStatus();
+  }
+
+  async function adminSetPrizes(list) {
+    const state = await readState();
+    await writeState({ ...state, prizes: cleanPrizeList(list) });
     return adminStatus();
   }
 
@@ -115,15 +138,20 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     const candidates = issued.filter((r) => !state.drawn.includes(r.number));
     if (!candidates.length) return { status: 409, body: { error: 'nothing_to_draw' } };
     const winner = candidates[Math.floor(random() * candidates.length)];
+    const prizeIndex = state.drawn.length;
+    const prize = (state.prizes || [])[prizeIndex] || null;
     await writeState({ ...state, drawn: [...state.drawn, winner.number] });
-    return { status: 200, body: { number: winner.number, name: winner.name || '', team: winner.team, email: winner.email, remaining: candidates.length - 1 } };
+    return {
+      status: 200,
+      body: { number: winner.number, name: winner.name || '', team: winner.team, email: winner.email, remaining: candidates.length - 1, prizeIndex, prize },
+    };
   }
 
   async function adminPurge() {
     await purgeAll();
-    await writeState({ open: false, session: null, drawn: [] });
+    await writeState({ open: false, session: null, drawn: [], prizes: [] });
     return adminStatus();
   }
 
-  return { publicStatus, claim, adminStatus, adminOpen, adminClose, adminDraw, adminPurge };
+  return { publicStatus, claim, adminStatus, adminOpen, adminClose, adminDraw, adminPurge, adminSetPrizes };
 }
