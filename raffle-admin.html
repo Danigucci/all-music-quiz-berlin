@@ -120,7 +120,7 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </div>
 
     <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">
-      <p id="draw-prize-label" class="text-white/60 text-sm uppercase tracking-widest font-semibold min-h-[1.25rem]"></p>
+      <div id="draw-prize-label" class="min-h-[2.5rem] flex items-center justify-center"></div>
       <div id="draw-number" class="display grad-brand-text font-extrabold leading-none my-6" style="font-size:9rem;">—</div>
       <p id="draw-team" class="text-xl font-semibold min-h-[1.75rem]"></p>
       <button id="btn-draw" class="grad-brand text-navy font-bold text-lg px-10 py-4 rounded-full hover:opacity-90 transition mt-6">Вытянуть номер</button>
@@ -199,11 +199,20 @@ function renderStatus(s) {
   }
 }
 
+function prizeBadge(index, total, name) {
+  return `
+    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-3">
+      <span class="text-brand-yellow text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-gift mr-1.5"></i>Приз №${index} из ${total}</span>
+      <span class="display grad-brand-text text-2xl font-extrabold leading-tight">${esc(name)}</span>
+    </div>`;
+}
+
 function renderNextPrizeLabel(s) {
-  if (!s.prizes || !s.prizes.length) { $('draw-prize-label').textContent = ''; return; }
-  $('draw-prize-label').textContent = s.nextPrize
-    ? `Приз №${s.nextPrizeIndex + 1} из ${s.prizes.length}: ${s.nextPrize}`
-    : 'Все призы разыграны';
+  const el = $('draw-prize-label');
+  if (!s.prizes || !s.prizes.length) { el.innerHTML = ''; return; }
+  el.innerHTML = s.nextPrize
+    ? prizeBadge(s.nextPrizeIndex + 1, s.prizes.length, s.nextPrize)
+    : '<span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-1.5"></i>Все призы разыграны</span>';
 }
 
 function renderDrawn(drawn) {
@@ -301,7 +310,7 @@ $('btn-draw').addEventListener('click', async () => {
     return;
   }
   $('draw-team').textContent = '';
-  $('draw-prize-label').textContent = r.data.prize ? `Приз №${r.data.prizeIndex + 1}: ${r.data.prize}` : '';
+  $('draw-prize-label').innerHTML = r.data.prize ? prizeBadge(r.data.prizeIndex + 1, lastStatus?.prizes?.length || r.data.prizeIndex + 1, r.data.prize) : '';
   const el = $('draw-number');
   const end = Date.now() + 2200;
   const spin = setInterval(() => {
