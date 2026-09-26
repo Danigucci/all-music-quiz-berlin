@@ -233,6 +233,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <span class="flex flex-col">
             <span class="flex items-center gap-2">Игра #3: Музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
             <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+            <span class="text-brand-yellow text-xs font-semibold mt-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Мест почти нет — запись только в резерв</span>
           </span>
           <span class="text-white/60">01.10.2026, 19:00</span>
         </button>
@@ -372,7 +373,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
         <label class="text-white/80 text-sm font-semibold block mb-1.5">На какую игру записаться</label>
         <select name="game" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]">
           <option value="" disabled selected class="text-navy">Выберите игру</option>
-          <option value="01.10.2026, 19:00 — music mix" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix</option>
+          <option value="01.10.2026, 19:00 — music mix (резерв)" data-datetime="2026-10-01T19:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix (мест нет, только резерв)</option>
           <option value="15.10.2026, 19:00 — Всё на А" data-datetime="2026-10-15T19:00:00+02:00" class="text-navy">15.10.2026, 19:00 — Игра #4: Всё на А</option>
           <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party</option>
           <option value="12.11.2026, 19:00 — Romantik Collection" data-datetime="2026-11-12T19:00:00+01:00" class="text-navy">12.11.2026, 19:00 — Игра #6: Romantik Collection</option>
@@ -751,6 +752,9 @@ function showMusicMixModal() {
             <button onclick="document.getElementById('music-mix-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
           </div>
           <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">Music Mix <span class="grad-brand-text">lite</span></h3>
+          <p class="inline-flex items-center gap-2 text-brand-yellow text-sm font-semibold bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-5">
+            <i class="fa-solid fa-triangle-exclamation"></i> Мест на игру почти нет — регистрация идёт только в резерв
+          </p>
           <p class="text-white/70 leading-relaxed mb-6">
             Чего же ждать в игре Music Mix lite? Хоть игра и называется «лайт» — нифига она не лайт!!!
             Чтобы сохранить интригу, мы не скажем, какие механики будут в каких конкретно турах, но немного информации всё же дадим — чтобы вы хоть что-то угадали :)
