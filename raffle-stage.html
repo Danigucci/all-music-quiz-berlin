@@ -97,6 +97,9 @@ function prizeBadge(index, total, name) {
 
 function renderPrizeBadge(s) {
   const el = $('prize-badge');
+  const allPrizesDrawn = Boolean(s.prizes && s.prizes.length && !s.nextPrize);
+  $('btn-draw').disabled = allPrizesDrawn;
+  $('btn-draw').classList.toggle('opacity-40', allPrizesDrawn);
   if (!s.prizes || !s.prizes.length) { el.innerHTML = ''; return; }
   el.innerHTML = s.nextPrize
     ? prizeBadge(s.nextPrizeIndex + 1, s.prizes.length, s.nextPrize)
