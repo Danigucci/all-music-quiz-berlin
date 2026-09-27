@@ -230,8 +230,8 @@ p { margin: 0; }
   }
 
   function renderJoin(err) {
-    const name = h('input', { id: 'nm', maxlength: 24, placeholder: 'Например, Аня', autocomplete: 'nickname', value: me.name || '', 'aria-describedby': 'nm-err' });
-    const team = h('input', { id: 'tm', maxlength: 32, placeholder: 'Например, Бублики', value: me.team || '', 'aria-describedby': 'tm-err' });
+    const name = h('input', { id: 'nm', maxlength: 24, placeholder: 'Например, Вася', autocomplete: 'nickname', value: me.name || '', 'aria-describedby': 'nm-err' });
+    const team = h('input', { id: 'tm', maxlength: 32, placeholder: 'Например, Маги воздуха', value: me.team || '', 'aria-describedby': 'tm-err' });
     const nameErr = h('small', { class: 'err-msg', id: 'nm-err' });
     const teamErr = h('small', { class: 'err-msg', id: 'tm-err' });
     const formErr = h('p', { class: 'err-msg', role: 'alert' }, err || '');
