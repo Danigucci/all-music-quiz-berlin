@@ -66,13 +66,14 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
   <div id="prize-badge" class="min-h-[4rem] flex items-center justify-center mb-4"></div>
   <div id="number" class="display grad-brand-text font-extrabold leading-none" style="font-size:min(38vw, 20rem);">—</div>
   <p id="winner" class="text-2xl sm:text-3xl font-semibold mt-4 min-h-[2.5rem]"></p>
-  <button id="btn-draw" class="grad-brand text-navy font-bold text-xl sm:text-2xl px-12 py-5 rounded-full hover:opacity-90 transition mt-10">Вытянуть номер</button>
+  <button id="btn-draw" class="grad-brand text-navy font-bold text-2xl sm:text-3xl px-16 py-7 rounded-full hover:opacity-90 transition mt-10 whitespace-nowrap">Вытянуть номер</button>
   <p id="error" class="text-[color:var(--pink)] mt-4 hidden"></p>
 </div>
 
 <audio id="draw-audio" src="audio/draw-music.mp3" preload="auto" loop></audio>
 <button id="btn-logout" class="hidden fixed top-4 right-4 text-white/30 hover:text-white/70 text-sm transition">Выйти</button>
 
+<script src="js/confetti.min.js"></script>
 <script>
 const API = '/api/raffle/admin/';
 let password = '';
@@ -111,6 +112,13 @@ function logout(msg) {
   $('login').classList.remove('hidden');
   $('login-error').textContent = msg || '';
   $('login-error').classList.toggle('hidden', !msg);
+}
+
+function fireConfetti() {
+  if (typeof confetti !== 'function') return;
+  const colors = ['#ffd83e', '#ff4fa3', '#ff8a3d'];
+  confetti({ particleCount: 140, spread: 100, startVelocity: 45, origin: { y: 0.6 }, colors });
+  setTimeout(() => confetti({ particleCount: 80, spread: 120, startVelocity: 35, origin: { y: 0.4 }, colors }), 200);
 }
 
 async function login(pw) {
@@ -153,6 +161,7 @@ $('btn-draw').addEventListener('click', async () => {
       el.textContent = r.data.number;
       $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
       btn.disabled = false;
+      fireConfetti();
       const st = await call('status');
       if (st.ok) renderPrizeBadge(st.data);
     } else {
