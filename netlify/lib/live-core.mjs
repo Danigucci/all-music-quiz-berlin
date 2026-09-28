@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { PRIZES, ROUNDS } from './live-questions.mjs';
+import { hasBannedWord } from './live-banned.mjs';
 
 export const QUESTION_MS = 10000;
 // Phones see a question up to one poll later than the big screen and count their own 10 s,
@@ -102,6 +103,8 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     if (!PID_RE.test(String(pid || ''))) return { status: 400, body: { error: 'invalid_player' } };
     if (!cleanName) return { status: 400, body: { error: 'invalid_name' } };
     if (!cleanTeam) return { status: 400, body: { error: 'invalid_team' } };
+    if (hasBannedWord(cleanName)) return { status: 400, body: { error: 'banned_name' } };
+    if (hasBannedWord(cleanTeam)) return { status: 400, body: { error: 'banned_team' } };
     const key = `s/${state.session}/p/${pid}`;
     const prev = await store.get(key, { type: 'json' });
     await store.setJSON(key, { name: cleanName, team: cleanTeam, joinedAt: prev?.joinedAt ?? now() });

@@ -273,6 +273,13 @@ p { margin: 0; }
         const r = await post('join', { pid, name: name.value.trim(), team: team.value.trim() });
         if (!r.ok) {
           btn.disabled = false;
+          if (r.data.error === 'banned_name' || r.data.error === 'banned_team') {
+            const [input, el] = r.data.error === 'banned_name' ? [name, nameErr] : [team, teamErr];
+            input.parentElement.classList.add('err');
+            el.textContent = r.data.error === 'banned_name' ? 'Такое имя нельзя использовать — придумай другое' : 'Такое название нельзя использовать — придумай другое';
+            input.focus();
+            return;
+          }
           formErr.textContent = r.data.error === 'no_game' ? 'Игра ещё не открыта. Подожди, пока ведущий её запустит.' : 'Не получилось войти. Попробуй ещё раз.';
           return;
         }
