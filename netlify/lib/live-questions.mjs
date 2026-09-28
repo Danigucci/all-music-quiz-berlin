@@ -1,6 +1,13 @@
 // Question bank for the live quiz (live-host.html + live.html).
 // The right answer is always "a", wrong ones in "w"; options are shuffled per game.
 // Media lives in /live/audio and /live/photos and is only shown on the host screen.
+// Prizes for the top 3, shown to players before the game and on the final podium
+export const PRIZES = [
+  'Порция пельменей от pelmennia_berlin',
+  'Кальян на выбор в Shadow Lounge',
+  'Gutschein на 20 € в баре Kvartira62',
+];
+
 export const ROUNDS = [
   {
     id: 'hits', kind: 'audio', title: 'Угадай хит',

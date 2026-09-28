@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { ROUNDS } from './live-questions.mjs';
+import { PRIZES, ROUNDS } from './live-questions.mjs';
 
 export const QUESTION_MS = 10000;
 // Phones see a question up to one poll later than the big screen and count their own 10 s,
@@ -22,7 +22,7 @@ const rank = (scores) =>
     .map(([pid, s]) => ({ pid, ...s }))
     .sort((a, b) => b.correct - a.correct || a.time - b.time || a.joinedAt - b.joinedAt);
 
-export function createLive(store, { now = Date.now, random = Math.random, rounds = ROUNDS } = {}) {
+export function createLive(store, { now = Date.now, random = Math.random, rounds = ROUNDS, prizes = PRIZES } = {}) {
   const readState = async () => (await store.get('state', { type: 'json' })) || { phase: 'off' };
   const writeState = (state) => store.setJSON('state', state);
   const readScores = async (session) => (await store.get(`s/${session}/scores`, { type: 'json' })) || {};
@@ -55,7 +55,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function view(pid) {
     const state = await readState();
-    const base = { phase: state.phase, session: state.session || null };
+    const base = { phase: state.phase, session: state.session || null, prizes };
     if (state.phase === 'off' || state.phase === 'lobby') return base;
     if (state.phase === 'final') {
       const board = rank(await readScores(state.session));
@@ -128,11 +128,12 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function hostStatus() {
     const state = await readState();
-    if (state.phase === 'off') return { phase: 'off' };
+    if (state.phase === 'off') return { phase: 'off', prizes };
     const players = await listJson(`s/${state.session}/p/`);
     const scores = await readScores(state.session);
     const out = {
       phase: state.phase,
+      prizes,
       step: stepOf(state),
       session: state.session,
       players: Object.values(players).sort((a, b) => a.joinedAt - b.joinedAt).map(({ name, team }) => ({ name, team })),

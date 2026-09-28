@@ -149,6 +149,16 @@ p { margin: 0; }
 .stat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 8px; text-align: center; }
 .stat b { display: block; font: 800 26px/1.1 var(--display); font-variant-numeric: tabular-nums; }
 .stat small { color: var(--muted); font-size: 12px; font-weight: 700; }
+.prizes { display: grid; gap: 8px; width: 100%; text-align: left; }
+.prize { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); font: 700 15px/1.3 var(--body); }
+.prize .pl { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: var(--navy-ink); font: 800 15px/1 var(--body); }
+.prize:nth-of-type(1) .pl { background: var(--yellow); }
+.prize:nth-of-type(2) .pl { background: #d9d6f5; }
+.prize:nth-of-type(3) .pl { background: var(--orange); }
+.my-prize { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 18px; background: rgba(255, 216, 62, 0.1); border: 1px solid rgba(255, 216, 62, 0.45); display: grid; gap: 4px; }
+.my-prize b { font: 800 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
+.my-prize p { font-weight: 800; font-size: 18px; }
+.my-prize small { color: var(--muted); }
 .bigplace { font: 800 min(34vw, 150px)/0.9 var(--display); }
 .offline { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); background: var(--bad); color: #fff; font: 700 13px/1 var(--body); padding: 10px 14px; border-radius: 999px; }
 .offline[hidden] { display: none; }
@@ -221,11 +231,17 @@ p { margin: 0; }
   let tick = null;
   const stopTick = () => { if (tick) { cancelAnimationFrame(tick); tick = null; } };
 
-  function waitScreen(title, text) {
+  const prizeList = (prizes) => prizes && prizes.length ? h('div', { class: 'prizes' },
+    h('span', { class: 'eyebrow' }, 'Играем за призы'),
+    prizes.map((p, i) => h('div', { class: 'prize' }, h('span', { class: 'pl' }, i + 1), h('span', {}, p)))
+  ) : null;
+
+  function waitScreen(title, text, extra) {
     show(h('div', { class: 'center' },
       h('div', { class: 'pulse', html: ICON_EYE }),
       h('h2', {}, title),
-      text ? h('p', { class: 'muted' }, text) : null
+      text ? h('p', { class: 'muted' }, text) : null,
+      extra || null
     ));
   }
 
@@ -275,6 +291,7 @@ p { margin: 0; }
         h('h1', {}, 'Играем вместе на большом экране'),
         h('p', { class: 'muted' }, 'Вопросы и музыка — на экране в баре, ответы — здесь. 10 секунд на вопрос, 1 очко за верный ответ, при равенстве побеждает скорость.')
       ),
+      prizeList(S && S.prizes),
       h('form', { class: 'stack', novalidate: true, onsubmit: submit },
         h('div', { class: 'field' }, h('label', { for: 'nm' }, 'Твоё имя'), name, nameErr),
         h('div', { class: 'field' }, h('label', { for: 'tm' }, 'Команда'), team, teamErr),
@@ -373,7 +390,8 @@ p { margin: 0; }
       m ? [
         h('p', { class: 'muted' }, 'Твоё место'),
         h('div', { class: 'bigplace grad-text', style: 'background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent' }, m.place),
-        h('p', {}, `из ${st.players} · ${m.correct} из ${st.total} верных · ${fmtTime(m.time)}`)
+        h('p', {}, `из ${st.players} · ${m.correct} из ${st.total} верных · ${fmtTime(m.time)}`),
+        st.prizes && st.prizes[m.place - 1] ? h('div', { class: 'my-prize' }, h('b', {}, 'Твой приз'), h('p', {}, st.prizes[m.place - 1]), h('small', {}, 'Подойди к ведущему, чтобы его забрать.')) : null
       ] : h('h2', {}, 'Спасибо за игру!'),
       h('p', { class: 'muted' }, 'Полная таблица — на большом экране.')
     ));
@@ -395,7 +413,7 @@ p { margin: 0; }
     renderWho();
     if (st.phase === 'off') { stopTick(); closedScreen(); }
     else if (!joined) { stopTick(); renderJoin(); }
-    else if (st.phase === 'lobby') { stopTick(); waitScreen('Ты в игре!', 'Найди своё имя на экране. Как только ведущий нажмёт «Старт», здесь появится первый вопрос.'); }
+    else if (st.phase === 'lobby') { stopTick(); waitScreen('Ты в игре!', 'Найди своё имя на экране. Как только ведущий нажмёт «Старт», здесь появится первый вопрос.', prizeList(st.prizes)); }
     else if (st.phase === 'intro') { stopTick(); waitScreen(`Раунд ${st.round.index + 1}: ${st.round.title}`, st.round.rule); }
     else if (st.phase === 'question') renderQuestion(st);
     else if (st.phase === 'reveal') renderReveal(st);
