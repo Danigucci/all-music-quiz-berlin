@@ -229,6 +229,15 @@ p { margin: 0; }
     ));
   }
 
+  function closedScreen() {
+    show(h('div', { class: 'center' },
+      h('span', { class: 'eyebrow' }, 'Живая игра'),
+      h('h2', {}, 'Игра сейчас закрыта'),
+      h('p', { class: 'muted' }, 'Она открывается во время квиза All Music Quiz Berlin. Если ты уже в баре — подожди, ведущий скоро её откроет, страница обновится сама.'),
+      h('a', { class: 'btn', href: '/#register', style: 'text-decoration:none;box-sizing:border-box;margin-top:8px' }, 'Записаться на квиз')
+    ));
+  }
+
   function renderJoin(err) {
     const name = h('input', { id: 'nm', maxlength: 24, placeholder: 'Например, Вася', autocomplete: 'nickname', value: me.name || '', 'aria-describedby': 'nm-err' });
     const team = h('input', { id: 'tm', maxlength: 32, placeholder: 'Например, Маги воздуха', value: me.team || '', 'aria-describedby': 'tm-err' });
@@ -384,7 +393,7 @@ p { margin: 0; }
     if (key === shown) return;
     shown = key;
     renderWho();
-    if (st.phase === 'off') { stopTick(); waitScreen('Игра ещё не началась', 'Ведущий скоро откроет игру — страница обновится сама.'); }
+    if (st.phase === 'off') { stopTick(); closedScreen(); }
     else if (!joined) { stopTick(); renderJoin(); }
     else if (st.phase === 'lobby') { stopTick(); waitScreen('Ты в игре!', 'Найди своё имя на экране. Как только ведущий нажмёт «Старт», здесь появится первый вопрос.'); }
     else if (st.phase === 'intro') { stopTick(); waitScreen(`Раунд ${st.round.index + 1}: ${st.round.title}`, st.round.rule); }

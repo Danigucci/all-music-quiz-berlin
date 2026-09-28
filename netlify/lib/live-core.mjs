@@ -182,6 +182,14 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     return hostStatus();
   }
 
+  // Closed between quiz nights: players see a "closed" screen and can't join
+  async function close() {
+    const prev = await readState();
+    await writeState({ phase: 'off' });
+    await purgeSession(prev.session);
+    return hostStatus();
+  }
+
   async function reveal({ step } = {}) {
     const state = await readState();
     if (state.phase !== 'question' || (step && step !== stepOf(state))) return hostStatus();
@@ -234,5 +242,5 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     return hostStatus();
   }
 
-  return { view, join, answer, hostStatus, newGame, next, reveal };
+  return { view, join, answer, hostStatus, newGame, close, next, reveal };
 }

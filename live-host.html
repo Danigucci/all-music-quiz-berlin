@@ -209,6 +209,7 @@ main { min-height: 0; display: grid; }
     <div class="tools">
       <button class="btn ghost small" type="button" id="fs">Во весь экран</button>
       <button class="btn ghost small" type="button" id="reset">Новая игра</button>
+      <button class="btn ghost small" type="button" id="close">Закрыть игру</button>
       <button class="btn ghost small" type="button" id="logout">Выйти</button>
     </div>
     <p class="hint">Пробел или → — следующий шаг</p>
@@ -494,11 +495,11 @@ main { min-height: 0; display: grid; }
 
   function renderOff() {
     stopRaf();
-    primary = h('button', { class: 'btn', type: 'button', onclick: () => act('new') }, 'Открыть новую игру');
+    primary = h('button', { class: 'btn', type: 'button', onclick: () => act('new') }, 'Открыть игру');
     show(h('div', { class: 'intro' },
-      h('span', { class: 'eyebrow' }, 'Экран ведущего'),
+      h('span', { class: 'eyebrow' }, 'Игра закрыта'),
       h('h1', {}, 'Живая игра'),
-      h('p', {}, 'Открой игру, выведи этот экран на большой телевизор и дай гостям отсканировать QR-код.'),
+      h('p', {}, 'Сейчас гости видят, что игра закрыта, и не могут в неё войти. Открой игру во время квиза, выведи этот экран на большой телевизор и дай гостям отсканировать QR-код.'),
       primary
     ));
   }
@@ -506,6 +507,8 @@ main { min-height: 0; display: grid; }
   function render(st) {
     S = st;
     foot.hidden = false;
+    document.getElementById('reset').hidden = st.phase === 'off';
+    document.getElementById('close').hidden = st.phase === 'off';
     renderTop();
     if (st.step === shown) {
       if (st.phase === 'lobby') updateLobby(st);
@@ -567,6 +570,9 @@ main { min-height: 0; display: grid; }
   document.getElementById('logout').addEventListener('click', () => logout());
   document.getElementById('reset').addEventListener('click', () => {
     if (confirm('Начать новую игру? Текущие игроки и результаты удалятся, всем нужно будет войти заново.')) { audio.pause(); act('new'); }
+  });
+  document.getElementById('close').addEventListener('click', () => {
+    if (confirm('Закрыть игру? Игроки и результаты удалятся, а гости увидят, что игра закрыта, пока ты её снова не откроешь.')) { audio.pause(); act('close'); }
   });
   document.getElementById('fs').addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
