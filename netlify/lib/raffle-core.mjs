@@ -99,11 +99,17 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     return { status: 409, body: { error: 'full' } };
   }
 
+  const remainingPrizeIndexes = (state) => {
+    const used = new Set((state.drawnPrizes || []).filter((i) => i != null));
+    return (state.prizes || []).map((_, i) => i).filter((i) => !used.has(i));
+  };
+
   async function adminStatus() {
     const state = await readState();
     const issued = state.session ? await listIssued(state.session) : [];
     const byNumber = new Map(issued.map((r) => [r.number, r]));
     const prizes = state.prizes || [];
+    const drawnPrizes = state.drawnPrizes || [];
     return {
       open: state.open,
       session: state.session,
@@ -115,11 +121,11 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
         name: byNumber.get(n)?.name || '',
         team: byNumber.get(n)?.team || '',
         email: byNumber.get(n)?.email || '',
-        prize: prizes[i] || null,
+        prize: drawnPrizes[i] != null ? prizes[drawnPrizes[i]] || null : null,
       })),
       prizes,
-      nextPrizeIndex: state.drawn.length,
-      nextPrize: prizes[state.drawn.length] || null,
+      remainingPrizeIndexes: remainingPrizeIndexes(state),
+      pendingPrize: state.pendingPrize ?? null,
     };
   }
 
@@ -127,13 +133,15 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     const prior = await readState();
     await purgeAll();
     const session = `${Date.now().toString(36)}${randomBytes(3).toString('hex')}`;
-    await writeState({ open: true, session, drawn: [], prizes: prior.prizes || [] });
+    await writeState({ open: true, session, drawn: [], drawnPrizes: [], pendingPrize: null, prizes: prior.prizes || [] });
     return adminStatus();
   }
 
   async function adminSetPrizes(list) {
     const state = await readState();
-    await writeState({ ...state, prizes: cleanPrizeList(list) });
+    const prizes = cleanPrizeList(list);
+    const pendingPrize = state.pendingPrize != null && state.pendingPrize < prizes.length ? state.pendingPrize : null;
+    await writeState({ ...state, prizes, pendingPrize });
     return adminStatus();
   }
 
@@ -143,27 +151,67 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     return adminStatus();
   }
 
+  const undrawnCandidates = async (state) => {
+    const issued = await listIssued(state.session);
+    return issued.filter((r) => !state.drawn.includes(r.number));
+  };
+
+  // Step 1: the wheel picks which remaining prize is played for next.
+  async function adminSpin() {
+    const state = await readState();
+    if (!state.session) return { status: 400, body: { error: 'no_session' } };
+    const prizes = state.prizes || [];
+    if (!prizes.length) return { status: 400, body: { error: 'no_prizes' } };
+    if (state.pendingPrize != null && prizes[state.pendingPrize]) {
+      return { status: 409, body: { error: 'already_spun', prizeIndex: state.pendingPrize, prize: prizes[state.pendingPrize] } };
+    }
+    const remaining = remainingPrizeIndexes(state);
+    if (!remaining.length) return { status: 409, body: { error: 'no_prizes_left' } };
+    if (!(await undrawnCandidates(state)).length) return { status: 409, body: { error: 'nothing_to_draw' } };
+    const prizeIndex = remaining[Math.floor(random() * remaining.length)];
+    await writeState({ ...state, pendingPrize: prizeIndex });
+    return { status: 200, body: { prizeIndex, prize: prizes[prizeIndex], remainingPrizes: remaining.length } };
+  }
+
+  // Step 2: draw the winning number for the prize chosen by the wheel.
   async function adminDraw() {
     const state = await readState();
     if (!state.session) return { status: 400, body: { error: 'no_session' } };
-    const issued = await listIssued(state.session);
-    const candidates = issued.filter((r) => !state.drawn.includes(r.number));
+    const prizes = state.prizes || [];
+    const hasPrizes = prizes.length > 0;
+    if (hasPrizes) {
+      if (!remainingPrizeIndexes(state).length) return { status: 409, body: { error: 'no_prizes_left' } };
+      if (state.pendingPrize == null || !prizes[state.pendingPrize]) return { status: 409, body: { error: 'spin_first' } };
+    }
+    const candidates = await undrawnCandidates(state);
     if (!candidates.length) return { status: 409, body: { error: 'nothing_to_draw' } };
     const winner = candidates[Math.floor(random() * candidates.length)];
-    const prizeIndex = state.drawn.length;
-    const prize = (state.prizes || [])[prizeIndex] || null;
-    await writeState({ ...state, drawn: [...state.drawn, winner.number] });
+    const prizeIndex = hasPrizes ? state.pendingPrize : null;
+    await writeState({
+      ...state,
+      drawn: [...state.drawn, winner.number],
+      drawnPrizes: [...(state.drawnPrizes || []), prizeIndex],
+      pendingPrize: null,
+    });
     return {
       status: 200,
-      body: { number: winner.number, name: winner.name || '', team: winner.team, email: winner.email, remaining: candidates.length - 1, prizeIndex, prize },
+      body: {
+        number: winner.number,
+        name: winner.name || '',
+        team: winner.team,
+        email: winner.email,
+        remaining: candidates.length - 1,
+        prizeIndex,
+        prize: prizeIndex != null ? prizes[prizeIndex] : null,
+      },
     };
   }
 
   async function adminPurge() {
     await purgeAll();
-    await writeState({ open: false, session: null, drawn: [], prizes: [] });
+    await writeState({ open: false, session: null, drawn: [], drawnPrizes: [], pendingPrize: null, prizes: [] });
     return adminStatus();
   }
 
-  return { publicStatus, claim, adminStatus, adminOpen, adminClose, adminDraw, adminPurge, adminSetPrizes };
+  return { publicStatus, claim, adminStatus, adminOpen, adminClose, adminSpin, adminDraw, adminPurge, adminSetPrizes };
 }

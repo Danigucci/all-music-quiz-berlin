@@ -72,6 +72,10 @@ export default async (req) => {
     if (action === 'open') return json(200, await raffle.adminOpen());
     if (action === 'close') return json(200, await raffle.adminClose());
     if (action === 'purge') return json(200, await raffle.adminPurge());
+    if (action === 'spin') {
+      const { status, body } = await raffle.adminSpin();
+      return json(status, body);
+    }
     if (action === 'draw') {
       const { status, body } = await raffle.adminDraw();
       return json(status, body);

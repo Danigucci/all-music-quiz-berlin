@@ -120,10 +120,14 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </div>
 
     <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">
-      <div id="draw-prize-label" class="min-h-[2.5rem] flex items-center justify-center"></div>
+      <div id="draw-prize-label" class="min-h-[2.5rem] flex flex-col items-center justify-center gap-2"></div>
       <div id="draw-number" class="display grad-brand-text font-extrabold leading-none my-6" style="font-size:9rem;">—</div>
       <p id="draw-team" class="text-xl font-semibold min-h-[1.75rem]"></p>
-      <button id="btn-draw" class="grad-brand text-navy font-bold text-xl px-12 py-5 rounded-full hover:opacity-90 transition mt-6 whitespace-nowrap">Вытянуть номер</button>
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+        <button id="btn-spin" class="border-2 border-[color:var(--yellow)] text-brand-yellow font-bold text-xl px-10 py-4 rounded-full hover:bg-white/10 transition whitespace-nowrap">1. Выбрать приз</button>
+        <button id="btn-draw" class="grad-brand text-navy font-bold text-xl px-10 py-4 rounded-full hover:opacity-90 transition whitespace-nowrap">2. Вытянуть номер</button>
+      </div>
+      <p class="text-white/40 text-xs mt-3">Сначала выбирается приз (как на колесе на экране для гостей), затем номер-победитель.</p>
       <p id="draw-error" class="text-sm text-[color:var(--pink)] mt-3 hidden"></p>
     </div>
 
@@ -194,7 +198,7 @@ function renderStatus(s) {
   $('btn-close').classList.toggle('opacity-40', !s.open);
   renderDrawn(s.drawn);
   renderParticipants(s.participants);
-  renderNextPrizeLabel(s);
+  renderPrizeArea(s);
   if (document.activeElement !== $('prizes-input')) {
     $('prizes-input').value = (s.prizes || []).map(prizeToLine).join('\n');
   }
@@ -227,15 +231,34 @@ function prizeBadge(index, total, prize) {
     </div>`;
 }
 
-function renderNextPrizeLabel(s) {
+let resultPrizeHtml = '';
+
+function setDrawButtons(spinOn, drawOn) {
+  $('btn-spin').disabled = !spinOn;
+  $('btn-spin').classList.toggle('opacity-40', !spinOn);
+  $('btn-draw').disabled = !drawOn;
+  $('btn-draw').classList.toggle('opacity-40', !drawOn);
+}
+
+function renderPrizeArea(s) {
   const el = $('draw-prize-label');
-  const allPrizesDrawn = Boolean(s.prizes && s.prizes.length && !s.nextPrize);
-  $('btn-draw').disabled = allPrizesDrawn;
-  $('btn-draw').classList.toggle('opacity-40', allPrizesDrawn);
-  if (!s.prizes || !s.prizes.length) { el.innerHTML = ''; return; }
-  el.innerHTML = s.nextPrize
-    ? prizeBadge(s.nextPrizeIndex + 1, s.prizes.length, s.nextPrize)
-    : '<span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-1.5"></i>Все призы разыграны</span>';
+  const hasPrizes = s.prizes.length > 0;
+  $('btn-spin').classList.toggle('hidden', !hasPrizes);
+  if (!hasPrizes) {
+    el.innerHTML = '';
+    setDrawButtons(false, true);
+    return;
+  }
+  if (s.pendingPrize != null) {
+    el.innerHTML = prizeBadge(s.drawn.length + 1, s.prizes.length, s.prizes[s.pendingPrize]);
+    setDrawButtons(false, true);
+  } else if (s.remainingPrizeIndexes.length === 0) {
+    el.innerHTML = resultPrizeHtml + '<span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-1.5"></i>Все призы разыграны</span>';
+    setDrawButtons(false, false);
+  } else {
+    el.innerHTML = resultPrizeHtml || '<span class="text-white/50 text-sm">Приз ещё не выбран — нажми «Выбрать приз»</span>';
+    setDrawButtons(true, false);
+  }
 }
 
 function renderDrawn(drawn) {
@@ -316,7 +339,7 @@ $('btn-purge').addEventListener('click', async () => {
   const r = await call('purge'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); resetDraw(); }
 });
 
-function resetDraw() { $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
+function resetDraw() { resultPrizeHtml = ''; $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
 
 $('btn-save-prizes').addEventListener('click', async () => {
   const prizes = $('prizes-input').value.split('\n').map((s) => s.trim()).filter(Boolean).map(lineToPrize);
@@ -328,19 +351,43 @@ $('btn-save-prizes').addEventListener('click', async () => {
   }
 });
 
+const DRAW_ERRORS = {
+  nothing_to_draw: 'Больше нет номеров для розыгрыша.',
+  no_session: 'Сначала открой выдачу номеров.',
+  no_prizes_left: 'Все призы разыграны.',
+  no_prizes: 'Сначала добавь призы.',
+  spin_first: 'Сначала выбери приз.',
+};
+
+$('btn-spin').addEventListener('click', async () => {
+  setDrawButtons(false, false);
+  $('draw-error').classList.add('hidden');
+  const r = await call('spin');
+  if (!r.ok && r.data.error !== 'already_spun') {
+    $('draw-error').textContent = DRAW_ERRORS[r.data.error] || 'Ошибка, попробуй ещё раз.';
+    $('draw-error').classList.remove('hidden');
+  } else {
+    resultPrizeHtml = '';
+    $('draw-number').textContent = '—';
+    $('draw-team').textContent = '';
+  }
+  await refresh();
+});
+
 $('btn-draw').addEventListener('click', async () => {
   const btn = $('btn-draw');
-  btn.disabled = true;
+  setDrawButtons(false, false);
   $('draw-error').classList.add('hidden');
   const r = await call('draw');
   if (!r.ok) {
-    btn.disabled = false;
-    $('draw-error').textContent = r.data.error === 'nothing_to_draw' ? 'Больше нет номеров для розыгрыша.' : (r.data.error === 'no_session' ? 'Сначала открой выдачу номеров.' : 'Ошибка, попробуй ещё раз.');
+    $('draw-error').textContent = DRAW_ERRORS[r.data.error] || 'Ошибка, попробуй ещё раз.';
     $('draw-error').classList.remove('hidden');
+    await refresh();
     return;
   }
   $('draw-team').textContent = '';
-  $('draw-prize-label').innerHTML = r.data.prize ? prizeBadge(r.data.prizeIndex + 1, lastStatus?.prizes?.length || r.data.prizeIndex + 1, r.data.prize) : '';
+  resultPrizeHtml = r.data.prize ? prizeBadge((lastStatus?.drawn?.length || 0) + 1, lastStatus?.prizes?.length || 1, r.data.prize) : '';
+  $('draw-prize-label').innerHTML = resultPrizeHtml;
   const el = $('draw-number');
   const end = Date.now() + 2200;
   const spin = setInterval(() => {
@@ -348,7 +395,6 @@ $('btn-draw').addEventListener('click', async () => {
       clearInterval(spin);
       el.textContent = r.data.number;
       $('draw-team').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
-      btn.disabled = false;
       fireConfetti();
       refresh();
     } else {

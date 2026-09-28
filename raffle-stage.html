@@ -62,11 +62,21 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
   <p id="login-error" class="text-sm text-[color:var(--pink)] hidden"></p>
 </form>
 
-<div id="stage" class="hidden flex-1 flex flex-col items-center justify-center px-5 py-10 text-center">
-  <div id="prize-badge" class="min-h-[4rem] flex items-center justify-center mb-4"></div>
-  <div id="number" class="display grad-brand-text font-extrabold leading-none" style="font-size:min(38vw, 20rem);">—</div>
-  <p id="winner" class="text-2xl sm:text-3xl font-semibold mt-4 min-h-[2.5rem]"></p>
-  <button id="btn-draw" class="grad-brand text-navy font-bold text-2xl sm:text-3xl px-16 py-7 rounded-full hover:opacity-90 transition mt-10 whitespace-nowrap">Вытянуть номер</button>
+<div id="stage" class="hidden flex-1 flex flex-col items-center justify-center px-5 py-8 text-center">
+  <div id="stage-grid" class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+    <div id="wheel-col" class="flex justify-center">
+      <div class="relative" style="width:min(86vw, 58vh, 520px); aspect-ratio:1;">
+        <div class="absolute left-1/2 z-10 -translate-x-1/2" style="top:-4px; width:0; height:0; border-left:16px solid transparent; border-right:16px solid transparent; border-top:34px solid #ffd83e; filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));"></div>
+        <canvas id="wheel" class="w-full h-full rounded-full" style="box-shadow:0 0 0 6px #ffd83e, 0 20px 50px rgba(0,0,0,.5);"></canvas>
+      </div>
+    </div>
+    <div id="result-col" class="flex flex-col items-center min-w-0">
+      <div id="prize-badge" class="min-h-[4rem] flex items-center justify-center mb-4 max-w-full"></div>
+      <div id="number" class="display grad-brand-text font-extrabold leading-none" style="font-size:min(30vw, 14rem);">—</div>
+      <p id="winner" class="text-2xl sm:text-3xl font-semibold mt-4 min-h-[2.5rem]"></p>
+    </div>
+  </div>
+  <button id="btn-action" class="grad-brand text-navy font-bold text-2xl sm:text-3xl px-16 py-7 rounded-full hover:opacity-90 transition mt-8 whitespace-nowrap">Крутить колесо</button>
   <p id="error" class="text-[color:var(--pink)] mt-4 hidden"></p>
 </div>
 
@@ -74,11 +84,17 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 <button id="btn-logout" class="hidden fixed top-4 right-4 text-white/30 hover:text-white/70 text-sm transition">Выйти</button>
 
 <script src="js/confetti.min.js"></script>
+<script src="js/raffle-wheel.js"></script>
 <script>
 const API = '/api/raffle/admin/';
 let password = '';
+let status = null;
+let phase = 'spin';
+let busy = false;
+let wheelKey = null;
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const wheel = new PrizeWheel($('wheel'));
 
 async function call(action) {
   const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password } });
@@ -103,15 +119,54 @@ function prizeBadge(index, total, prize) {
     </div>`;
 }
 
-function renderPrizeBadge(s) {
-  const el = $('prize-badge');
-  const allPrizesDrawn = Boolean(s.prizes && s.prizes.length && !s.nextPrize);
-  $('btn-draw').disabled = allPrizesDrawn;
-  $('btn-draw').classList.toggle('opacity-40', allPrizesDrawn);
-  if (!s.prizes || !s.prizes.length) { el.innerHTML = ''; return; }
-  el.innerHTML = s.nextPrize
-    ? prizeBadge(s.nextPrizeIndex + 1, s.prizes.length, s.nextPrize)
-    : '<span class="text-brand-yellow text-lg font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-2"></i>Все призы разыграны</span>';
+function setPrizeArea(html) { $('prize-badge').innerHTML = html; }
+
+function showError(msg) { $('error').textContent = msg; $('error').classList.remove('hidden'); }
+function hideError() { $('error').classList.add('hidden'); }
+
+function remainingCount() { return status && status.prizes.length ? status.remainingPrizeIndexes.length : 0; }
+
+function updateButton() {
+  const btn = $('btn-action');
+  const hasPrizes = Boolean(status && status.prizes.length);
+  const allGone = hasPrizes && phase === 'spin' && remainingCount() === 0;
+  btn.textContent = allGone ? 'Все призы разыграны' : (phase === 'spin' ? 'Крутить колесо' : 'Вытянуть номер');
+  btn.disabled = busy || allGone;
+  btn.classList.toggle('opacity-40', btn.disabled);
+}
+
+function applyStatus(s) {
+  status = s;
+  const hasPrizes = s.prizes.length > 0;
+  $('wheel-col').classList.toggle('hidden', !hasPrizes);
+  $('stage-grid').classList.toggle('lg:grid-cols-2', hasPrizes);
+
+  if (!hasPrizes) {
+    phase = 'draw';
+    updateButton();
+    return;
+  }
+
+  const key = s.remainingPrizeIndexes.join(',') + '|' + s.prizes.map((p) => p.name).join('/');
+  if (key !== wheelKey) {
+    wheelKey = key;
+    wheel.setItems(s.remainingPrizeIndexes.map((i) => ({ label: s.prizes[i].name })));
+  }
+
+  if (s.pendingPrize != null) {
+    phase = 'draw';
+    wheel.showStatic(s.remainingPrizeIndexes.indexOf(s.pendingPrize));
+    setPrizeArea(prizeBadge(s.drawn.length + 1, s.prizes.length, s.prizes[s.pendingPrize]));
+  } else {
+    phase = 'spin';
+  }
+  updateButton();
+}
+
+async function refreshStatus() {
+  const r = await call('status');
+  if (r.ok) applyStatus(r.data);
+  return r;
 }
 
 function logout(msg) {
@@ -142,44 +197,84 @@ async function login(pw) {
   $('login').classList.add('hidden');
   $('stage').classList.remove('hidden');
   $('btn-logout').classList.remove('hidden');
-  renderPrizeBadge(r.data);
+  applyStatus(r.data);
+}
+
+const ERROR_TEXT = {
+  nothing_to_draw: 'Больше нет номеров для розыгрыша.',
+  no_session: 'Выдача номеров ещё не открыта.',
+  no_prizes_left: 'Все призы разыграны.',
+};
+
+async function startMusic() {
+  const audio = $('draw-audio');
+  if (audio.paused) { try { await audio.play(); } catch (e) {} }
+}
+
+async function doSpin() {
+  const r = await call('spin');
+  if (!r.ok) {
+    if (r.data.error === 'already_spun') { await refreshStatus(); return; }
+    showError(ERROR_TEXT[r.data.error] || 'Ошибка, попробуй ещё раз.');
+    return;
+  }
+  $('number').textContent = '—';
+  $('winner').textContent = '';
+  setPrizeArea('<span class="text-white/60 text-xl font-semibold"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Колесо крутится…</span>');
+
+  let pos = status.remainingPrizeIndexes.indexOf(r.data.prizeIndex);
+  if (pos < 0) { await refreshStatus(); pos = status.remainingPrizeIndexes.indexOf(r.data.prizeIndex); }
+  await wheel.spinTo(pos, 5500);
+
+  setPrizeArea(prizeBadge(status.drawn.length + 1, status.prizes.length, r.data.prize));
+  status.pendingPrize = r.data.prizeIndex;
+  phase = 'draw';
+}
+
+async function doDraw() {
+  const r = await call('draw');
+  if (!r.ok) {
+    if (r.data.error === 'spin_first') { await refreshStatus(); }
+    showError(ERROR_TEXT[r.data.error] || 'Ошибка, попробуй ещё раз.');
+    return;
+  }
+  $('winner').textContent = '';
+  const el = $('number');
+  const end = Date.now() + 3200;
+  await new Promise((resolve) => {
+    const spin = setInterval(() => {
+      if (Date.now() >= end) {
+        clearInterval(spin);
+        el.textContent = r.data.number;
+        $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
+        fireConfetti();
+        resolve();
+      } else {
+        el.textContent = 1 + Math.floor(Math.random() * 90);
+      }
+    }, 70);
+  });
+  await refreshStatus();
 }
 
 $('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
 $('btn-logout').addEventListener('click', () => logout());
 
-$('btn-draw').addEventListener('click', async () => {
-  const btn = $('btn-draw');
-  btn.disabled = true;
-  $('error').classList.add('hidden');
-  const r = await call('draw');
-  if (!r.ok) {
-    btn.disabled = false;
-    $('error').textContent = r.data.error === 'nothing_to_draw' ? 'Больше нет номеров для розыгрыша.' : (r.data.error === 'no_session' ? 'Выдача номеров ещё не открыта.' : 'Ошибка, попробуй ещё раз.');
-    $('error').classList.remove('hidden');
-    return;
+$('btn-action').addEventListener('click', async () => {
+  if (busy) return;
+  busy = true;
+  updateButton();
+  hideError();
+  await startMusic();
+  try {
+    if (phase === 'spin') await doSpin(); else await doDraw();
+  } finally {
+    busy = false;
+    updateButton();
   }
-
-  const audio = $('draw-audio');
-  if (audio.paused) { try { await audio.play(); } catch (e) {} }
-
-  $('winner').textContent = '';
-  const el = $('number');
-  const end = Date.now() + 3200;
-  const spin = setInterval(async () => {
-    if (Date.now() >= end) {
-      clearInterval(spin);
-      el.textContent = r.data.number;
-      $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
-      btn.disabled = false;
-      fireConfetti();
-      const st = await call('status');
-      if (st.ok) renderPrizeBadge(st.data);
-    } else {
-      el.textContent = 1 + Math.floor(Math.random() * 90);
-    }
-  }, 70);
 });
+
+window.addEventListener('resize', () => wheel.draw());
 
 try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
 </script>
