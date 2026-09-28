@@ -111,8 +111,8 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 
     <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
       <h2 class="font-bold text-lg">Призы</h2>
-      <p class="text-zinc-500 text-sm mt-1">По одному призу на строку, в порядке розыгрыша. Список сохраняется между играми — меняй его, когда призы другие.</p>
-      <textarea id="prizes-input" rows="4" placeholder="Порция пельменей&#10;Депиляция&#10;Сертификат в бар" class="w-full mt-3 bg-white border border-zinc-300 px-4 py-3 rounded-xl outline-none focus:border-[color:var(--pink)] text-sm font-mono"></textarea>
+      <p class="text-zinc-500 text-sm mt-1">По одному призу на строку, в порядке розыгрыша. Формат: <span class="font-mono">Название | @instagram | файл-картинки.png</span> — Instagram и картинка необязательны. Картинки лежат в папке <span class="font-mono">prizes/</span> сайта. Список сохраняется между играми.</p>
+      <textarea id="prizes-input" rows="4" placeholder="Protokoll Taproom | @protokollberlin | protokoll-taproom.png&#10;Депиляция&#10;Сертификат в бар | @bar_berlin" class="w-full mt-3 bg-white border border-zinc-300 px-4 py-3 rounded-xl outline-none focus:border-[color:var(--pink)] text-sm font-mono"></textarea>
       <div class="flex items-center gap-3 mt-3">
         <button id="btn-save-prizes" class="grad-brand text-navy font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition text-sm">Сохранить список</button>
         <span id="prizes-saved" class="text-sm text-zinc-400 hidden">Сохранено</span>
@@ -196,15 +196,34 @@ function renderStatus(s) {
   renderParticipants(s.participants);
   renderNextPrizeLabel(s);
   if (document.activeElement !== $('prizes-input')) {
-    $('prizes-input').value = (s.prizes || []).join('\n');
+    $('prizes-input').value = (s.prizes || []).map(prizeToLine).join('\n');
   }
 }
 
-function prizeBadge(index, total, name) {
+function prizeToLine(p) {
+  const parts = [p.name, p.instagram ? '@' + p.instagram : '', p.image];
+  while (parts.length > 1 && !parts[parts.length - 1]) parts.pop();
+  return parts.join(' | ');
+}
+
+function lineToPrize(line) {
+  const [name, instagram, image] = line.split('|').map((s) => s.trim());
+  return { name, instagram: instagram || '', image: image || '' };
+}
+
+function prizeBadge(index, total, prize) {
+  const instagram = prize.instagram
+    ? `<span class="text-white/80 text-sm font-semibold"><i class="fa-brands fa-instagram mr-1 text-brand-yellow"></i>@${esc(prize.instagram)}</span>`
+    : '';
+  const image = prize.image
+    ? `<img src="prizes/${encodeURIComponent(prize.image)}" alt="${esc(prize.name)}" class="mt-2 max-h-24 w-auto max-w-full rounded-lg">`
+    : '';
   return `
-    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-3">
+    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-3 max-w-full">
       <span class="text-brand-yellow text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-gift mr-1.5"></i>Приз №${index} из ${total}</span>
-      <span class="display grad-brand-text text-2xl font-extrabold leading-tight">${esc(name)}</span>
+      <span class="display grad-brand-text text-2xl font-extrabold leading-tight">${esc(prize.name)}</span>
+      ${instagram}
+      ${image}
     </div>`;
 }
 
@@ -226,7 +245,7 @@ function renderDrawn(drawn) {
     '<span class="rank-badge" style="background:#181454">' + d.number + '</span>' +
     '<span class="font-semibold">' + (esc(d.name) || '—') + '</span><span class="text-zinc-500">' + (esc(d.team) || 'без команды') + '</span>' +
     (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</div>' +
-    (d.prize ? '<div class="text-xs text-[color:var(--pink)] font-semibold mt-1 ml-11">' + esc(d.prize) + '</div>' : '') + '</li>'
+    (d.prize ? '<div class="text-xs text-[color:var(--pink)] font-semibold mt-1 ml-11">' + esc(d.prize.name) + (d.prize.instagram ? ' · @' + esc(d.prize.instagram) : '') + '</div>' : '') + '</li>'
   ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
 }
 
@@ -300,7 +319,7 @@ $('btn-purge').addEventListener('click', async () => {
 function resetDraw() { $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
 
 $('btn-save-prizes').addEventListener('click', async () => {
-  const prizes = $('prizes-input').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  const prizes = $('prizes-input').value.split('\n').map((s) => s.trim()).filter(Boolean).map(lineToPrize);
   const r = await call('prizes', { prizes });
   if (r.ok) {
     lastStatus = r.data; renderStatus(r.data);

@@ -7,15 +7,27 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
 
 export function createRaffle(store, { random = Math.random, sendEmail = async () => {} } = {}) {
-  const readState = async () =>
-    (await store.get('state', { type: 'json' })) || { open: false, session: null, drawn: [], prizes: [] };
+  const normalizePrize = (p) => {
+    const src = typeof p === 'string' ? { name: p } : (p || {});
+    const name = String(src.name || '').trim().slice(0, 120);
+    if (!name) return null;
+    const instagram = String(src.instagram || '').trim().replace(/^@+/, '');
+    const image = String(src.image || '').trim();
+    return {
+      name,
+      instagram: /^[A-Za-z0-9._]{1,30}$/.test(instagram) ? instagram : '',
+      image: /^[A-Za-z0-9._-]{1,100}$/.test(image) && !image.startsWith('.') ? image : '',
+    };
+  };
+
+  const readState = async () => {
+    const state = (await store.get('state', { type: 'json' })) || { open: false, session: null, drawn: [] };
+    return { ...state, prizes: (state.prizes || []).map(normalizePrize).filter(Boolean) };
+  };
   const writeState = (state) => store.setJSON('state', state);
 
   const cleanPrizeList = (list) =>
-    (Array.isArray(list) ? list : [])
-      .map((p) => String(p || '').trim().slice(0, 120))
-      .filter(Boolean)
-      .slice(0, 200);
+    (Array.isArray(list) ? list : []).map(normalizePrize).filter(Boolean).slice(0, 200);
 
   const listIssued = async (session) => {
     const { blobs } = await store.list({ prefix: `s/${session}/n/` });
