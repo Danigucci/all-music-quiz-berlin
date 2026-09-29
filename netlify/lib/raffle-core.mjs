@@ -13,10 +13,13 @@ export function createRaffle(store, { random = Math.random, sendEmail = async ()
     if (!name) return null;
     const instagram = String(src.instagram || '').trim().replace(/^@+/, '');
     const image = String(src.image || '').trim();
+    const video = String(src.video || '').trim();
+    const isSafeFilename = (f) => /^[A-Za-z0-9._-]{1,100}$/.test(f) && !f.startsWith('.');
     return {
       name,
       instagram: /^[A-Za-z0-9._]{1,30}$/.test(instagram) ? instagram : '',
-      image: /^[A-Za-z0-9._-]{1,100}$/.test(image) && !image.startsWith('.') ? image : '',
+      image: isSafeFilename(image) ? image : '',
+      video: isSafeFilename(video) ? video : '',
     };
   };
 
