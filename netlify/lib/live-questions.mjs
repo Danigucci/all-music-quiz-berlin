@@ -5,7 +5,7 @@
 export const PRIZES = [
   'Gutschein на 30 € от @khinkali_station',
   'Кальян на выбор в Shadow Lounge',
-  'Gutschein на 20 € в баре Kvartira62',
+  'Gutschein на 20 € в баре @kvartira62',
 ];
 
 export const ROUNDS = [
