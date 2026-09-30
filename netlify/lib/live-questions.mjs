@@ -4,7 +4,7 @@
 // Prizes for the top 3, shown to players before the game and on the final podium
 export const PRIZES = [
   'Gutschein на 30 € от @khinkali_station',
-  'Кальян на выбор в Shadow Lounge',
+  'Кальян на выбор в @shadow.berlin',
   'Gutschein на 20 € в баре @kvartira62',
 ];
 
