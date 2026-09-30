@@ -61,10 +61,12 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     if (state.phase === 'final') {
       const board = rank(await readScores(state.session));
       const me = board.findIndex((r) => r.pid === pid);
+      // Top-3 players learn their place only when the host announces it on the big screen
+      const hidden = me >= 0 && me + 1 <= 3 && me + 1 < (state.podium ?? 1);
       return {
         ...base,
         total: rounds.reduce((s, r) => s + r.questions.length, 0),
-        me: me < 0 ? null : { place: me + 1, correct: board[me].correct, time: board[me].time },
+        me: me < 0 ? null : hidden ? { pending: true } : { place: me + 1, correct: board[me].correct, time: board[me].time },
         players: board.length,
       };
     }
@@ -143,6 +145,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
       board: rank(scores).map(({ name, team, correct, time }) => ({ name, team, correct, time })),
       total: rounds.reduce((s, r) => s + r.questions.length, 0),
     };
+    if (state.phase === 'final') out.podium = state.podium ?? 1;
     if (state.phase === 'lobby' || state.phase === 'final') return out;
     out.round = roundInfo(state);
     // What comes next, so the host screen can preload it
@@ -225,7 +228,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
   }
 
   // `step` is what the host screen was showing, so a double tap can't skip a question
-  const stepOf = (state) => `${state.phase}:${state.round}-${state.q}`;
+  const stepOf = (state) => `${state.phase}:${state.round}-${state.q}` + (state.phase === 'final' ? `:${state.podium ?? 1}` : '');
 
   async function next({ step } = {}) {
     const state = await readState();
@@ -239,12 +242,24 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
       return reveal({ step });
     } else if (state.phase === 'reveal') {
       const nx = nextSlot(state);
-      if (!nx) await writeState({ ...state, phase: 'final', stats: null });
+      if (!nx) {
+        // `podium` is the best place announced so far: 4 = none yet, then 3, 2, 1
+        const scored = Object.keys(await readScores(state.session)).length;
+        await writeState({ ...state, phase: 'final', stats: null, podium: Math.min(3, scored) + 1 });
+      }
       else if (nx.round !== state.round) await writeState({ ...state, phase: 'intro', round: nx.round, q: 0, stats: null });
       else await writeState({ ...state, phase: 'question', q: nx.q, startedAt: now(), stats: null });
     }
     return hostStatus();
   }
 
-  return { view, join, answer, hostStatus, newGame, close, next, reveal };
+  // Announce the next place on the podium (3rd, then 2nd, then 1st)
+  async function announce({ step } = {}) {
+    const state = await readState();
+    if (state.phase !== 'final' || (step && step !== stepOf(state))) return hostStatus();
+    if ((state.podium ?? 1) > 1) await writeState({ ...state, podium: state.podium - 1 });
+    return hostStatus();
+  }
+
+  return { view, join, answer, hostStatus, newGame, close, next, reveal, announce };
 }

@@ -1,11 +1,12 @@
 // Question bank for the live quiz (live-host.html + live.html).
 // The right answer is always "a", wrong ones in "w"; options are shuffled per game.
 // Media lives in /live/audio and /live/photos and is only shown on the host screen.
-// Prizes for the top 3, shown to players before the game and on the final podium
+// Prizes for the top 3, shown to players before the game and on the final podium.
+// `logo` is a path on the site (square picture, shown in a circle).
 export const PRIZES = [
-  'Gutschein на 30 € от @khinkali_station',
-  'Кальян на выбор в @shadow.berlin',
-  'Gutschein на 20 € в баре @kvartira62',
+  { text: 'Gutschein на 30 € от @khinkali_station', logo: 'live/prizes/khinkali-station.png' },
+  { text: 'Кальян на выбор в @shadow.berlin', logo: 'live/prizes/shadow-berlin.png' },
+  { text: 'Gutschein на 20 € в баре @kvartira62', logo: 'live/prizes/kvartira62.png' },
 ];
 
 export const ROUNDS = [

@@ -155,7 +155,11 @@ p { margin: 0; }
 .prize:nth-of-type(1) .pl { background: var(--yellow); }
 .prize:nth-of-type(2) .pl { background: #d9d6f5; }
 .prize:nth-of-type(3) .pl { background: var(--orange); }
-.my-prize { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 18px; background: rgba(255, 216, 62, 0.1); border: 1px solid rgba(255, 216, 62, 0.45); display: grid; gap: 4px; }
+.my-prize { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 18px; background: rgba(255, 216, 62, 0.1); border: 1px solid rgba(255, 216, 62, 0.45); display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; text-align: left; }
+.my-prize > div { display: grid; gap: 4px; }
+.my-prize img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #fff; }
+.prize { grid-template-columns: 34px 34px 1fr; }
+.prize img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: #fff; }
 .my-prize b { font: 800 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
 .my-prize p { font-weight: 800; font-size: 18px; }
 .my-prize small { color: var(--muted); }
@@ -177,6 +181,7 @@ p { margin: 0; }
 </div>
 <p class="offline" id="offline" hidden>Нет связи — пробую снова…</p>
 
+<script src="js/confetti.min.js"></script>
 <script>
 (() => {
   const API = '/api/live/';
@@ -233,7 +238,7 @@ p { margin: 0; }
 
   const prizeList = (prizes) => prizes && prizes.length ? h('div', { class: 'prizes' },
     h('span', { class: 'eyebrow' }, 'Играем за призы'),
-    prizes.map((p, i) => h('div', { class: 'prize' }, h('span', { class: 'pl' }, i + 1), h('span', {}, p)))
+    prizes.map((p, i) => h('div', { class: 'prize' }, h('span', { class: 'pl' }, i + 1), p.logo ? h('img', { src: p.logo, alt: '' }) : h('span'), h('span', {}, p.text)))
   ) : null;
 
   function waitScreen(title, text, extra) {
@@ -389,19 +394,31 @@ p { margin: 0; }
     );
   }
 
+  let celebrated = false;
   function renderFinal(st) {
     stopTick();
     const m = st.me;
+    if (m && m.pending) {
+      waitScreen('Объявляем победителей…', 'Смотри на большой экран — сейчас узнаешь своё место!');
+      return;
+    }
+    const prize = m && st.prizes && st.prizes[m.place - 1];
     show(h('div', { class: 'center' },
       h('span', { class: 'eyebrow' }, 'Игра окончена'),
       m ? [
         h('p', { class: 'muted' }, 'Твоё место'),
         h('div', { class: 'bigplace grad-text', style: 'background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent' }, m.place),
         h('p', {}, `из ${st.players} · ${m.correct} из ${st.total} верных · ${fmtTime(m.time)}`),
-        st.prizes && st.prizes[m.place - 1] ? h('div', { class: 'my-prize' }, h('b', {}, 'Твой приз'), h('p', {}, st.prizes[m.place - 1]), h('small', {}, 'Подойди к ведущему, чтобы его забрать.')) : null
+        prize ? h('div', { class: 'my-prize' },
+          prize.logo ? h('img', { src: prize.logo, alt: '' }) : null,
+          h('div', {}, h('b', {}, 'Твой приз'), h('p', {}, prize.text), h('small', {}, 'Подойди к ведущему, чтобы его забрать.'))) : null
       ] : h('h2', {}, 'Спасибо за игру!'),
       h('p', { class: 'muted' }, 'Полная таблица — на большом экране.')
     ));
+    if (prize && !celebrated && typeof confetti === 'function') {
+      celebrated = true;
+      confetti({ particleCount: 140, spread: 90, startVelocity: 40, origin: { y: 0.4 }, colors: ['#ffd83e', '#ff4fa3', '#ff8a3d', '#ffffff'] });
+    }
   }
 
   function render(st) {
@@ -414,7 +431,7 @@ p { margin: 0; }
     else if (st.phase === 'intro') key = 'intro:' + st.round.index;
     else if (st.phase === 'question') key = 'q:' + st.question.key;
     else if (st.phase === 'reveal') key = 'r:' + st.question.key + ':' + (st.me ? st.me.place + '/' + st.players : '-');
-    else key = 'final:' + (st.me ? st.me.place : '-');
+    else key = 'final:' + (st.me ? (st.me.pending ? 'wait' : st.me.place) : '-');
     if (key === shown) return;
     shown = key;
     renderWho();
