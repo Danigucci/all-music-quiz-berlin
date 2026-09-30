@@ -3,7 +3,7 @@
 // Media lives in /live/audio and /live/photos and is only shown on the host screen.
 // Prizes for the top 3, shown to players before the game and on the final podium
 export const PRIZES = [
-  'Порция пельменей от pelmennia_berlin',
+  'Gutschein на 30 € от @khinkali_station',
   'Кальян на выбор в Shadow Lounge',
   'Gutschein на 20 € в баре Kvartira62',
 ];
