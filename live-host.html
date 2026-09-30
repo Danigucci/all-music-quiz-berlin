@@ -365,7 +365,7 @@ main { min-height: 0; display: grid; }
     show(h('div', { class: 'lobby' },
       h('div', { class: 'qr' }, h('img', { src: 'qr/live.svg', alt: 'QR-код: allmusicquiz.com/live.html' }), h('p', {}, 'allmusicquiz.com/live.html')),
       h('div', { class: 'lobby-right' },
-        h('span', { class: 'eyebrow' }, 'Живая игра'),
+        h('span', { class: 'eyebrow' }, 'IT’S ALL YOU'),
         h('h1', { style: 'font-size:calc(var(--u)*4.6)' }, 'Наведи камеру на QR ', h('span', { class: 'grad-text' }, 'и заходи в игру')),
         prizeList(st.prizes),
         count, names,
@@ -513,7 +513,7 @@ main { min-height: 0; display: grid; }
     primary = h('button', { class: 'btn', type: 'button', onclick: () => act('new') }, 'Открыть игру');
     show(h('div', { class: 'intro' },
       h('span', { class: 'eyebrow' }, 'Игра закрыта'),
-      h('h1', {}, 'Живая игра'),
+      h('h1', {}, 'IT’S ALL YOU'),
       h('p', {}, 'Сейчас гости видят, что игра закрыта, и не могут в неё войти. Открой игру во время квиза, выведи этот экран на большой телевизор и дай гостям отсканировать QR-код.'),
       primary
     ));
@@ -556,7 +556,7 @@ main { min-height: 0; display: grid; }
     const err = h('p', { class: 'err', role: 'alert' }, msg || '');
     show(h('form', { class: 'login', onsubmit: (e) => { e.preventDefault(); if (input.value) login(input.value); } },
       h('span', { class: 'eyebrow' }, 'Экран ведущего'),
-      h('h2', {}, 'Живая игра'),
+      h('h2', {}, 'IT’S ALL YOU'),
       input,
       h('button', { class: 'btn', type: 'submit' }, 'Войти'),
       err
