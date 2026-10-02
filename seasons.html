@@ -130,7 +130,9 @@ function computeStandings(season) {
   const teams = {};
   played.forEach(id => {
     gameResults[id].forEach(r => {
-      const t = teams[r.team] || (teams[r.team] = { team: r.team, wins: 0, games: 0, points: 0 });
+      const key = r.team.trim().toLowerCase().replace(/\s+/g, ' ');
+      const t = teams[key] || (teams[key] = { team: r.team, wins: 0, games: 0, points: 0 });
+      t.team = r.team;
       t.games += 1;
       t.points += r.total;
       if (r.place === 1) t.wins += 1;
