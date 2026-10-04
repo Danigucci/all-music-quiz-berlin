@@ -253,6 +253,7 @@ main { min-height: 0; display: grid; }
   const foot = document.getElementById('foot');
   const ICONS = {
     hits: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+    euro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.3l6.1-.7z"/></svg>',
     kids: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/><path d="M9 3.5c1 .8 2 1 3 .5"/></svg>',
     film: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>'
   };
@@ -294,19 +295,41 @@ main { min-height: 0; display: grid; }
   const audio = new Audio();
   audio.preload = 'auto';
   let fadeId = null;
-  const playClip = (src) => {
+  // Clips differ a lot in loudness, so each has a gain. Boosting above 1 needs Web Audio;
+  // without it (context not allowed to start) the plain element volume is used instead.
+  let actx = null, gainNode = null;
+  const wireAudio = () => {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state !== 'running') actx.resume();
+      if (!gainNode && actx.state === 'running') {
+        gainNode = actx.createGain();
+        actx.createMediaElementSource(audio).connect(gainNode);
+        gainNode.connect(actx.destination);
+      }
+    } catch (e) {}
+  };
+  const playClip = (src, gain = 1) => {
     clearInterval(fadeId);
+    wireAudio();
     if (!audio.src.endsWith(src)) audio.src = src;
-    audio.currentTime = 0; audio.volume = 1;
+    // Start from the clip's own offset; set it explicitly, not every browser honours #t=
+    const start = Number(src.split('#t=')[1] || 0);
+    const seek = () => { if (Math.abs(audio.currentTime - start) > 0.3) audio.currentTime = start; };
+    if (audio.readyState >= 1) seek(); else audio.addEventListener('loadedmetadata', seek, { once: true });
+    if (gainNode) { gainNode.gain.value = gain; audio.volume = 1; }
+    else audio.volume = Math.min(1, gain);
     const p = audio.play();
     if (p && p.catch) p.catch(() => { audioBlocked = true; renderTop(); });
+    // Routed through a context that the browser hasn't let start: no sound until a click
+    if (gainNode && actx.state !== 'running') setTimeout(() => { if (actx.state !== 'running') { audioBlocked = true; renderTop(); } }, 600);
   };
   const fadeOut = () => {
     clearInterval(fadeId);
     if (audio.paused) return;
     fadeId = setInterval(() => {
       audio.volume = Math.max(0, audio.volume - 0.08);
-      if (audio.volume <= 0.01) { clearInterval(fadeId); audio.pause(); audio.volume = 1; }
+      if (audio.volume <= 0.01) { clearInterval(fadeId); audio.pause(); }
     }, 60);
   };
   let audioBlocked = false;
@@ -329,7 +352,7 @@ main { min-height: 0; display: grid; }
   const renderTop = () => {
     topRight.replaceChildren();
     if (!S || S.phase === 'off') return;
-    if (audioBlocked) topRight.append(h('button', { class: 'btn small', type: 'button', onclick: () => { audioBlocked = false; if (S.question) playClip(S.question.media); renderTop(); } }, 'Включить звук'));
+    if (audioBlocked) topRight.append(h('button', { class: 'btn small', type: 'button', onclick: () => { audioBlocked = false; wireAudio(); if (S.question) playClip(S.question.media, S.question.gain); renderTop(); } }, 'Включить звук'));
     topRight.append(h('span', {}, h('b', {}, S.players.length), ` ${plural(S.players.length, 'игрок', 'игрока', 'игроков')}`));
   };
 
@@ -357,7 +380,8 @@ main { min-height: 0; display: grid; }
     if (!S || busy) return;
     if (S.phase === 'final' || S.phase === 'off') return;
     // Load the next clip inside the tap so the browser lets it play
-    if (S.upcoming && /\.mp4$/.test(S.upcoming)) { clearInterval(fadeId); audio.pause(); audio.src = S.upcoming; audio.load(); }
+    wireAudio();
+    if (S.upcoming && /\.mp4(#|$)/.test(S.upcoming)) { clearInterval(fadeId); audio.pause(); audio.src = S.upcoming; audio.load(); }
     act('next', { step: S.step });
   }
   const primaryBtn = (st) => {
@@ -431,7 +455,7 @@ main { min-height: 0; display: grid; }
       // Count from the server's start, but never trust a clock far off from ours
       const skew = Date.now() - st.now;
       qStart = performance.now() - Math.min(Math.max(Date.now() - skew - q.startedAt, 0), QUESTION_MS);
-      if (q.kind === 'audio') playClip(q.media);
+      if (q.kind === 'audio') playClip(q.media, q.gain);
     }
     const C = 2 * Math.PI * 90;
     const ns = 'http://www.w3.org/2000/svg';
@@ -498,7 +522,7 @@ main { min-height: 0; display: grid; }
   }
 
   // ---------- final: drum roll, podium place by place, confetti ----------
-  let actx = null, noiseBuf = null;
+  let noiseBuf = null;
   function drumRoll(sec) {
     const done = new Promise((r) => setTimeout(r, sec * 1000));
     try {

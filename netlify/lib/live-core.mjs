@@ -47,6 +47,9 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     return { round, src, opts, correct: slot.order.indexOf(0), key: `${state.round}-${state.q}` };
   };
 
+  // A clip can start from a later second: the host page reads the #t= media fragment
+  const mediaOf = (q) => q.media + (q.start ? `#t=${q.start}` : '');
+
   const roundInfo = (state) => {
     const r = rounds[state.round];
     return { index: state.round, count: rounds.length, title: r.title, rule: r.rule, kind: r.kind, id: r.id };
@@ -151,11 +154,11 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     // What comes next, so the host screen can preload it
     if (state.phase === 'intro' || state.phase === 'reveal') {
       const nx = nextSlot(state);
-      if (nx) out.upcoming = rounds[nx.round].questions[state.plan[nx.round][nx.q].qi].media;
+      if (nx) out.upcoming = mediaOf(rounds[nx.round].questions[state.plan[nx.round][nx.q].qi]);
     }
     if (state.phase === 'intro') return out;
     const { round, src, opts, correct, key } = current(state);
-    out.question = { key, num: state.q + 1, of: round.questions.length, prompt: round.prompt, opts, media: src.media, kind: round.kind, startedAt: state.startedAt };
+    out.question = { key, num: state.q + 1, of: round.questions.length, prompt: round.prompt, opts, media: mediaOf(src), gain: src.gain ?? 1, kind: round.kind, startedAt: state.startedAt };
     if (state.phase === 'question') {
       const { blobs } = await store.list({ prefix: `s/${state.session}/a/${key}/` });
       out.answered = blobs.length;
