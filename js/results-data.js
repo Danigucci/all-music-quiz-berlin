@@ -70,7 +70,7 @@ const seasons = [
 const gamePlaylists = {
   game1: 'https://open.spotify.com/playlist/0PfZSDR8UuZcKdNxnhzSUm',
   game2: 'https://open.spotify.com/playlist/5dqVegNKwzALAJtGflw8Os',
-  game3: null,
+  game3: 'https://open.spotify.com/playlist/2ByY82j1tSlYYvpDuNovpS',
   game4: null,
   game5: null,
   game6: null,
