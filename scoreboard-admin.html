@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ввод результатов • All Music Quiz Berlin</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#181454;
+  --navy-deep:#100d3a;
+  --yellow:#ffd83e;
+  --pink:#ff4fa3;
+  --orange:#ff8a3d;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:var(--navy-deep); color:#fff; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+
+.field{
+  width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+  color:#fff; border-radius:.75rem; padding:.7rem .9rem; outline:none; font-size:1rem;
+}
+.field:focus{ border-color:var(--pink); }
+.field::placeholder{ color:rgba(255,255,255,.3); }
+.field.score-field{ width:6rem; flex:none; text-align:center; font-weight:700; font-size:1.25rem; padding:.55rem .4rem; }
+
+.round-pill{
+  min-width:3rem; padding:.55rem .9rem; border-radius:9999px; font-weight:700;
+  border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.8); background:transparent; position:relative;
+}
+.round-pill.active{ background:linear-gradient(135deg,var(--pink),var(--orange)); color:var(--navy); border-color:transparent; }
+.round-pill .dot{ position:absolute; top:.3rem; right:.4rem; width:.4rem; height:.4rem; border-radius:9999px; background:var(--yellow); }
+.round-pill.active .dot{ background:var(--navy); }
+</style>
+</head>
+<body class="overflow-x-hidden min-h-screen flex flex-col">
+
+<form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
+  <div class="display text-2xl font-extrabold">All Music Quiz <span class="text-brand-yellow">Berlin</span></div>
+  <p class="text-white/50 text-sm">Ввод результатов</p>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="field text-center rounded-full">
+  <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>
+  <p id="login-error" class="text-sm text-[color:var(--pink)] hidden"></p>
+</form>
+
+<main id="app" class="hidden w-full max-w-2xl mx-auto px-4 pt-5 pb-32">
+  <div class="flex items-center justify-between gap-3">
+    <h1 class="display text-2xl font-extrabold">Ввод результатов</h1>
+    <button id="btn-logout" class="text-white/40 hover:text-white/80 text-sm transition">Выйти</button>
+  </div>
+
+  <section class="mt-5 bg-white/5 border border-white/10 rounded-2xl p-4">
+    <label class="block text-sm font-semibold mb-2" for="title">Подзаголовок таблицы <span class="text-white/40 font-normal">(необязательно)</span></label>
+    <input id="title" class="field" maxlength="80" placeholder="например: music mix 01.10.26">
+  </section>
+
+  <section class="mt-4 bg-white/5 border border-white/10 rounded-2xl p-4">
+    <h2 class="font-bold text-lg">Команды <span id="team-count" class="text-white/40 font-normal text-base"></span></h2>
+    <div id="team-list" class="mt-3 space-y-2"></div>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <button id="btn-add-team" class="border border-white/25 hover:border-white/60 rounded-full px-4 py-2 text-sm font-semibold transition"><i class="fa-solid fa-plus mr-1.5"></i>Добавить команду</button>
+      <button id="btn-toggle-bulk" class="text-white/60 hover:text-white text-sm underline px-2 py-2 transition">добавить списком</button>
+    </div>
+    <div id="bulk-box" class="hidden mt-3">
+      <textarea id="bulk-input" rows="5" class="field" placeholder="По одной команде на строку"></textarea>
+      <button id="btn-bulk-add" class="mt-2 grad-brand text-navy font-bold rounded-full px-5 py-2 text-sm hover:opacity-90 transition">Добавить в список</button>
+    </div>
+  </section>
+
+  <section class="mt-4 bg-white/5 border border-white/10 rounded-2xl p-4">
+    <h2 class="font-bold text-lg">Баллы за тур</h2>
+    <div id="round-pills" class="flex flex-wrap gap-2 mt-3"></div>
+    <div id="score-list" class="mt-4 space-y-2"></div>
+    <p id="score-empty" class="hidden text-white/50 text-sm mt-3">Сначала добавь команды выше.</p>
+  </section>
+
+  <section class="mt-6 text-center">
+    <button id="btn-clear" class="text-sm text-white/40 hover:text-[color:var(--pink)] underline transition">Очистить всё (новая игра)</button>
+  </section>
+</main>
+
+<div id="savebar" class="hidden fixed bottom-0 inset-x-0 bg-navy-deep/95 backdrop-blur border-t border-white/10 px-4 py-3">
+  <div class="max-w-2xl mx-auto flex items-center gap-3">
+    <p id="save-status" class="flex-1 text-sm text-white/60 min-w-0"></p>
+    <button id="btn-save" class="grad-brand text-navy font-bold rounded-full px-8 py-3 hover:opacity-90 transition whitespace-nowrap">Сохранить</button>
+  </div>
+</div>
+
+<script src="js/scoreboard-rank.js"></script>
+<script>
+const API = '/api/scoreboard/';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(5)), (b) => b.toString(16).padStart(2, '0')).join('');
+
+let password = '';
+let rev = 0;
+let state = { title: '', teams: [], scores: {} };
+let currentRound = 1;
+let dirty = false;
+
+async function call(route, body) {
+  const res = await fetch(API + route, {
+    method: 'POST',
+    headers: { 'x-admin-password': password, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body || {}),
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function setStatus(text, tone) {
+  const el = $('save-status');
+  el.textContent = text;
+  el.className = 'flex-1 text-sm min-w-0 ' + (tone === 'error' ? 'text-[color:var(--pink)]' : tone === 'ok' ? 'text-brand-yellow' : 'text-white/60');
+}
+
+function markDirty() {
+  dirty = true;
+  setStatus('Есть несохранённые изменения', 'warn');
+}
+
+function adopt(data) {
+  rev = data.rev;
+  state = { title: data.title || '', teams: data.teams || [], scores: data.scores || {} };
+  dirty = false;
+}
+
+function renderPills() {
+  const withData = new Set(Scoreboard.computeRows(state).roundsWithData);
+  $('round-pills').innerHTML = Array.from({ length: Scoreboard.ROUNDS }, (_, i) => i + 1).map((r) =>
+    `<button type="button" class="round-pill ${r === currentRound ? 'active' : ''}" data-round="${r}">${r}${withData.has(r) ? '<span class="dot"></span>' : ''}</button>`
+  ).join('');
+}
+
+function renderTeams() {
+  $('team-count').textContent = state.teams.length ? `(${state.teams.length})` : '';
+  $('team-list').innerHTML = state.teams.length
+    ? state.teams.map((t, i) => `
+      <div class="flex items-center gap-2">
+        <span class="w-6 text-right text-white/40 text-sm shrink-0">${i + 1}</span>
+        <input class="field team-name" data-id="${t.id}" maxlength="60" value="${esc(t.name)}" placeholder="Название команды">
+        <button type="button" class="team-del text-white/40 hover:text-[color:var(--pink)] px-2 py-2 shrink-0" data-id="${t.id}" aria-label="Удалить команду"><i class="fa-solid fa-xmark"></i></button>
+      </div>`).join('')
+    : '<p class="text-white/50 text-sm">Пока нет команд — добавь первую.</p>';
+}
+
+function renderScores() {
+  const roundScores = state.scores[currentRound] || {};
+  $('score-empty').classList.toggle('hidden', state.teams.length > 0);
+  $('score-list').innerHTML = state.teams.map((t) => `
+    <div class="flex items-center gap-3">
+      <span class="flex-1 min-w-0 truncate font-semibold">${esc(t.name)}</span>
+      <input class="field score-field w-24 shrink-0" type="number" step="1" enterkeyhint="next" data-id="${t.id}" value="${roundScores[t.id] ?? ''}" placeholder="—">
+    </div>`).join('');
+}
+
+function renderAll() {
+  $('title').value = state.title;
+  renderTeams();
+  renderPills();
+  renderScores();
+}
+
+$('round-pills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.round-pill');
+  if (!btn) return;
+  currentRound = Number(btn.dataset.round);
+  renderPills();
+  renderScores();
+});
+
+$('title').addEventListener('input', (e) => { state.title = e.target.value; markDirty(); });
+
+$('team-list').addEventListener('input', (e) => {
+  if (!e.target.classList.contains('team-name')) return;
+  const team = state.teams.find((t) => t.id === e.target.dataset.id);
+  if (team) { team.name = e.target.value; markDirty(); renderScoresLabelsOnly(); }
+});
+
+function renderScoresLabelsOnly() {
+  const names = new Map(state.teams.map((t) => [t.id, t.name]));
+  document.querySelectorAll('#score-list .score-field').forEach((inp) => {
+    inp.previousElementSibling.textContent = names.get(inp.dataset.id) || '';
+  });
+}
+
+$('team-list').addEventListener('click', (e) => {
+  const del = e.target.closest('.team-del');
+  if (!del) return;
+  const team = state.teams.find((t) => t.id === del.dataset.id);
+  if (!team) return;
+  const hasScores = Object.values(state.scores).some((row) => row && row[team.id] !== undefined && row[team.id] !== '');
+  if (hasScores && !confirm(`Удалить «${team.name}» вместе с её баллами?`)) return;
+  state.teams = state.teams.filter((t) => t.id !== team.id);
+  for (const row of Object.values(state.scores)) if (row) delete row[team.id];
+  markDirty();
+  renderAll();
+});
+
+$('btn-add-team').addEventListener('click', () => {
+  state.teams.push({ id: newId(), name: '' });
+  markDirty();
+  renderTeams();
+  renderScores();
+  const inputs = document.querySelectorAll('.team-name');
+  inputs[inputs.length - 1].focus();
+});
+
+$('btn-toggle-bulk').addEventListener('click', () => $('bulk-box').classList.toggle('hidden'));
+
+$('btn-bulk-add').addEventListener('click', () => {
+  const names = $('bulk-input').value.split('\n').map((s) => s.trim()).filter(Boolean);
+  if (!names.length) return;
+  names.forEach((name) => state.teams.push({ id: newId(), name }));
+  $('bulk-input').value = '';
+  $('bulk-box').classList.add('hidden');
+  markDirty();
+  renderAll();
+});
+
+$('score-list').addEventListener('input', (e) => {
+  if (!e.target.classList.contains('score-field')) return;
+  if (!state.scores[currentRound]) state.scores[currentRound] = {};
+  state.scores[currentRound][e.target.dataset.id] = e.target.value;
+  markDirty();
+});
+
+$('score-list').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || !e.target.classList.contains('score-field')) return;
+  e.preventDefault();
+  const all = [...document.querySelectorAll('#score-list .score-field')];
+  const next = all[all.indexOf(e.target) + 1];
+  if (next) next.focus(); else e.target.blur();
+});
+
+$('btn-save').addEventListener('click', async () => {
+  const btn = $('btn-save');
+  btn.disabled = true;
+  setStatus('Сохраняю…', 'warn');
+  const r = await call('save', { state, baseRev: rev });
+  btn.disabled = false;
+  if (r.ok) {
+    adopt(r.data);
+    renderAll();
+    setStatus('Сохранено ✓ ' + new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }), 'ok');
+  } else if (r.status === 409) {
+    setStatus('Данные изменились на другом устройстве. Обнови страницу, чтобы не затереть чужие правки.', 'error');
+  } else if (r.status === 401) {
+    logout('Пароль больше не подходит.');
+  } else {
+    setStatus('Не удалось сохранить, попробуй ещё раз.', 'error');
+  }
+});
+
+$('btn-clear').addEventListener('click', async () => {
+  if (!confirm('Удалить ВСЕ команды и баллы? Это нельзя отменить.')) return;
+  if (!confirm('Точно очистить? Таблица на экране тоже опустеет.')) return;
+  const r = await call('clear');
+  if (r.ok) { adopt(r.data); currentRound = 1; renderAll(); setStatus('Всё очищено', 'ok'); }
+  else setStatus('Не удалось очистить.', 'error');
+});
+
+window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+function logout(msg) {
+  password = '';
+  try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  $('app').classList.add('hidden');
+  $('savebar').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('login-error').textContent = msg || '';
+  $('login-error').classList.toggle('hidden', !msg);
+}
+$('btn-logout').addEventListener('click', () => logout());
+
+async function login(pw) {
+  password = pw;
+  const r = await call('get');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере.');
+  if (!r.ok) return logout('Ошибка сервера, попробуй ещё раз.');
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  adopt(r.data);
+  $('login').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  $('savebar').classList.remove('hidden');
+  setStatus('Загружено', 'warn');
+  renderAll();
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
+</script>
+
+</body>
+</html>
