@@ -3,12 +3,10 @@
 const GAME_RE = /(\d{2})\.(\d{2})\.(\d{4}),\s*(\d{2}):(\d{2})\s*[—–-]\s*(?:Игра\s*#(\d+):?\s*)?(.*)$/u;
 
 const THE_CASTLE = { name: 'The Castle Berlin Mitte', address: 'Invalidenstraße 129, 10115 Berlin' };
-const STRASSENBRAEU = { name: 'Straßenbräu Ausschank 2', address: 'Görlitzer Str. 52, 10997 Berlin' };
 const BELUSHIS = { name: "Belushi's Berlin (Mitte)", address: '' };
 
 // Keep in sync with the schedule in index.html. Keyed by game date (YYYY-MM-DD).
 export const SCHEDULE = {
-  '2026-10-15': { number: 4, venue: STRASSENBRAEU },
   '2026-10-29': { number: 5, venue: THE_CASTLE },
   '2026-11-12': { number: 6, venue: THE_CASTLE },
   '2026-11-26': { number: 7, venue: BELUSHIS },
