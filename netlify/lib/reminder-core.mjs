@@ -1,25 +1,36 @@
-const GAME_RE = /(\d{2})\.(\d{2})\.(\d{4}),\s*(\d{2}):(\d{2})\s*—\s*Игра\s*#(\d+):?\s*(.*)$/u;
+// The registration form submits the selected <option value>, e.g.
+// "26.11.2026, 19:00 — Музыка в кино" (older/other variants may carry an "Игра #N:" prefix).
+const GAME_RE = /(\d{2})\.(\d{2})\.(\d{4}),\s*(\d{2}):(\d{2})\s*[—–-]\s*(?:Игра\s*#(\d+):?\s*)?(.*)$/u;
 
-const VENUES = {
-  default: { name: 'The Castle Berlin Mitte', address: 'Invalidenstraße 129, 10115 Berlin' },
-  4: { name: 'Straßenbräu Ausschank 2', address: 'Görlitzer Str. 52, 10997 Berlin' },
+const THE_CASTLE = { name: 'The Castle Berlin Mitte', address: 'Invalidenstraße 129, 10115 Berlin' };
+const STRASSENBRAEU = { name: 'Straßenbräu Ausschank 2', address: 'Görlitzer Str. 52, 10997 Berlin' };
+const BELUSHIS = { name: "Belushi's Berlin (Mitte)", address: '' };
+
+// Keep in sync with the schedule in index.html. Keyed by game date (YYYY-MM-DD).
+export const SCHEDULE = {
+  '2026-10-15': { number: 4, venue: STRASSENBRAEU },
+  '2026-10-29': { number: 5, venue: THE_CASTLE },
+  '2026-11-12': { number: 6, venue: THE_CASTLE },
+  '2026-11-26': { number: 7, venue: BELUSHIS },
+  '2026-12-10': { number: 8, venue: THE_CASTLE },
+  '2026-12-22': { number: 9, venue: BELUSHIS },
+  '2026-12-29': { number: 10, venue: THE_CASTLE },
 };
 
-export function venueForGame(number) {
-  return VENUES[number] || VENUES.default;
+export function venueForGame(game) {
+  return SCHEDULE[game?.dateStr]?.venue || THE_CASTLE;
 }
 
-// Parses the "game" field submitted by the registration form,
-// e.g. "17.09.2026, 19:00 — Игра #2: 90е и 00е"
 export function parseGameField(value) {
   const m = GAME_RE.exec(String(value || '').trim());
   if (!m) return null;
-  const [, dd, mm, yyyy, hh, min, num, name] = m;
+  const [, dd, mm, yyyy, hh, min, num, rawName] = m;
+  const dateStr = `${yyyy}-${mm}-${dd}`;
   return {
-    dateStr: `${yyyy}-${mm}-${dd}`,
+    dateStr,
     time: `${hh}:${min}`,
-    number: Number(num),
-    name: name.trim(),
+    number: num ? Number(num) : (SCHEDULE[dateStr]?.number ?? null),
+    name: rawName.replace(/\s*\((?:резерв|мест нет[^)]*|регистрация закрыта)\)\s*$/iu, '').trim(),
     dateLabel: `${dd}.${mm}.${yyyy}`,
   };
 }

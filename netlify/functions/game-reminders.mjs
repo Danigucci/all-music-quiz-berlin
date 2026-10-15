@@ -43,9 +43,9 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
       <p>Привет, ${escapeHtml(captain || '')}!</p>
       <p>Через 2 дня — <strong>All Music Quiz Berlin</strong>, не забудь прийти.</p>
       <table style="width:100%; border-collapse:collapse; margin:16px 0;">
-        <tr><td style="padding:6px 0; color:#666;">Игра</td><td style="padding:6px 0;"><strong>${escapeHtml(`Игра #${game.number}: ${game.name}`)}</strong></td></tr>
+        <tr><td style="padding:6px 0; color:#666;">Игра</td><td style="padding:6px 0;"><strong>${escapeHtml(game.number ? `Игра #${game.number}: ${game.name}` : game.name)}</strong></td></tr>
         <tr><td style="padding:6px 0; color:#666;">Когда</td><td style="padding:6px 0;">${escapeHtml(game.dateLabel)}, ${escapeHtml(game.time)}</td></tr>
-        <tr><td style="padding:6px 0; color:#666;">Где</td><td style="padding:6px 0;">${escapeHtml(venue.name)}, ${escapeHtml(venue.address)}</td></tr>
+        <tr><td style="padding:6px 0; color:#666;">Где</td><td style="padding:6px 0;">${escapeHtml(venue.address ? `${venue.name}, ${venue.address}` : venue.name)}</td></tr>
         <tr><td style="padding:6px 0; color:#666;">Команда</td><td style="padding:6px 0;">${escapeHtml(teamLine)}</td></tr>
       </table>
       <p>До встречи! 🎶</p>
@@ -91,7 +91,7 @@ export default async (req, context) => {
         captain: data.captain,
         teamLine,
         game,
-        venue: venueForGame(game.number),
+        venue: venueForGame(game),
       });
       sent += 1;
     } catch (e) {
