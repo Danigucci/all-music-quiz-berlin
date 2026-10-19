@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рассылка • All Music Quiz Berlin</title>
+<meta name="robots" content="noindex">
+<style>
+body{margin:0;background:#181454;color:#fff;font-family:system-ui,-apple-system,Arial,sans-serif;min-height:100vh}
+main{max-width:480px;margin:0 auto;padding:24px 16px}
+h1{font-size:24px;margin:0 0 16px}
+label{display:block;font-size:13px;color:#ffffffa0;margin:14px 0 6px}
+input,select,button{width:100%;box-sizing:border-box;font-size:16px;padding:12px;border-radius:12px;border:1px solid #ffffff30;background:#ffffff14;color:#fff}
+select option{color:#181454}
+button{background:#ff4fa3;color:#181454;font-weight:700;border:0;margin-top:14px;cursor:pointer}
+button.alt{background:#ffd83e}
+button:disabled{opacity:.5}
+.box{background:#ffffff0d;border:1px solid #ffffff1a;border-radius:16px;padding:16px;margin-top:16px}
+#msg{margin-top:14px;font-size:14px;min-height:20px;color:#ffd83e}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+  <form id="login">
+    <h1>Рассылка</h1>
+    <label for="pw">Пароль организатора</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button type="submit">Войти</button>
+  </form>
+  <div id="app" class="hidden">
+    <h1>Рассылка анонсов</h1>
+    <div class="box" id="counts">…</div>
+    <div class="box">
+      <label for="game">Игра</label>
+      <select id="game"></select>
+      <label for="test-to">Тест на адрес</label>
+      <input id="test-to" type="email" placeholder="you@example.com">
+      <button class="alt" id="btn-test" type="button">Отправить тест</button>
+      <button id="btn-all" type="button">Отправить всем подписчикам</button>
+    </div>
+    <div id="msg"></div>
+  </div>
+</main>
+<script>
+const GAMES = [
+  ['2026-10-29','#5 Halloween Music Party — 29.10'],['2026-11-12','#6 Romantik Collection — 12.11'],
+  ['2026-11-26','#7 Музыка в кино — 26.11'],['2026-12-10','#8 Музыкальный алфавит — 10.12'],
+  ['2026-12-22','#9 Вокруг света — 22.12'],['2026-12-29','#10 Новогодний музыкальный микс — 29.12'],
+];
+const $ = (id) => document.getElementById(id);
+let password = '';
+for (const [v, t] of GAMES) { const o = document.createElement('option'); o.value = v; o.textContent = t; $('game').appendChild(o); }
+const say = (t) => { $('msg').textContent = t; };
+async function call(route, method, body) {
+  const res = await fetch('/api/newsletter/' + route, {
+    method, headers: { 'x-admin-password': password, 'Content-Type': 'application/json' },
+    body: method === 'POST' ? JSON.stringify(body || {}) : undefined,
+  });
+  let data = {}; try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+async function refresh() {
+  const r = await call('count', 'GET');
+  if (r.status === 401) return false;
+  $('counts').textContent = `Подтверждено: ${r.data.active} · ждут подтверждения: ${r.data.pending} · отписались: ${r.data.unsubscribed}`;
+  return true;
+}
+async function login(pw) {
+  password = pw;
+  if (!(await refresh())) { $('pw').value = ''; alert('Неверный пароль'); return; }
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  $('login').classList.add('hidden'); $('app').classList.remove('hidden');
+}
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+$('btn-test').addEventListener('click', async () => {
+  const to = $('test-to').value.trim();
+  if (!to) return say('Укажи адрес для теста.');
+  say('Отправляю…');
+  const r = await call('send', 'POST', { date: $('game').value, testTo: to });
+  say(r.ok ? 'Тест отправлен.' : 'Ошибка: ' + (r.data.error || r.status));
+});
+$('btn-all').addEventListener('click', async () => {
+  const label = $('game').selectedOptions[0].textContent;
+  if (!confirm(`Отправить анонс «${label}» ВСЕМ подтверждённым подписчикам?`)) return;
+  say('Отправляю…'); $('btn-all').disabled = true;
+  const r = await call('send', 'POST', { date: $('game').value });
+  $('btn-all').disabled = false;
+  say(r.ok ? `Отправлено: ${r.data.sent}, ошибок: ${r.data.failed}, уже получали: ${r.data.skippedAlreadySent}` : 'Ошибка: ' + (r.data.error || r.status));
+  refresh();
+});
+try { const s = sessionStorage.getItem('amq_admin_pw'); if (s) login(s); } catch (e) {}
+</script>
+</body>
+</html>

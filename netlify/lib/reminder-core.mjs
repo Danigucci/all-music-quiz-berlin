@@ -7,12 +7,12 @@ const BELUSHIS = { name: "Belushi's Berlin (Mitte)", address: '' };
 
 // Keep in sync with the schedule in index.html. Keyed by game date (YYYY-MM-DD).
 export const SCHEDULE = {
-  '2026-10-29': { number: 5, venue: THE_CASTLE },
-  '2026-11-12': { number: 6, venue: THE_CASTLE },
-  '2026-11-26': { number: 7, venue: BELUSHIS },
-  '2026-12-10': { number: 8, venue: THE_CASTLE },
-  '2026-12-22': { number: 9, venue: BELUSHIS },
-  '2026-12-29': { number: 10, venue: THE_CASTLE },
+  '2026-10-29': { number: 5, name: 'Halloween Music Party', time: '19:00', venue: THE_CASTLE },
+  '2026-11-12': { number: 6, name: 'Romantik Collection', time: '19:00', venue: THE_CASTLE },
+  '2026-11-26': { number: 7, name: 'Музыка в кино', time: '19:00', venue: BELUSHIS },
+  '2026-12-10': { number: 8, name: 'Музыкальный алфавит', time: '19:00', venue: THE_CASTLE },
+  '2026-12-22': { number: 9, name: 'Вокруг света', time: '19:00', venue: BELUSHIS },
+  '2026-12-29': { number: 10, name: 'Новогодний музыкальный микс', time: '19:00', venue: THE_CASTLE },
 };
 
 export function venueForGame(game) {

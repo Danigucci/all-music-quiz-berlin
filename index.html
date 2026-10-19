@@ -384,6 +384,13 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           <a href="datenschutz.html" target="_blank" class="text-brand-yellow hover:underline">политикой конфиденциальности</a>
         </span>
       </label>
+      <label class="flex items-start gap-3 cursor-pointer select-none">
+        <input type="checkbox" name="newsletter_optin" value="yes" class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+        <span class="text-white/70 text-sm">
+          Хочу получать анонсы новых игр на email (необязательно). Мы пришлём письмо со ссылкой для подтверждения; отписаться можно в любой момент
+          (<a href="datenschutz.html#newsletter" target="_blank" class="text-brand-yellow hover:underline">подробнее</a>)
+        </span>
+      </label>
       <button type="submit" id="register-submit-btn" class="w-full grad-brand text-navy font-bold py-3.5 rounded-xl hover:opacity-90 transition">Отправить заявку</button>
     </form>
 
@@ -817,6 +824,14 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(Object.fromEntries(formData)),
     }).catch((err) => console.error('send-confirmation failed:', err));
+
+    if (formData.get('newsletter_optin') === 'yes' && formData.get('email')) {
+      fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.get('email'), source: 'form' }),
+      }).catch((err) => console.error('newsletter subscribe failed:', err));
+    }
 
     form.classList.add('hidden');
     document.getElementById('register-success').classList.remove('hidden');
