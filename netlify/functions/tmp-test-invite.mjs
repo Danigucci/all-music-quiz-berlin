@@ -1,5 +1,6 @@
 import { getStore } from '@netlify/blobs';
 export const config = { path: '/api/tmp-test-invite' };
+const to = 'bikmetova.ania@gmail.com';
 export default async () => {
   const store = getStore({ name: 'tmp-test-invite', consistency: 'strong' });
   const { modified } = await store.setJSON('sent', { at: new Date().toISOString() }, { onlyIfNew: true });
