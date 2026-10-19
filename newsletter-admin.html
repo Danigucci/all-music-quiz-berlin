@@ -39,6 +39,10 @@ button:disabled{opacity:.5}
       <button class="alt" id="btn-test" type="button">Отправить тест</button>
       <button id="btn-all" type="button">Отправить всем подписчикам</button>
     </div>
+    <div class="box">
+      <div id="legacy-info" style="font-size:14px;color:#ffffffa0">Старые участники (регистрировались, но не подписывались)</div>
+      <button class="alt" id="btn-legacy" type="button">Отправить анонс старым участникам</button>
+    </div>
     <div id="msg"></div>
   </div>
 </main>
@@ -86,6 +90,17 @@ $('btn-all').addEventListener('click', async () => {
   say('Отправляю…'); $('btn-all').disabled = true;
   const r = await call('send', 'POST', { date: $('game').value });
   $('btn-all').disabled = false;
+  say(r.ok ? `Отправлено: ${r.data.sent}, ошибок: ${r.data.failed}, уже получали: ${r.data.skippedAlreadySent}` : 'Ошибка: ' + (r.data.error || r.status));
+  refresh();
+});
+$('btn-legacy').addEventListener('click', async () => {
+  const c = await call('legacy-count', 'GET');
+  if (!c.ok) return say('Ошибка: ' + (c.data.error || c.status));
+  const label = $('game').selectedOptions[0].textContent;
+  if (!confirm(`Отправить анонс «${label}» ${c.data.eligible} старым участникам БЕЗ их согласия на рассылку? Риск по UWG §7 — на твоей ответственности.`)) return;
+  say('Отправляю…'); $('btn-legacy').disabled = true;
+  const r = await call('legacy-send', 'POST', { date: $('game').value });
+  $('btn-legacy').disabled = false;
   say(r.ok ? `Отправлено: ${r.data.sent}, ошибок: ${r.data.failed}, уже получали: ${r.data.skippedAlreadySent}` : 'Ошибка: ' + (r.data.error || r.status));
   refresh();
 });

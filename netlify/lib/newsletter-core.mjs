@@ -33,7 +33,7 @@ export function unsubscribeUrl(token) {
   return `${SITE_URL}/api/newsletter/unsubscribe?token=${token}`;
 }
 
-export function buildAnnouncement(game, token) {
+export function buildAnnouncement(game, token, legacy = false) {
   const venueLine = game.venue.address ? `${game.venue.name}, ${game.venue.address}` : game.venue.name;
   const registerUrl = `${SITE_URL}/#register`;
   const unsub = unsubscribeUrl(token);
@@ -60,7 +60,7 @@ export function buildAnnouncement(game, token) {
       <p style="margin:0;font-size:14px;color:#5b5890;">Instagram: <a href="https://instagram.com/allmusicquiz_berlin" style="color:#ff4fa3;">@allmusicquiz_berlin</a></p>
     </div>
     <div style="background:#f4f2fb;padding:16px 24px;color:#7a77a8;font-size:12px;line-height:1.5;">
-      Вы получили это письмо, потому что подписались на анонсы игр All Music Quiz Berlin.
+      ${legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры All Music Quiz Berlin.' : 'Вы получили это письмо, потому что подписались на анонсы игр All Music Quiz Berlin.'}
       <a href="${unsub}" style="color:#7a77a8;">Отписаться</a><br>
       All Music Quiz Berlin · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin · danlappo@yahoo.com
     </div>
@@ -72,6 +72,7 @@ export function buildAnnouncement(game, token) {
     `Когда: ${game.whenLabel}`, `Где: ${venueLine}`,
     'Формат: 7 музыкальных раундов, команды от 2 до 10 человек', 'Участие: 15 € с человека', '',
     `Запишись заранее: ${registerUrl}`, '',
+    legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры All Music Quiz Berlin.' : 'Вы подписались на анонсы игр All Music Quiz Berlin.',
     `Отписаться: ${unsub}`,
     'All Music Quiz Berlin · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin',
   ].join('\n');
@@ -173,6 +174,40 @@ export async function handleNewsletter({ route, method, query, password, body },
     }
     await store.setJSON(sentKey, already);
     return { status: 200, json: { sent, failed, skippedAlreadySent: active.length - sent - failed } };
+  }
+
+  if (route === 'legacy-count' || route === 'legacy-send') {
+    if (!adminPassword || password !== adminPassword) return { status: 401, json: { error: 'unauthorized' } };
+    const emails = [...new Set((await deps.listRegistrantEmails()).map(normalizeEmail).filter(isValidEmail))];
+    const targets = [];
+    for (const email of emails) {
+      const rec = await store.get(`e:${email}`, { type: 'json' });
+      if (rec?.status === 'unsubscribed') continue;
+      targets.push({ email, rec });
+    }
+    if (route === 'legacy-count') return { status: 200, json: { eligible: targets.length, skippedUnsubscribed: emails.length - targets.length } };
+    const info = gameInfo(String(body?.date || ''));
+    if (!info) return { status: 400, json: { error: 'unknown game date' } };
+    const sentKey = `sent:${info.dateStr}`;
+    const already = (await store.get(sentKey, { type: 'json' })) || {};
+    let sent = 0, failed = 0, skipped = 0;
+    for (const { email, rec } of targets) {
+      if (already[email]) { skipped += 1; continue; }
+      let r = rec;
+      if (!r) {
+        r = { email, token: newToken(), status: 'imported', importedAt: new Date().toISOString() };
+        await store.setJSON(`e:${email}`, r);
+        await store.setJSON(`t:${r.token}`, email);
+      }
+      const m = buildAnnouncement(info, r.token, r.status !== 'active');
+      try {
+        await send({ to: email, ...m, headers: { 'List-Unsubscribe': `<${m.unsub}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' } });
+        already[email] = new Date().toISOString();
+        sent += 1;
+      } catch (e) { failed += 1; }
+    }
+    await store.setJSON(sentKey, already);
+    return { status: 200, json: { sent, failed, skippedAlreadySent: skipped } };
   }
 
   return { status: 404, json: { error: 'not found' } };
