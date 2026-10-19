@@ -399,6 +399,21 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
       <h3 class="text-white font-bold text-xl">Заявка получена!</h3>
       <p class="text-white/60 mt-2">Мы свяжемся с вами, чтобы подтвердить участие в ближайшей игре.</p>
     </div>
+
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 mt-6 text-center">
+      <h3 class="text-white font-bold text-lg">Не готов записаться сейчас?</h3>
+      <p class="text-white/60 text-sm mt-2">Подпишись на анонсы новых игр. Мы пришлём письмо со ссылкой для подтверждения.</p>
+      <form id="subscribe-form" class="mt-4" style="display:grid;gap:12px">
+        <input type="email" id="subscribe-email" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="you@example.com">
+        <label class="flex items-start gap-3 cursor-pointer select-none text-left">
+          <input type="checkbox" id="subscribe-consent" required class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+          <span class="text-white/70 text-sm">Согласен(-на) получать анонсы игр на email. Отписаться можно в любой момент
+            (<a href="datenschutz.html#newsletter" target="_blank" class="text-brand-yellow hover:underline">подробнее</a>)</span>
+        </label>
+        <button type="submit" id="subscribe-btn" class="w-full grad-brand text-navy font-bold py-3 rounded-xl hover:opacity-90 transition">Подписаться</button>
+      </form>
+      <p id="subscribe-done" class="hidden text-brand-yellow mt-4">Проверь почту: мы отправили письмо для подтверждения.</p>
+    </div>
   </div>
 </section>
 
@@ -840,6 +855,24 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     alert('Ошибка отправки: ' + err.message + '\nПопробуйте ещё раз или напишите нам в Instagram/Telegram напрямую.');
     btn.disabled = false;
     btn.textContent = 'Отправить заявку';
+  }
+});
+document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('subscribe-btn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: document.getElementById('subscribe-email').value, source: 'subscribe' }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    e.target.classList.add('hidden');
+    document.getElementById('subscribe-done').classList.remove('hidden');
+  } catch (err) {
+    alert('Не удалось подписаться: ' + err.message);
+    btn.disabled = false;
   }
 });
 </script>
