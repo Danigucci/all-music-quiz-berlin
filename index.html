@@ -237,7 +237,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
           </span>
           <span class="text-white/60">01.10.2026, 19:00</span>
         </button>
-        <button onclick="showHalloweenModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+        <button onclick="showHalloweenModal()" data-remove-at="2026-10-29T18:30:00+01:00" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
           <span class="flex flex-col">
             <span class="flex items-center gap-2">Игра #5: Halloween Music Party <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
             <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
@@ -367,7 +367,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
         <select name="game" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]">
           <option value="" disabled selected class="text-navy">Выберите игру</option>
           <option value="01.10.2026, 19:00 — music mix (резерв)" data-datetime="2026-09-30T00:00:00+02:00" data-remove-at="2026-10-01T17:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix (регистрация закрыта)</option>
-          <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party · The Castle</option>
+          <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" data-remove-at="2026-10-29T18:30:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party · The Castle</option>
           <option value="12.11.2026, 19:00 — Romantik Collection" data-datetime="2026-11-12T19:00:00+01:00" class="text-navy">12.11.2026, 19:00 — Игра #6: Romantik Collection · The Castle</option>
           <option value="26.11.2026, 19:00 — Музыка в кино" data-datetime="2026-11-26T19:00:00+01:00" class="text-navy">26.11.2026, 19:00 — Игра #7: Музыка в кино · Belushi's Berlin (Mitte)</option>
           <option value="10.12.2026, 19:00 — Музыкальный алфавит" data-datetime="2026-12-10T19:00:00+01:00" class="text-navy">10.12.2026, 19:00 — Игра #8: Музыкальный алфавит · The Castle</option>
