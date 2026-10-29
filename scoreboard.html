@@ -87,6 +87,8 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     <div class="flex flex-wrap items-center justify-center gap-3 mt-3">
       <button id="btn-next" class="btn-main grad-brand">Next</button>
       <button id="btn-hide" class="btn-ghost">Скрыть результаты</button>
+      <button id="btn-song" class="btn-ghost" type="button"><i class="fa-solid fa-play"></i> Трек</button>
+      <audio id="song" src="audio/all-music-quiz-song.mp3" preload="none"></audio>
     </div>
   </div>
 
@@ -216,6 +218,18 @@ function hideAll() {
 
 $('btn-next').addEventListener('click', showNext);
 $('btn-hide').addEventListener('click', hideAll);
+
+const song = $('song');
+const songBtn = $('btn-song');
+const setSongBtn = () => {
+  songBtn.innerHTML = song.paused ? '<i class="fa-solid fa-play"></i> Трек' : '<i class="fa-solid fa-pause"></i> Пауза';
+};
+songBtn.addEventListener('click', () => {
+  if (song.paused) song.play().catch(() => {}); else song.pause();
+});
+song.addEventListener('play', setSongBtn);
+song.addEventListener('pause', setSongBtn);
+song.addEventListener('ended', setSongBtn);
 
 
 let toastTimer = null;
