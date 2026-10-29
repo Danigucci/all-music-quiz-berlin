@@ -5,7 +5,7 @@
 // Prizes for the top 3, shown to players before the game and on the final podium.
 // `logo` is a path on the site (square picture, shown in a circle).
 export const PRIZES = [
-  { text: 'Gutschein на 30 € от @khinkali_station', logo: 'live/prizes/khinkali-station.png' },
+  { text: 'Порция пельменей от @pelmennaia__berlin' },
   { text: 'Кальян на выбор в @shadow.berlin', logo: 'live/prizes/shadow-berlin.png' },
   { text: 'Gutschein на 20 € в баре @kvartira62', logo: 'live/prizes/kvartira62.png' },
 ];
