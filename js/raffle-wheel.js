@@ -1,6 +1,6 @@
 (function () {
-  const COLORS = ['#ff4fa3', '#ff8a3d', '#ffd83e', '#6a4cff'];
-  const TEXT_COLORS = ['#ffffff', '#181454', '#181454', '#ffffff'];
+  const COLORS = ['#ff4fa3', '#22d6e8', '#ffb3d9', '#7c5cff'];
+  const TEXT_COLORS = ['#ffffff', '#09070f', '#09070f', '#ffffff'];
 
   function PrizeWheel(canvas) {
     this.canvas = canvas;
@@ -77,10 +77,10 @@
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius * 0.13, 0, Math.PI * 2);
-    ctx.fillStyle = '#181454';
+    ctx.fillStyle = '#09070f';
     ctx.fill();
     ctx.lineWidth = 4;
-    ctx.strokeStyle = '#ffd83e';
+    ctx.strokeStyle = '#ffb3d9';
     ctx.stroke();
   };
 

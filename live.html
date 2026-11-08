@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>IT’S ALL YOU • All Music Quiz Berlin</title>
+<title>IT’S ALL YOU • KAIFZEIT Berlin</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#100d3a">
+<meta name="theme-color" content="#050409">
 <style>
 @font-face {
   font-family: 'Baloo 2';
@@ -33,12 +33,12 @@
 }
 :root {
   color-scheme: dark;
-  --navy: #181454;
-  --navy-deep: #100d3a;
+  --navy: #09070f;
+  --navy-deep: #050409;
   --navy-ink: #0b0929;
-  --yellow: #ffd83e;
+  --yellow: #ffb3d9;
   --pink: #ff4fa3;
-  --orange: #ff8a3d;
+  --orange: #22d6e8;
   --teal: #38c8e8;
   --text: #f4f2ff;
   --muted: #aeaad6;
@@ -170,11 +170,14 @@ p { margin: 0; }
 .link button { background: none; border: 0; color: inherit; text-decoration: underline; font: inherit; cursor: pointer; padding: 4px; }
 @media (prefers-reduced-motion: reduce) { .screen, .pulse { animation: none; } }
 </style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand">All Music Quiz<span>Berlin</span></div>
+    <div class="brand">KAIFZEIT<span>Berlin</span></div>
     <div class="who" id="who"></div>
   </header>
   <main id="app" aria-live="polite"></main>
@@ -254,7 +257,7 @@ p { margin: 0; }
     show(h('div', { class: 'center' },
       h('span', { class: 'eyebrow' }, 'IT’S ALL YOU'),
       h('h2', {}, 'Игра сейчас закрыта'),
-      h('p', { class: 'muted' }, 'Она открывается во время квиза All Music Quiz Berlin. Если ты уже в баре — подожди, ведущий скоро её откроет, страница обновится сама.'),
+      h('p', { class: 'muted' }, 'Она открывается во время квиза KAIFZEIT Berlin. Если ты уже в баре — подожди, ведущий скоро её откроет, страница обновится сама.'),
       h('a', { class: 'btn', href: '/#register', style: 'text-decoration:none;box-sizing:border-box;margin-top:8px' }, 'Записаться на квиз')
     ));
   }
@@ -417,7 +420,7 @@ p { margin: 0; }
     ));
     if (prize && !celebrated && typeof confetti === 'function') {
       celebrated = true;
-      confetti({ particleCount: 140, spread: 90, startVelocity: 40, origin: { y: 0.4 }, colors: ['#ffd83e', '#ff4fa3', '#ff8a3d', '#ffffff'] });
+      confetti({ particleCount: 140, spread: 90, startVelocity: 40, origin: { y: 0.4 }, colors: ['#ffb3d9', '#ff4fa3', '#22d6e8', '#ffffff'] });
     }
   }
 

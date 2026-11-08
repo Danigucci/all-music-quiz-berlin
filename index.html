@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All Music Quiz • Berlin</title>
+<title>KAIFZEIT • Berlin · Больше, чем квиз</title>
 <link rel="stylesheet" href="css/tailwind.css">
 <link rel="stylesheet" href="css/fontawesome.css">
 <style>
@@ -33,14 +33,14 @@
 }
 
 :root{
-  --navy:#181454;
-  --navy-deep:#100d3a;
-  --yellow:#ffd83e;
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#ffb3d9;
   --pink:#ff4fa3;
-  --orange:#ff8a3d;
+  --orange:#22d6e8;
 }
 
-body{ font-family:'Manrope', system-ui, sans-serif; background:#faf8f3; color:#181454; }
+body{ font-family:'Manrope', system-ui, sans-serif; background:#09070f; color:#09070f; }
 h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 
 .bg-navy{ background:var(--navy); }
@@ -55,14 +55,14 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 .navy-noise{
   background-image:
     radial-gradient(circle at 20% 20%, rgba(255,79,163,0.18) 0, transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(255,138,61,0.18) 0, transparent 45%);
+    radial-gradient(circle at 85% 75%, rgba(34,214,232,0.18) 0, transparent 45%);
 }
 
 .photo-bg{ position:relative; background-size:cover; background-position:center; }
 .photo-bg::before{
   content:''; position:absolute; inset:0; z-index:0;
   background:
-    linear-gradient(180deg, rgba(16,13,58,.9) 0%, rgba(24,20,84,.88) 45%, rgba(16,13,58,.95) 100%);
+    linear-gradient(180deg, rgba(5,4,9,.9) 0%, rgba(9,7,15,.88) 45%, rgba(5,4,9,.95) 100%);
 }
 .photo-bg > *{ position:relative; z-index:1; }
 
@@ -116,18 +116,21 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
   font-family:'Baloo 2', system-ui, sans-serif;
   width:2rem; height:2rem; border-radius:9999px;
   display:flex; align-items:center; justify-content:center;
-  background:rgba(255,216,62,.14); color:var(--yellow); flex-shrink:0;
+  background:rgba(255,179,217,.14); color:var(--yellow); flex-shrink:0;
   font-size:.85rem; font-weight:700;
 }
 </style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body class="overflow-x-hidden">
 
-<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(24,20,84,0.97); backdrop-filter:blur(8px);">
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(9,7,15,0.97); backdrop-filter:blur(8px);">
   <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
     <a href="#top" class="flex items-center gap-3">
-      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
-      <span class="text-white font-bold text-lg tracking-tight">All Music Quiz <span class="text-brand-yellow">Berlin</span></span>
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
+      <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-brand-yellow">Berlin</span></span>
     </a>
     <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/80">
       <a href="#format" class="hover:text-white transition">Формат</a>
@@ -157,13 +160,13 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
   <div class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 grid md:grid-cols-2 gap-12 items-center">
     <div>
       <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-        <i class="fa-solid fa-music"></i> Музыкальный квиз в Берлине
+        <i class="fa-solid fa-music"></i> Music &amp; Game Nights · Berlin
       </span>
       <h1 class="display text-white text-4xl sm:text-6xl font-extrabold mt-6 leading-[1.05]">
-        All Music <span class="grad-brand-text">Quiz</span> в Берлине
+        <span class="grad-brand-text">KAIFZEIT</span><br>Больше, чем квиз
       </h1>
       <p class="text-white/70 text-lg mt-5 max-w-lg">
-        Официальная франшиза квиза All Music Quiz из солнечной Алматы.
+        Музыкальный квиз All Music Quiz — официальная франшиза из солнечной Алматы.
         <br><br>
         Только про музыку: интро, ремиксы, саундтреки, хиты всех десятилетий. Собирай команду и приходи проверить, кто в зале знает музыку лучше всех.
       </p>
@@ -177,16 +180,7 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
       </div>
     </div>
     <div class="flex justify-center">
-      <div class="w-64 h-64 sm:w-80 sm:h-80">
-        <div class="logo-mark">
-          <div class="blob blob-1"></div>
-          <div class="blob blob-2"></div>
-          <div class="wordmark">
-            <span class="text-3xl sm:text-4xl">All Music</span>
-            <span class="text-3xl sm:text-4xl">Quiz</span>
-          </div>
-        </div>
-      </div>
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT — Berlin · Music &amp; Game Nights" class="w-64 h-64 sm:w-80 sm:h-80 rounded-full" style="box-shadow:0 0 60px -10px rgba(255,79,163,.55)">
     </div>
   </div>
 </section>
@@ -463,16 +457,16 @@ h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
 <footer class="bg-navy-deep">
   <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 shrink-0"><div class="logo-mark"><div class="blob blob-1"></div><div class="blob blob-2"></div></div></div>
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
       <div>
-        <p class="text-white font-bold">All Music Quiz Berlin</p>
-        <p class="text-white/40 text-xs">Официальная берлинская франшиза @allmusicquiz (Алматы)</p>
+        <p class="text-white font-bold">KAIFZEIT Berlin</p>
+        <p class="text-white/40 text-xs">Music &amp; Game Nights · квиз All Music Quiz — официальная берлинская франшиза @allmusicquiz (Алматы)</p>
       </div>
     </div>
     <div class="flex items-center gap-5 text-white/60">
       <a href="https://instagram.com/allmusicquiz_berlin" target="_blank" aria-label="Instagram" class="hover:text-brand-yellow transition"><i class="fa-brands fa-instagram text-xl"></i></a>
       <a href="https://t.me/allmusicquizberlin" target="_blank" aria-label="Telegram" class="hover:text-brand-yellow transition"><i class="fa-brands fa-telegram text-xl"></i></a>
-      <span class="text-xs">© 2026 All Music Quiz Berlin</span>
+      <span class="text-xs">© 2026 KAIFZEIT Berlin</span>
     </div>
   </div>
   <div class="max-w-6xl mx-auto px-5 sm:px-8 pb-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/40">

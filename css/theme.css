@@ -1,0 +1,31 @@
+/* KAIFZEIT dark neon theme — loaded last on every page */
+:root{
+  --ink:#09070f;
+  --cyan:#22d6e8;
+  --neon:#ff4fa3;
+  --soft-pink:#ffb3d9;
+}
+html{ background:var(--ink); }
+body{ background:var(--ink); color:#f3eff8; }
+
+/* content that used to be light-on-white */
+.bg-white{ background-color:rgba(255,255,255,.045); }
+.shadow-sm{ box-shadow:none; }
+.border-zinc-100,.border-zinc-200{ border-color:rgba(255,255,255,.12); }
+.text-zinc-400{ color:rgba(255,255,255,.5); }
+.text-zinc-500,.text-zinc-600{ color:rgba(255,255,255,.68); }
+.text-zinc-700,.text-zinc-800,.text-zinc-900{ color:rgba(255,255,255,.88); }
+.text-navy:not(.grad-brand):not(option){ color:#fff; }
+h1,h2,h3{ color:#fff; }
+
+/* neon glow accents */
+.card-hover:hover{ box-shadow:0 24px 48px -20px rgba(255,79,163,.45), 0 0 0 1px rgba(255,79,163,.35); }
+.grad-brand{ background:linear-gradient(135deg,var(--neon) 0%,var(--cyan) 100%); }
+.grad-brand-text{ background:linear-gradient(135deg,var(--neon) 0%,var(--cyan) 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+a.grad-brand,button.grad-brand{ box-shadow:0 0 28px -6px rgba(255,79,163,.6); }
+
+/* panels that sit on the black page need to stay visible */
+.bg-navy{ background-color:#120e1d; }
+.bg-navy.rounded-2xl,.bg-navy.rounded-3xl{ border:1px solid rgba(255,255,255,.1); }
+header a[href="#top"] span, header a[href="/"] span{ white-space:nowrap; }
+@media (max-width:1023px){ header > div > a:first-child > span > span{ display:none; } }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Таблица результатов • All Music Quiz Berlin</title>
+<title>Таблица результатов • KAIFZEIT Berlin</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="css/tailwind.css">
 <link rel="stylesheet" href="css/fontawesome.css">
@@ -34,11 +34,11 @@
 }
 
 :root{
-  --navy:#181454;
-  --navy-deep:#100d3a;
-  --yellow:#ffd83e;
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#ffb3d9;
   --pink:#ff4fa3;
-  --orange:#ff8a3d;
+  --orange:#22d6e8;
 }
 
 body{ font-family:'Manrope', system-ui, sans-serif; background:var(--navy-deep); color:#fff; }
@@ -64,16 +64,19 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 .cell-place{ font-weight:800; }
 [data-edit]{ cursor:text; border-radius:.3em; }
 [data-edit]:hover{ background:rgba(255,255,255,.1); }
-.cell-input{ width:100%; min-width:0; background:rgba(255,255,255,.95); color:#181454; font:inherit; font-weight:800; text-align:center; border:2px solid var(--pink); border-radius:.3em; padding:.1em .2em; outline:none; }
+.cell-input{ width:100%; min-width:0; background:rgba(255,255,255,.95); color:#09070f; font:inherit; font-weight:800; text-align:center; border:2px solid var(--pink); border-radius:.3em; padding:.1em .2em; outline:none; }
 .cell-team .cell-input{ text-align:left; }
-#toast{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#ff4fa3; color:#181454; font-weight:700; padding:.6rem 1.2rem; border-radius:9999px; opacity:0; pointer-events:none; transition:opacity .3s; z-index:50; }
+#toast{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:#ff4fa3; color:#09070f; font-weight:700; padding:.6rem 1.2rem; border-radius:9999px; opacity:0; pointer-events:none; transition:opacity .3s; z-index:50; }
 #toast.show{ opacity:1; }
 </style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body class="overflow-x-hidden min-h-screen flex flex-col">
 
 <form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
-  <div class="display text-2xl font-extrabold">All Music Quiz <span class="text-brand-yellow">Berlin</span></div>
+  <div class="display text-2xl font-extrabold">KAIFZEIT <span class="text-brand-yellow">Berlin</span></div>
   <p class="text-white/50 text-sm">Таблица результатов</p>
   <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-full text-center outline-none focus:border-[color:var(--pink)]">
   <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>

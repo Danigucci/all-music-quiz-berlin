@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Экран ведущего • All Music Quiz Berlin</title>
+<title>Экран ведущего • KAIFZEIT Berlin</title>
 <meta name="robots" content="noindex">
 <style>
 @font-face {
@@ -32,14 +32,14 @@
 }
 :root {
   color-scheme: dark;
-  --navy: #181454;
-  --navy-deep: #100d3a;
+  --navy: #09070f;
+  --navy-deep: #050409;
   --navy-ink: #0b0929;
-  --yellow: #ffd83e;
+  --yellow: #ffb3d9;
   --pink: #ff4fa3;
-  --orange: #ff8a3d;
+  --orange: #22d6e8;
   --teal: #38c8e8;
-  --cream: #faf8f3;
+  --cream: #09070f;
   --text: #f4f2ff;
   --muted: #aeaad6;
   --line: rgba(255, 255, 255, 0.12);
@@ -218,11 +218,14 @@ main { min-height: 0; display: grid; }
 
 @media (prefers-reduced-motion: reduce) { .screen, .eq span, .name { animation: none !important; } }
 </style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 <div class="stage">
   <header class="top">
-    <div class="brand">All Music Quiz<span>Berlin</span></div>
+    <div class="brand">KAIFZEIT<span>Berlin</span></div>
     <div class="top-right" id="top-right"></div>
   </header>
   <main id="app"></main>
@@ -237,7 +240,7 @@ main { min-height: 0; display: grid; }
   </footer>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4fa3"/><stop offset="1" stop-color="#ff8a3d"/></linearGradient></defs>
+  <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4fa3"/><stop offset="1" stop-color="#22d6e8"/></linearGradient></defs>
 </svg>
 
 <script src="js/confetti.min.js"></script>
@@ -562,7 +565,7 @@ main { min-height: 0; display: grid; }
 
   function fireConfetti(place) {
     if (typeof confetti !== 'function') return;
-    const colors = ['#ffd83e', '#ff4fa3', '#ff8a3d', '#ffffff'];
+    const colors = ['#ffb3d9', '#ff4fa3', '#22d6e8', '#ffffff'];
     const x = place === 1 ? 0.5 : place === 2 ? 0.28 : 0.72;
     confetti({ particleCount: place === 1 ? 180 : 90, spread: 90, startVelocity: 45, origin: { x, y: 0.55 }, colors });
     if (place !== 1) return;

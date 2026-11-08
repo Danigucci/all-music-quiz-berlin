@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Экран розыгрыша • All Music Quiz Berlin</title>
+<title>Экран розыгрыша • KAIFZEIT Berlin</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="css/tailwind.css">
 <link rel="stylesheet" href="css/fontawesome.css">
@@ -34,11 +34,11 @@
 }
 
 :root{
-  --navy:#181454;
-  --navy-deep:#100d3a;
-  --yellow:#ffd83e;
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#ffb3d9;
   --pink:#ff4fa3;
-  --orange:#ff8a3d;
+  --orange:#22d6e8;
 }
 
 body{ font-family:'Manrope', system-ui, sans-serif; background:var(--navy-deep); color:#fff; }
@@ -51,11 +51,14 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 </style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body class="overflow-x-hidden min-h-screen flex flex-col">
 
 <form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
-  <div class="display text-2xl font-extrabold">All Music Quiz <span class="text-brand-yellow">Berlin</span></div>
+  <div class="display text-2xl font-extrabold">KAIFZEIT <span class="text-brand-yellow">Berlin</span></div>
   <p class="text-white/50 text-sm">Экран розыгрыша</p>
   <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-full text-center outline-none focus:border-[color:var(--pink)]">
   <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>
@@ -66,8 +69,8 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
   <div id="stage-grid" class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
     <div id="wheel-col" class="flex justify-center">
       <div class="relative" style="width:min(86vw, 58vh, 520px); aspect-ratio:1;">
-        <div class="absolute left-1/2 z-10 -translate-x-1/2" style="top:-4px; width:0; height:0; border-left:16px solid transparent; border-right:16px solid transparent; border-top:34px solid #ffd83e; filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));"></div>
-        <canvas id="wheel" class="w-full h-full rounded-full" style="box-shadow:0 0 0 6px #ffd83e, 0 20px 50px rgba(0,0,0,.5);"></canvas>
+        <div class="absolute left-1/2 z-10 -translate-x-1/2" style="top:-4px; width:0; height:0; border-left:16px solid transparent; border-right:16px solid transparent; border-top:34px solid #ffb3d9; filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));"></div>
+        <canvas id="wheel" class="w-full h-full rounded-full" style="box-shadow:0 0 0 6px #ffb3d9, 0 20px 50px rgba(0,0,0,.5);"></canvas>
       </div>
     </div>
     <div id="result-col" class="flex flex-col items-center min-w-0">
@@ -183,7 +186,7 @@ function logout(msg) {
 
 function fireConfetti() {
   if (typeof confetti !== 'function') return;
-  const colors = ['#ffd83e', '#ff4fa3', '#ff8a3d'];
+  const colors = ['#ffb3d9', '#ff4fa3', '#22d6e8'];
   confetti({ particleCount: 140, spread: 100, startVelocity: 45, origin: { y: 0.6 }, colors });
   setTimeout(() => confetti({ particleCount: 80, spread: 120, startVelocity: 35, origin: { y: 0.4 }, colors }), 200);
 }
