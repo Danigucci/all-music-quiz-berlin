@@ -56,7 +56,7 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Kaifzeit Quiz <noreply@allmusicquiz.com>',
+      from: 'Kaifzeit Quiz <noreply@kaifzeit.com>',
       to: [email],
       subject: `Напоминание: игра ${game.dateLabel} в ${game.time}`,
       html,

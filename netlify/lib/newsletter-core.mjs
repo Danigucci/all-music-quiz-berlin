@@ -1,7 +1,7 @@
 import { SCHEDULE } from './reminder-core.mjs';
 
 export const SITE_URL = 'https://kaifzeit.com';
-const FROM = 'Kaifzeit Quiz <noreply@allmusicquiz.com>';
+const FROM = 'Kaifzeit Quiz <noreply@kaifzeit.com>';
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 
 export const escapeHtml = (s) =>
