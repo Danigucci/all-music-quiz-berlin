@@ -28,18 +28,18 @@ async function sendEmail({ email, name, team, number }) {
   const teamLine = team ? `<p style="color:#666;">Команда: ${escapeHtml(team)}</p>` : '';
   const html = `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; text-align:center;">
-      <h2 style="color:#181454;">Твой номер для розыгрыша</h2>
+      <h2 style="color:#09070f;">Твой номер для розыгрыша</h2>
       <p>Привет, ${escapeHtml(name || '')}!</p>
       <div style="font-size:64px; font-weight:800; color:#ff4fa3; margin:16px 0;">${number}</div>
       ${teamLine}
       <p>Сохрани это письмо или сделай скриншот — номер понадобится при розыгрыше призов. Удачи! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">All Music Quiz Berlin · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
     </div>`;
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'All Music Quiz Berlin <noreply@allmusicquiz.com>',
+      from: 'Kaifzeit Quiz <noreply@allmusicquiz.com>',
       to: [email],
       subject: `Твой номер для розыгрыша: ${number}`,
       html,

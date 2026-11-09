@@ -39,9 +39,9 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
   if (!apiKey) return;
   const html = `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-      <h2 style="color:#181454;">Напоминаем про игру 🎶</h2>
+      <h2 style="color:#09070f;">Напоминаем про игру 🎶</h2>
       <p>Привет, ${escapeHtml(captain || '')}!</p>
-      <p>Через 2 дня — <strong>All Music Quiz Berlin</strong>, не забудь прийти.</p>
+      <p>Через 2 дня — <strong>Kaifzeit Quiz</strong>, не забудь прийти.</p>
       <table style="width:100%; border-collapse:collapse; margin:16px 0;">
         <tr><td style="padding:6px 0; color:#666;">Игра</td><td style="padding:6px 0;"><strong>${escapeHtml(game.number ? `Игра #${game.number}: ${game.name}` : game.name)}</strong></td></tr>
         <tr><td style="padding:6px 0; color:#666;">Когда</td><td style="padding:6px 0;">${escapeHtml(game.dateLabel)}, ${escapeHtml(game.time)}</td></tr>
@@ -49,14 +49,14 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
         <tr><td style="padding:6px 0; color:#666;">Команда</td><td style="padding:6px 0;">${escapeHtml(teamLine)}</td></tr>
       </table>
       <p>До встречи! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">All Music Quiz Berlin · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
     </div>
   `;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'All Music Quiz Berlin <noreply@allmusicquiz.com>',
+      from: 'Kaifzeit Quiz <noreply@allmusicquiz.com>',
       to: [email],
       subject: `Напоминание: игра ${game.dateLabel} в ${game.time}`,
       html,

@@ -1,7 +1,7 @@
 import { SCHEDULE } from './reminder-core.mjs';
 
 export const SITE_URL = 'https://kaifzeit.com';
-const FROM = 'All Music Quiz Berlin <noreply@allmusicquiz.com>';
+const FROM = 'Kaifzeit Quiz <noreply@allmusicquiz.com>';
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 
 export const escapeHtml = (s) =>
@@ -14,10 +14,10 @@ export const newToken = () => crypto.randomUUID().replace(/-/g, '') + crypto.ran
 
 export function pageHtml(title, message) {
   return `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${escapeHtml(title)}</title></head>
-<body style="margin:0;background:#181454;color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box">
-<div style="max-width:420px"><div style="color:#ffd83e;letter-spacing:2px;font-weight:bold;font-size:14px">ALL MUSIC QUIZ BERLIN</div>
+<body style="margin:0;background:#09070f;color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box">
+<div style="max-width:420px"><div style="color:#ff4fa3;letter-spacing:2px;font-weight:bold;font-size:14px">KAIFZEIT QUIZ</div>
 <h1 style="font-size:26px;margin:14px 0">${escapeHtml(title)}</h1><p style="color:#ffb3d9;line-height:1.5">${escapeHtml(message)}</p>
-<a href="${SITE_URL}" style="color:#ffd83e">На сайт</a></div></body></html>`;
+<a href="${SITE_URL}" style="color:#ff4fa3">На сайт</a></div></body></html>`;
 }
 
 export function gameInfo(dateStr) {
@@ -40,13 +40,13 @@ export function buildAnnouncement(game, token, legacy = false) {
   const html = `
 <div style="background:#f4f2fb;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">
   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;">
-    <div style="background:#181454;padding:28px 24px;text-align:center;">
-      <div style="color:#ffd83e;font-size:14px;letter-spacing:2px;font-weight:bold;">ALL MUSIC QUIZ BERLIN</div>
+    <div style="background:#09070f;padding:28px 24px;text-align:center;">
+      <div style="color:#ff4fa3;font-size:14px;letter-spacing:2px;font-weight:bold;">KAIFZEIT QUIZ</div>
       <div style="color:#ffffff;font-size:28px;font-weight:bold;margin-top:10px;line-height:1.15;">${escapeHtml(game.name)}</div>
       <div style="color:#ffb3d9;font-size:16px;margin-top:8px;">Игра #${game.number}</div>
     </div>
-    <div style="padding:26px 24px;color:#181454;font-size:16px;line-height:1.55;">
-      <p style="margin:0 0 14px;">Привет! Приглашаем тебя и твою команду на новую игру All Music Quiz Berlin.</p>
+    <div style="padding:26px 24px;color:#09070f;font-size:16px;line-height:1.55;">
+      <p style="margin:0 0 14px;">Привет! Приглашаем тебя и твою команду на новую игру Kaifzeit Quiz.</p>
       <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:16px;">
         <tr><td style="padding:8px 0;color:#7a77a8;width:110px;">Когда</td><td style="padding:8px 0;"><strong>${escapeHtml(game.whenLabel)}</strong></td></tr>
         <tr><td style="padding:8px 0;color:#7a77a8;">Где</td><td style="padding:8px 0;"><strong>${escapeHtml(venueLine)}</strong></td></tr>
@@ -55,38 +55,38 @@ export function buildAnnouncement(game, token, legacy = false) {
       </table>
       <p style="margin:0 0 22px;">Места ограничены, так что лучше записаться заранее.</p>
       <div style="text-align:center;margin:26px 0;">
-        <a href="${registerUrl}" style="display:inline-block;background:#ff4fa3;color:#181454;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 34px;border-radius:999px;">Записать команду</a>
+        <a href="${registerUrl}" style="display:inline-block;background:#ff4fa3;color:#09070f;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 34px;border-radius:999px;">Записать команду</a>
       </div>
       <p style="margin:0;font-size:14px;color:#5b5890;">Instagram: <a href="https://instagram.com/allmusicquiz_berlin" style="color:#ff4fa3;">@allmusicquiz_berlin</a></p>
     </div>
     <div style="background:#f4f2fb;padding:16px 24px;color:#7a77a8;font-size:12px;line-height:1.5;">
-      ${legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры All Music Quiz Berlin.' : 'Вы получили это письмо, потому что подписались на анонсы игр All Music Quiz Berlin.'}
+      ${legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры Kaifzeit Quiz.' : 'Вы получили это письмо, потому что подписались на анонсы игр Kaifzeit Quiz.'}
       <a href="${unsub}" style="color:#7a77a8;">Отписаться</a><br>
-      All Music Quiz Berlin · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin · danlappo@yahoo.com
+      Kaifzeit Quiz · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin · danlappo@yahoo.com
     </div>
   </div>
 </div>`;
   const text = [
-    `ALL MUSIC QUIZ BERLIN — ${game.name} (Игра #${game.number})`, '',
+    `KAIFZEIT QUIZ — ${game.name} (Игра #${game.number})`, '',
     'Привет! Приглашаем тебя и твою команду на новую игру.', '',
     `Когда: ${game.whenLabel}`, `Где: ${venueLine}`,
     'Формат: 7 музыкальных раундов, команды от 2 до 10 человек', 'Участие: 15 € с человека', '',
     `Запишись заранее: ${registerUrl}`, '',
-    legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры All Music Quiz Berlin.' : 'Вы подписались на анонсы игр All Music Quiz Berlin.',
+    legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры Kaifzeit Quiz.' : 'Вы подписались на анонсы игр Kaifzeit Quiz.',
     `Отписаться: ${unsub}`,
-    'All Music Quiz Berlin · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin',
+    'Kaifzeit Quiz · Danil Lappo · Konrad-Zuse-Str. 17, 12489 Berlin',
   ].join('\n');
   return { html, text, subject: `Приглашение: ${game.name} — ${game.dateStr.split('-').reverse().slice(0, 2).join('.')} в ${game.time}`, unsub };
 }
 
 export function buildConfirmEmail(token) {
   const url = `${SITE_URL}/api/newsletter/confirm?token=${token}`;
-  const html = `<div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;color:#181454;">
+  const html = `<div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;color:#09070f;">
 <h2>Подтвердите подписку 🎶</h2>
-<p>Вы (или кто-то с вашим адресом) попросили присылать анонсы игр All Music Quiz Berlin. Чтобы подтвердить, нажмите кнопку. Если это были не вы — просто проигнорируйте письмо, ничего не произойдёт.</p>
-<p style="text-align:center;margin:24px 0;"><a href="${url}" style="background:#ff4fa3;color:#181454;text-decoration:none;font-weight:bold;padding:12px 28px;border-radius:999px;display:inline-block;">Подтвердить подписку</a></p>
-<p style="color:#999;font-size:12px;">All Music Quiz Berlin · Konrad-Zuse-Str. 17, 12489 Berlin</p></div>`;
-  return { html, text: `Подтвердите подписку на анонсы All Music Quiz Berlin: ${url}\nЕсли это были не вы — проигнорируйте письмо.`, subject: 'Подтвердите подписку на анонсы All Music Quiz Berlin' };
+<p>Вы (или кто-то с вашим адресом) попросили присылать анонсы игр Kaifzeit Quiz. Чтобы подтвердить, нажмите кнопку. Если это были не вы — просто проигнорируйте письмо, ничего не произойдёт.</p>
+<p style="text-align:center;margin:24px 0;"><a href="${url}" style="background:#ff4fa3;color:#09070f;text-decoration:none;font-weight:bold;padding:12px 28px;border-radius:999px;display:inline-block;">Подтвердить подписку</a></p>
+<p style="color:#999;font-size:12px;">Kaifzeit Quiz · Konrad-Zuse-Str. 17, 12489 Berlin</p></div>`;
+  return { html, text: `Подтвердите подписку на анонсы Kaifzeit Quiz: ${url}\nЕсли это были не вы — проигнорируйте письмо.`, subject: 'Подтвердите подписку на анонсы Kaifzeit Quiz' };
 }
 
 export async function sendEmail(apiKey, { to, subject, html, text, headers }) {

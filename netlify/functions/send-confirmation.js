@@ -29,16 +29,16 @@ exports.handler = async (event) => {
 
   const html = `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-      <h2 style="color:#181454;">Регистрация подтверждена ✅</h2>
+      <h2 style="color:#09070f;">Регистрация подтверждена ✅</h2>
       <p>Привет, ${escapeHtml(captain || '')}!</p>
-      <p>Мы получили вашу заявку на <strong>All Music Quiz Berlin</strong>.</p>
+      <p>Мы получили вашу заявку на <strong>Kaifzeit Quiz</strong>.</p>
       <table style="width:100%; border-collapse:collapse; margin:16px 0;">
         <tr><td style="padding:6px 0; color:#666;">Игра</td><td style="padding:6px 0;"><strong>${escapeHtml(game || '')}</strong></td></tr>
         <tr><td style="padding:6px 0; color:#666;">Команда</td><td style="padding:6px 0;">${escapeHtml(teamLine)}</td></tr>
         <tr><td style="padding:6px 0; color:#666;">Число игроков</td><td style="padding:6px 0;">${escapeHtml(players || '')}</td></tr>
       </table>
       <p>До встречи на игре! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">All Music Quiz Berlin · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
     </div>
   `;
 
@@ -49,9 +49,9 @@ exports.handler = async (event) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'All Music Quiz Berlin <noreply@allmusicquiz.com>',
+      from: 'Kaifzeit Quiz <noreply@allmusicquiz.com>',
       to: [email],
-      subject: 'Регистрация подтверждена — All Music Quiz Berlin',
+      subject: 'Регистрация подтверждена — Kaifzeit Quiz',
       html,
     }),
   });
