@@ -1,5 +1,5 @@
 {
-  "name": "all-music-quiz-berlin",
+  "name": "kaifzeit-quiz-berlin",
   "private": true,
   "dependencies": {
     "@netlify/blobs": "^11.1.0"
