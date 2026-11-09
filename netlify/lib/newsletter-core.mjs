@@ -1,6 +1,6 @@
 import { SCHEDULE } from './reminder-core.mjs';
 
-export const SITE_URL = 'https://allmusicquiz.com';
+export const SITE_URL = 'https://kaifzeit.com';
 const FROM = 'All Music Quiz Berlin <noreply@allmusicquiz.com>';
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 
