@@ -2,6 +2,19 @@
   publish = "."
   functions = "netlify/functions"
 
+# Old domain -> new domain (keeps old links and QR codes working)
+[[redirects]]
+  from = "https://allmusicquiz.com/*"
+  to = "https://kaifzeit.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.allmusicquiz.com/*"
+  to = "https://kaifzeit.com/:splat"
+  status = 301
+  force = true
+
 # Function sources (quiz answers, raffle logic) must not be downloadable from the site
 [[redirects]]
   from = "/netlify/*"
