@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAIFZEIT • Berlin · Больше, чем квиз</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#ffb3d9;
+  --pink:#ff4fa3;
+  --orange:#22d6e8;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#09070f; color:#09070f; }
+h1,h2,h3,.display,.logo-word{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.navy-noise{
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,79,163,0.18) 0, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(34,214,232,0.18) 0, transparent 45%);
+}
+
+.photo-bg{ position:relative; background-size:cover; background-position:center; }
+.photo-bg::before{
+  content:''; position:absolute; inset:0; z-index:0;
+  background:
+    linear-gradient(180deg, rgba(5,4,9,.9) 0%, rgba(9,7,15,.88) 45%, rgba(5,4,9,.95) 100%);
+}
+.photo-bg > *{ position:relative; z-index:1; }
+
+/* logo mark */
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{
+  position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange));
+}
+.logo-mark .blob-1{
+  width:70%; height:60%; top:-8%; left:-6%;
+  border-radius:38% 62% 55% 45% / 45% 40% 60% 55%;
+  transform:rotate(-18deg);
+}
+.logo-mark .blob-2{
+  width:55%; height:34%; bottom:6%; right:-8%;
+  border-radius:60% 40% 50% 50% / 55% 45% 55% 45%;
+  transform:rotate(10deg);
+}
+.logo-mark .wordmark{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  color:var(--yellow); font-weight:700; line-height:1.05;
+}
+
+.card-hover{ transition:all .35s cubic-bezier(.4,0,.2,1); }
+.card-hover:hover{ transform:translateY(-6px); box-shadow:0 24px 48px -20px rgba(255,79,163,.35); }
+
+#mobile-menu{
+  max-height:0; opacity:0; overflow:hidden;
+  transition:all .4s cubic-bezier(.4,0,.2,1); transform:translateY(-10px); pointer-events:none;
+}
+#mobile-menu.open{ max-height:520px; opacity:1; transform:translateY(0); pointer-events:auto; }
+
+#scroll-top{
+  position:fixed; bottom:20px; right:20px; z-index:9999; width:52px; height:52px;
+  border-radius:9999px; display:flex; align-items:center; justify-content:center;
+  font-size:20px; color:#fff; background:linear-gradient(135deg,var(--pink),var(--orange));
+  box-shadow:0 10px 24px -6px rgba(255,79,163,.5); transition:all .3s ease;
+  opacity:0; visibility:hidden; transform:translateY(20px);
+}
+#scroll-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+#scroll-top:hover{ transform:scale(1.08); }
+
+.dot{ width:8px; height:8px; border-radius:9999px; background:var(--yellow); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,179,217,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+</style>
+<link rel="icon" type="image/png" href="brand/favicon.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(9,7,15,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3">
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
+      <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-white/80">
+      <a href="#format" class="hover:text-white transition">Формат</a>
+      <a href="#schedule" class="hover:text-white transition">Расписание</a>
+      <a href="#pricing" class="hover:text-white transition">Цены</a>
+      <a href="#results" class="hover:text-white transition">Результаты</a>
+      <a href="seasons.html" class="hover:text-white transition">Сезоны</a>
+      <a href="playlists.html" class="hover:text-white transition">Плейлисты</a>
+      <a href="sport.html" class="hover:text-white transition">⚽ Sport</a>
+      <a href="#social" class="hover:text-white transition">Соцсети</a>
+      <a href="#register" class="grad-brand text-navy px-4 py-2 rounded-full hover:opacity-90 transition">Записаться</a>
+    </nav>
+    <button id="menu-btn" class="md:hidden text-white text-xl"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div id="mobile-menu" class="md:hidden bg-navy border-t border-white/10 px-5 flex flex-col gap-1 text-white/90 font-semibold">
+    <a href="#format" class="py-3 border-b border-white/10">Формат</a>
+    <a href="#schedule" class="py-3 border-b border-white/10">Расписание</a>
+    <a href="#pricing" class="py-3 border-b border-white/10">Цены</a>
+    <a href="#results" class="py-3 border-b border-white/10">Результаты</a>
+    <a href="seasons.html" class="py-3 border-b border-white/10">Сезоны</a>
+    <a href="playlists.html" class="py-3 border-b border-white/10">Плейлисты</a>
+    <a href="sport.html" class="py-3 border-b border-white/10">⚽ Sport</a>
+    <a href="#social" class="py-3 border-b border-white/10">Соцсети</a>
+    <a href="#register" class="py-3 text-brand-yellow">Записаться →</a>
+  </div>
+</header>
+
+<section id="top" class="photo-bg navy-noise relative overflow-hidden" style="background-image:url('images/IMG_3721.JPG');">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+        <i class="fa-solid fa-music"></i> Music &amp; Game Nights · Berlin
+      </span>
+      <h1 class="display text-white text-4xl sm:text-6xl font-extrabold mt-6 leading-[1.05]">
+        <span class="grad-brand-text">KAIFZEIT</span><br>Больше, чем квиз
+      </h1>
+      <p class="text-white/70 text-lg mt-5 max-w-lg">
+        Kaifzeit Quiz — музыкальный квиз в Берлине.
+        <br><br>
+        Только про музыку: интро, ремиксы, саундтреки, хиты всех десятилетий. Собирай команду и приходи проверить, кто в зале знает музыку лучше всех.
+      </p>
+      <div class="flex flex-wrap items-center gap-4 mt-8">
+        <a href="#register" class="grad-brand text-navy font-bold px-7 py-3.5 rounded-full hover:opacity-90 transition shadow-lg shadow-pink-500/20">Записать команду</a>
+        <a href="#format" class="text-white font-semibold px-2 py-3.5 hover:text-brand-yellow transition">Как проходит игра →</a>
+      </div>
+      <div class="flex items-center gap-6 mt-10 text-white/60 text-sm">
+        <div class="flex items-center gap-2"><span class="dot"></span>2 игры в месяц</div>
+        <div class="flex items-center gap-2"><span class="dot"></span>Только музыкальные раунды</div>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT — Berlin · Music &amp; Game Nights" class="w-64 h-64 sm:w-80 sm:h-80 rounded-full" style="box-shadow:0 0 60px -10px rgba(255,79,163,.55)">
+    </div>
+  </div>
+</section>
+
+<section id="format" class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h2 class="display text-3xl sm:text-4xl font-extrabold text-center">Правила и формат</h2>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">Всё, что нужно знать перед первой игрой</p>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+    <div class="card-hover bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm">
+      <div class="w-12 h-12 rounded-xl grad-brand flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-users"></i></div>
+      <h3 class="font-bold text-lg">Команда</h3>
+      <p class="text-zinc-500 text-sm mt-2">От 2 до 10 человек в команде. Одиночкам поможем найти команду на месте.</p>
+    </div>
+    <div class="card-hover bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm">
+      <div class="w-12 h-12 rounded-xl grad-brand flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-layer-group"></i></div>
+      <h3 class="font-bold text-lg">Раунды</h3>
+      <p class="text-zinc-500 text-sm mt-2">7 музыкальных раундов(110 вопросов): интро, ремиксы, саундтреки, десятилетия, разгонный раунд и много других интересных механик.</p>
+    </div>
+    <div class="card-hover bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm">
+      <div class="w-12 h-12 rounded-xl grad-brand flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-headphones"></i></div>
+      <h3 class="font-bold text-lg">Только музыка</h3>
+      <p class="text-zinc-500 text-sm mt-2">🎵 Никаких вопросов «не в тему» — только музыка.</p>
+      <p class="text-zinc-500 text-sm mt-3">Треки, артисты, хиты, факты и всё, что поможет доказать: вы действительно шарите в музыке 🎧</p>
+    </div>
+    <div class="card-hover bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm">
+      <div class="w-12 h-12 rounded-xl grad-brand flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-trophy"></i></div>
+      <h3 class="font-bold text-lg">Призы</h3>
+      <p class="text-zinc-500 text-sm mt-2">Топ-3 команды по итогам квиза, а также команда, занявшая последнее место, получат призы от организаторов 🎁.</p>
+      <p class="text-zinc-500 text-sm mt-3">А ещё вас ждёт наш Лудотрон 🎰 — среди всех участников квиза случайным образом разыграем ну оооочень крутые призы! 🔥</p>
+      <p class="text-zinc-500 text-sm mt-3">Так что до самого конца есть шанс уйти с подарком — даже если сегодня вы не попадёте в топ 😉</p>
+    </div>
+  </div>
+</section>
+
+<section id="schedule" class="photo-bg" style="background-image:url('images/IMG_3744.jpeg');">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+    <h2 class="display text-3xl sm:text-4xl font-extrabold text-center text-white">Расписание и локация</h2>
+    <p class="text-white/60 text-center max-w-xl mx-auto mt-3">Играем 2 раза в месяц. Точные даты и адрес — в Instagram и здесь.</p>
+    <div class="grid md:grid-cols-2 gap-6 mt-12">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h3 class="text-brand-yellow font-bold text-lg mb-4"><i class="fa-regular fa-calendar mr-2"></i>Ближайшие игры</h3>
+        <div class="max-h-80 overflow-y-auto pr-1">
+        <button onclick="showMusicMixModal()" data-remove-at="2026-10-01T17:00:00+02:00" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #3: Музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+            <span class="text-brand-yellow text-xs font-semibold mt-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Регистрация закрыта</span>
+          </span>
+          <span class="text-white/60">01.10.2026, 19:00</span>
+        </button>
+        <button onclick="showHalloweenModal()" data-remove-at="2026-10-29T18:30:00+01:00" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #5: Halloween Music Party <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+          </span>
+          <span class="text-white/60">29.10.2026, 19:00</span>
+        </button>
+        <button onclick="showRomantikModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #6: Romantik Collection <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+          </span>
+          <span class="text-white/60">12.11.2026, 19:00</span>
+        </button>
+        <button onclick="showKinoModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #7: Музыка в кино <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-brand-yellow text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>Belushi's Berlin (Mitte)</span>
+          </span>
+          <span class="text-white/60">26.11.2026, 19:00</span>
+        </button>
+        <button onclick="showAlphabetModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #8: Музыкальный алфавит <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+          </span>
+          <span class="text-white/60">10.12.2026, 19:00</span>
+        </button>
+        <button onclick="showAroundWorldModal()" class="w-full flex items-center justify-between py-3 border-b border-white/10 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #9: Вокруг света <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-brand-yellow text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>Belushi's Berlin (Mitte)</span>
+          </span>
+          <span class="text-white/60">22.12.2026, 19:00</span>
+        </button>
+        <button onclick="showNewYearMixModal()" class="w-full flex items-center justify-between py-3 text-white text-left group">
+          <span class="flex flex-col">
+            <span class="flex items-center gap-2">Игра #10: Новогодний музыкальный микс <i class="fa-solid fa-circle-info text-brand-yellow text-xs opacity-70 group-hover:opacity-100 transition"></i></span>
+            <span class="text-white/40 text-xs mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>The Castle</span>
+          </span>
+          <span class="text-white/60">29.12.2026, 19:00</span>
+        </button>
+        </div>
+        <p class="text-white/40 text-xs mt-4">Следите за афишей в Instagram — точные даты публикуются заранее.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h3 class="text-brand-yellow font-bold text-lg mb-4"><i class="fa-solid fa-location-dot mr-2"></i>Где играем</h3>
+        <p class="text-white/40 text-xs uppercase tracking-widest font-semibold mb-1.5">Основная площадка</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=The+Castle+Berlin+Mitte+Invalidenstra%C3%9Fe+129+10115+Berlin" target="_blank" class="text-white text-lg font-semibold hover:text-brand-yellow transition inline-flex items-start gap-2">
+          <span>The Castle Berlin Mitte<br><span class="text-white/60 text-sm font-normal">Invalidenstraße 129, 10115 Berlin</span></span>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=The+Castle+Berlin+Mitte+Invalidenstra%C3%9Fe+129+10115+Berlin" target="_blank" class="inline-flex items-center gap-2 text-brand-yellow font-semibold mt-4 hover:underline">
+          <i class="fa-solid fa-diamond-turn-right"></i> Открыть в Google Maps
+        </a>
+
+        <div class="border-t border-white/10 my-5"></div>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Belushi%27s+Berlin+Mitte" target="_blank" class="text-white text-lg font-semibold hover:text-brand-yellow transition inline-flex items-start gap-2">
+          <span>Belushi's Berlin (Mitte)</span>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Belushi%27s+Berlin+Mitte" target="_blank" class="inline-flex items-center gap-2 text-brand-yellow font-semibold mt-4 hover:underline">
+          <i class="fa-solid fa-diamond-turn-right"></i> Открыть в Google Maps
+        </a>
+
+        <a href="https://instagram.com/allmusicquiz_berlin" target="_blank" class="flex items-center gap-2 text-brand-yellow font-semibold mt-5 hover:underline">
+          <i class="fa-brands fa-instagram"></i> @allmusicquiz_berlin
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h2 class="display text-3xl sm:text-4xl font-extrabold text-center">Цены</h2>
+  <div class="max-w-md mx-auto mt-12 bg-navy rounded-3xl p-8 text-center relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-40 h-40 grad-brand rounded-full opacity-30 blur-2xl"></div>
+    <p class="text-white/60 text-sm uppercase tracking-widest font-semibold">С человека</p>
+    <p class="text-brand-yellow text-5xl font-extrabold display mt-2">15€</p>
+    <ul class="text-white/70 text-sm mt-6 space-y-2 text-left max-w-xs mx-auto">
+      <li><i class="fa-solid fa-check text-brand-yellow mr-2"></i>Участие в игре, 7 раундов</li>
+      <li><i class="fa-solid fa-check text-brand-yellow mr-2"></i>Бланки ответов и ведущий</li>
+      <li><i class="fa-solid fa-check text-brand-yellow mr-2"></i>Призы победителям и не только</li>
+    </ul>
+  </div>
+</section>
+
+<section id="register" class="bg-navy-deep navy-noise">
+  <div class="max-w-2xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+    <h2 class="display text-3xl sm:text-4xl font-extrabold text-center text-white">Записать команду</h2>
+    <p class="text-white/60 text-center mt-3">Оставьте заявку — мы свяжемся и подтвердим место на игру</p>
+
+    <form id="register-form" name="registration" method="POST" data-netlify="true" netlify-honeypot="botcheck" class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 mt-10 space-y-5">
+      <input type="hidden" name="form-name" value="registration">
+      <input type="hidden" name="subject" id="register-subject" value="Новая регистрация на Kaifzeit Quiz">
+      <p class="hidden"><label>Не заполняйте это поле: <input name="botcheck"></label></p>
+      <input type="hidden" name="no_team" id="no-team-flag" value="">
+      <label id="no-team-tag" class="flex items-center gap-3 bg-white/5 border border-white/10 hover:border-[color:var(--pink)] rounded-xl px-4 py-3 cursor-pointer transition select-none">
+        <input type="checkbox" id="no-team-checkbox" class="w-5 h-5 accent-[color:var(--pink)] shrink-0">
+        <span class="text-white text-sm">
+          <span class="font-semibold">Я/мы без команды.</span> <span class="text-white/60">(макс. 2 чел)</span><br>
+          <span class="text-white/60">Прошу подсадить к кому-нибудь</span>
+        </span>
+      </label>
+      <div id="team-name-field">
+        <label class="text-white/80 text-sm font-semibold block mb-1.5">Название команды</label>
+        <input type="text" name="team" id="team-name-input" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="Например: Ноты решают">
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label class="text-white/80 text-sm font-semibold block mb-1.5" id="captain-label">Имя капитана</label>
+          <input type="text" name="captain" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="Ваше имя">
+        </div>
+        <div>
+          <label class="text-white/80 text-sm font-semibold block mb-1.5" id="players-label">Число игроков</label>
+          <input type="number" name="players" id="players-input" min="2" max="10" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="2–10">
+        </div>
+      </div>
+      <div>
+        <label class="text-white/80 text-sm font-semibold block mb-1.5">Телеграм @</label>
+        <input type="text" name="contact" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="Для связи с вами">
+      </div>
+      <div>
+        <label class="text-white/80 text-sm font-semibold block mb-1.5">Ваш e-mail</label>
+        <input type="email" name="email" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="you@example.com">
+      </div>
+      <div>
+        <label class="text-white/80 text-sm font-semibold block mb-1.5">На какую игру записаться</label>
+        <select name="game" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]">
+          <option value="" disabled selected class="text-navy">Выберите игру</option>
+          <option value="01.10.2026, 19:00 — music mix (резерв)" data-datetime="2026-09-30T00:00:00+02:00" data-remove-at="2026-10-01T17:00:00+02:00" class="text-navy">01.10.2026, 19:00 — Игра #3: music mix (регистрация закрыта)</option>
+          <option value="29.10.2026, 19:00 — Halloween Music Party" data-datetime="2026-10-29T19:00:00+01:00" data-remove-at="2026-10-29T18:30:00+01:00" class="text-navy">29.10.2026, 19:00 — Игра #5: Halloween Music Party · The Castle</option>
+          <option value="12.11.2026, 19:00 — Romantik Collection" data-datetime="2026-11-12T19:00:00+01:00" class="text-navy">12.11.2026, 19:00 — Игра #6: Romantik Collection · The Castle</option>
+          <option value="26.11.2026, 19:00 — Музыка в кино" data-datetime="2026-11-26T19:00:00+01:00" class="text-navy">26.11.2026, 19:00 — Игра #7: Музыка в кино · Belushi's Berlin (Mitte)</option>
+          <option value="10.12.2026, 19:00 — Музыкальный алфавит" data-datetime="2026-12-10T19:00:00+01:00" class="text-navy">10.12.2026, 19:00 — Игра #8: Музыкальный алфавит · The Castle</option>
+          <option value="22.12.2026, 19:00 — Вокруг света" data-datetime="2026-12-22T19:00:00+01:00" class="text-navy">22.12.2026, 19:00 — Игра #9: Вокруг света · Belushi's Berlin (Mitte)</option>
+          <option value="29.12.2026, 19:00 — Новогодний музыкальный микс" data-datetime="2026-12-29T19:00:00+01:00" class="text-navy">29.12.2026, 19:00 — Игра #10: Новогодний музыкальный микс · The Castle</option>
+        </select>
+      </div>
+      <label class="flex items-start gap-3 cursor-pointer select-none">
+        <input type="checkbox" name="terms_accepted" required class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+        <span class="text-white/70 text-sm">
+          Я согласен(-на) с
+          <a href="teilnahmebedingungen.html" target="_blank" class="text-brand-yellow hover:underline">условиями участия</a>
+          и
+          <a href="datenschutz.html" target="_blank" class="text-brand-yellow hover:underline">политикой конфиденциальности</a>
+        </span>
+      </label>
+      <label class="flex items-start gap-3 cursor-pointer select-none">
+        <input type="checkbox" name="newsletter_optin" value="yes" class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+        <span class="text-white/70 text-sm">
+          Хочу получать анонсы новых игр на email. Мы пришлём письмо со ссылкой для подтверждения; отписаться можно в любой момент
+          (<a href="datenschutz.html#newsletter" target="_blank" class="text-brand-yellow hover:underline">подробнее</a>)
+        </span>
+      </label>
+      <button type="submit" id="register-submit-btn" class="w-full grad-brand text-navy font-bold py-3.5 rounded-xl hover:opacity-90 transition">Отправить заявку</button>
+    </form>
+
+    <div id="register-success" class="hidden bg-white/5 border border-white/10 rounded-2xl p-10 mt-10 text-center">
+      <div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fa-solid fa-check"></i></div>
+      <h3 class="text-white font-bold text-xl">Заявка получена!</h3>
+      <p class="text-white/60 mt-2">Мы свяжемся с вами, чтобы подтвердить участие в ближайшей игре.</p>
+    </div>
+
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 mt-6 text-center">
+      <h3 class="text-white font-bold text-lg">Не готов записаться сейчас?</h3>
+      <p class="text-white/60 text-sm mt-2">Подпишись на анонсы новых игр. Мы пришлём письмо со ссылкой для подтверждения.</p>
+      <form id="subscribe-form" class="mt-4" style="display:grid;gap:12px">
+        <input type="email" id="subscribe-email" required class="w-full rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--pink)]" placeholder="you@example.com">
+        <label class="flex items-start gap-3 cursor-pointer select-none text-left">
+          <input type="checkbox" id="subscribe-consent" required class="w-5 h-5 mt-0.5 accent-[color:var(--pink)] shrink-0">
+          <span class="text-white/70 text-sm">Согласен(-на) получать анонсы игр на email. Отписаться можно в любой момент
+            (<a href="datenschutz.html#newsletter" target="_blank" class="text-brand-yellow hover:underline">подробнее</a>)</span>
+        </label>
+        <button type="submit" id="subscribe-btn" class="w-full grad-brand text-navy font-bold py-3 rounded-xl hover:opacity-90 transition">Подписаться</button>
+      </form>
+      <p id="subscribe-done" class="hidden text-brand-yellow mt-4">Проверь почту: мы отправили письмо для подтверждения.</p>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+  <h2 class="display text-3xl sm:text-4xl font-extrabold text-center">Результаты игр</h2>
+  <p class="text-zinc-500 text-center max-w-xl mx-auto mt-3">Выбери игру, чтобы увидеть таблицу результатов</p>
+
+  <div class="flex justify-center mt-8">
+    <select id="results-select" onchange="showGameResults()" class="bg-navy border border-white/15 text-white px-7 py-3.5 rounded-full text-base focus:border-[color:var(--pink)] outline-none cursor-pointer">
+      <option value="game1">Игра #1 · 08.09.2026 · 2010-2025 lite</option>
+      <option value="game2">Игра #2 · 17.09.2026 · 90е и 00е</option>
+      <option value="game3">Игра #3 · 01.10.2026 · music mix</option>
+      <option value="game4">Игра #4 · 15.10.2026 · Всё на А</option>
+      <option value="game5">Игра #5 · 29.10.2026 · Halloween Music Party</option>
+      <option value="game6">Игра #6 · 12.11.2026 · Romantik Collection</option>
+      <option value="game7">Игра #7 · 26.11.2026 · Музыка в кино</option>
+      <option value="game8">Игра #8 · 10.12.2026 · Музыкальный алфавит</option>
+      <option value="game9">Игра #9 · 22.12.2026 · Вокруг света</option>
+      <option value="game10">Игра #10 · 29.12.2026 · Новогодний музыкальный микс</option>
+    </select>
+  </div>
+
+  <div id="results-container" class="max-w-4xl mx-auto mt-10"></div>
+
+  <div class="text-center mt-10">
+    <a href="seasons.html" class="inline-flex items-center gap-2 grad-brand text-navy font-bold px-8 py-3.5 rounded-full hover:opacity-90 transition"><i class="fa-solid fa-trophy"></i> Сезонный зачёт</a>
+  </div>
+</section>
+
+<section id="social" class="bg-navy-deep navy-noise">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24 text-center">
+    <h2 class="display text-3xl sm:text-4xl font-extrabold text-white">Мы в соцсетях</h2>
+    <p class="text-white/60 mt-3">Анонсы игр, фото и закулисье — подписывайся, чтобы не пропустить</p>
+    <div class="grid sm:grid-cols-2 gap-5 mt-12">
+      <a href="https://instagram.com/allmusicquiz_berlin" target="_blank" class="card-hover flex items-center justify-center gap-4 bg-white/5 border border-white/10 hover:border-[color:var(--pink)] text-white font-bold text-xl px-8 py-8 rounded-2xl transition">
+        <i class="fa-brands fa-instagram text-4xl text-brand-yellow"></i>
+        <span>@allmusicquiz_berlin</span>
+      </a>
+      <a href="https://t.me/kaifzeitquiz" target="_blank" class="card-hover flex items-center justify-center gap-4 bg-white/5 border border-white/10 hover:border-[color:var(--pink)] text-white font-bold text-xl px-8 py-8 rounded-2xl transition">
+        <i class="fa-brands fa-telegram text-4xl text-brand-yellow"></i>
+        <span>@kaifzeitquiz</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-3">
+      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
+      <div>
+        <p class="text-white font-bold">KAIFZEIT Berlin</p>
+        <p class="text-white/40 text-xs">Music &amp; Game Nights · Kaifzeit Quiz</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-5 text-white/60">
+      <a href="https://instagram.com/allmusicquiz_berlin" target="_blank" aria-label="Instagram" class="hover:text-brand-yellow transition"><i class="fa-brands fa-instagram text-xl"></i></a>
+      <a href="https://t.me/kaifzeitquiz" target="_blank" aria-label="Telegram" class="hover:text-brand-yellow transition"><i class="fa-brands fa-telegram text-xl"></i></a>
+      <a href="/" class="text-xs hover:text-white transition">Все игры KAIFZEIT</a>
+      <span class="text-xs">© 2026 KAIFZEIT Berlin</span>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 pb-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/40">
+    <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+    <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+    <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+  </div>
+</footer>
+
+<button id="scroll-top" aria-label="Наверх"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script src="js/results-data.js"></script>
+<script>
+function disablePastGames() {
+  const now = new Date();
+  document.querySelectorAll('select[name="game"] option[data-datetime]').forEach(opt => {
+    const gameDate = new Date(opt.dataset.datetime);
+    if (gameDate < now) {
+      opt.disabled = true;
+      if (!opt.textContent.includes('регистрация закрыта')) {
+        opt.textContent += ' — регистрация закрыта';
+      }
+    }
+  });
+  const select = document.querySelector('select[name="game"]');
+  if (select && select.selectedOptions[0]?.disabled) {
+    select.value = '';
+  }
+}
+disablePastGames();
+
+function removeExpiredGames() {
+  const now = new Date();
+  document.querySelectorAll('[data-remove-at]').forEach(el => {
+    if (new Date(el.dataset.removeAt) <= now) el.remove();
+  });
+}
+removeExpiredGames();
+
+function renderResultsTableHTML(results) {
+  const rows = results.map((r, i) => {
+    let medal = '';
+    if (r.place === 1) medal = '<i class="fa-solid fa-trophy text-amber-400"></i>';
+    else if (r.place === 2) medal = '<i class="fa-solid fa-trophy text-zinc-300"></i>';
+    else if (r.place === 3) medal = '<i class="fa-solid fa-trophy text-orange-700"></i>';
+    const zebra = i % 2 === 1 ? 'bg-white/[0.03]' : '';
+    return `
+      <tr class="${zebra} hover:bg-white/5 transition-colors">
+        <td class="py-3 px-4">
+          <div class="flex items-center gap-2">
+            <span class="rank-badge">${r.place}</span>
+            ${medal}
+          </div>
+        </td>
+        <td class="py-3 px-4 font-semibold text-white whitespace-nowrap">${r.team}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t1}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t2}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t3}</td>
+        <td class="py-3 px-3 text-center text-brand-yellow font-semibold">${r.sum3}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t4}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t5}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t6}</td>
+        <td class="py-3 px-3 text-center text-brand-yellow font-semibold">${r.sum6}</td>
+        <td class="py-3 px-2 text-center text-white/60">${r.t7}</td>
+        <td class="py-3 px-4 text-right"><span class="font-display text-lg text-brand-yellow">${r.total}</span></td>
+      </tr>`;
+  }).join('');
+
+  return `
+    <div class="bg-navy border border-white/10 rounded-2xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[720px]">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Место</th>
+              <th class="py-4 px-4 text-left text-xs uppercase tracking-wider text-white/40 font-semibold">Команда</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т1</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т2</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т3</th>
+              <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 3</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т4</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т5</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т6</th>
+              <th class="py-4 px-3 text-center text-xs uppercase tracking-wider text-brand-yellow font-semibold whitespace-nowrap">Итог 6</th>
+              <th class="py-4 px-2 text-center text-xs uppercase tracking-wider text-white/40 font-semibold">Т7</th>
+              <th class="py-4 px-4 text-right text-xs uppercase tracking-wider text-white/40 font-semibold whitespace-nowrap">Итого</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderResultsPlaceholderHTML() {
+  return `
+    <div class="bg-white border border-zinc-100 rounded-2xl p-10 text-center shadow-sm">
+      <div class="w-14 h-14 grad-brand rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fa-solid fa-chart-simple"></i></div>
+      <h3 class="font-bold text-xl">Результаты скоро</h3>
+      <p class="text-zinc-500 mt-2">Таблица появится здесь сразу после этой игры.</p>
+    </div>`;
+}
+
+function showGameResults() {
+  const select = document.getElementById('results-select');
+  const container = document.getElementById('results-container');
+  const results = gameResults[select.value];
+  container.innerHTML = results ? renderResultsTableHTML(results) : renderResultsPlaceholderHTML();
+}
+showGameResults();
+
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+const scrollTopBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => {
+  scrollTopBtn.classList.toggle('show', window.scrollY > 400);
+});
+scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+function showTwentyTenModal() {
+  const rounds = [
+    'Название песни',
+    'Всё на Н',
+    'Повторяющиеся буквы',
+    'Радийные хиты',
+    'Дискография',
+    'Фиты с Тимберлейком',
+    '2024-2025',
+    'Музыканты в детстве',
+    'Назвать клип',
+    'Участник какой группы',
+    'Фиты с рэперами',
+    'Всё на Е',
+    'Британцы'
+  ];
+  const modalHTML = `
+    <div id="twenty-ten-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
+      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-8 sm:p-10 overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <i class="fa-solid fa-music"></i> Игра #1 · 08.09.2026, 19:00, вторник
+            </span>
+            <button onclick="document.getElementById('twenty-ten-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
+          </div>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">2010-2025 <span class="grad-brand-text">lite</span></h3>
+          <p class="text-white/70 leading-relaxed mb-6">
+            Пятнадцать лет главных хитов — от радийной классики до самых свежих релизов 2024-2025. Механики туров держим в секрете, но вот немного пищи для угадайки :)
+          </p>
+          <p class="text-brand-yellow text-sm font-bold uppercase tracking-widest mb-3">Вас ожидает:</p>
+          <ol class="space-y-2">
+            ${rounds.map((r, i) => `
+              <li class="flex items-start gap-3 text-white/80">
+                <span class="grad-brand text-navy font-bold text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
+                <span>${r}</span>
+              </li>`).join('')}
+          </ol>
+        </div>
+        <div class="border-t border-white/10 p-6 text-center shrink-0">
+          <button onclick="document.getElementById('twenty-ten-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
+        </div>
+      </div>
+    </div>`;
+  const div = document.createElement('div');
+  div.innerHTML = modalHTML;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function showThemeModal(id, badgeText, titleHTML, description, venue) {
+  const venueHTML = venue ? `<p class="text-brand-yellow text-sm font-semibold mb-4"><i class="fa-solid fa-location-dot mr-1"></i>${venue}</p>` : '';
+  const modalHTML = `
+    <div id="${id}-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
+      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-8 sm:p-10 overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <i class="fa-solid fa-music"></i> ${badgeText}
+            </span>
+            <button onclick="document.getElementById('${id}-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
+          </div>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white ${venue ? 'mb-2' : 'mb-4'}">${titleHTML}</h3>
+          ${venueHTML}
+          <p class="text-white/70 leading-relaxed">${description}</p>
+        </div>
+        <div class="border-t border-white/10 p-6 text-center shrink-0">
+          <button onclick="document.getElementById('${id}-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
+        </div>
+      </div>
+    </div>`;
+  const div = document.createElement('div');
+  div.innerHTML = modalHTML;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function showHalloweenModal() {
+  showThemeModal(
+    'halloween',
+    'Игра #5 · 29.10.2026, 19:00',
+    'Halloween <span class="grad-brand-text">Music Party</span>',
+    'Страшно крутая игра — музыкальный хэллоуин во всей красе. Механики туров держим в секрете, но атмосфера гарантированно жуткая и весёлая одновременно. Костюмы приветствуются!'
+  );
+}
+
+function showRomantikModal() {
+  showThemeModal(
+    'romantik',
+    'Игра #6 · 12.11.2026, 19:00',
+    'Romantik <span class="grad-brand-text">Collection</span>',
+    'Любовь в каждом хите — целая игра о песнях про любовь, разбитые сердца и всё, что между ними. Механики туров держим в секрете — приходи с парой или командой и погрузись в самые романтичные треки.'
+  );
+}
+
+function showKinoModal() {
+  showThemeModal(
+    'kino',
+    'Игра #7 · 26.11.2026, 19:00',
+    'Музыка <span class="grad-brand-text">в кино</span>',
+    'Саундтреки, которые мы любим — от культовых блокбастеров до анимации. Механики туров держим в секрете — приходи проверить, узнаешь ли ты фильм по первым нотам.',
+    "Belushi's Berlin (Mitte)"
+  );
+}
+
+function showAlphabetModal() {
+  showThemeModal(
+    'alphabet',
+    'Игра #8 · 10.12.2026, 19:00',
+    'Музыкальный <span class="grad-brand-text">алфавит</span>',
+    'От А до Я — вся игра построена вокруг букв алфавита. Механики туров держим в секрете, но будь готов вспомнить исполнителей и треки на самые разные буквы.'
+  );
+}
+
+function showAroundWorldModal() {
+  showThemeModal(
+    'around-world',
+    'Игра #9 · 22.12.2026, 19:00',
+    'Вокруг <span class="grad-brand-text">света</span>',
+    'Музыкальное путешествие — хиты из разных стран и культур со всего мира. Механики туров держим в секрете — собери команду и отправляйся в кругосветку без чемоданов.',
+    "Belushi's Berlin (Mitte)"
+  );
+}
+
+function showNewYearMixModal() {
+  showThemeModal(
+    'new-year-mix',
+    'Игра #10 · 29.12.2026, 19:00',
+    'Новогодний <span class="grad-brand-text">музыкальный микс</span>',
+    'Праздник уже близко! Завершаем год музыкальным миксом в новогоднем настроении. Механики туров держим в секрете — приходи проводить 2026-й с командой и хитами.'
+  );
+}
+
+function showMusicMixModal() {
+  const rounds = [
+    'Угадать название песни',
+    'Всё на букву К',
+    'Фиты',
+    '2020е',
+    'Саундтреки',
+    'Соло (этот певец раньше состоял в какой-то группе)',
+    'Хиты разных лет',
+    'Фото тур',
+    'Дискография',
+    'Легенды MTV'
+  ];
+  const modalHTML = `
+    <div id="music-mix-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4">
+      <div class="bg-navy border border-white/10 rounded-2xl max-w-lg w-full overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-8 sm:p-10 overflow-y-auto">
+          <div class="flex justify-between items-start mb-6">
+            <span class="inline-flex items-center gap-2 text-brand-yellow text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <i class="fa-solid fa-music"></i> Игра #3 · 01.10.2026, 19:00
+            </span>
+            <button onclick="document.getElementById('music-mix-modal').remove()" class="text-3xl text-white/40 hover:text-white leading-none">×</button>
+          </div>
+          <h3 class="display text-2xl sm:text-3xl font-extrabold text-white mb-4">Music Mix <span class="grad-brand-text">lite</span></h3>
+          <p class="inline-flex items-center gap-2 text-brand-yellow text-sm font-semibold bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-5">
+            <i class="fa-solid fa-triangle-exclamation"></i> Мест на игру почти нет — регистрация идёт только в резерв
+          </p>
+          <p class="text-white/70 leading-relaxed mb-6">
+            Чего же ждать в игре Music Mix lite? Хоть игра и называется «лайт» — нифига она не лайт!!!
+            Чтобы сохранить интригу, мы не скажем, какие механики будут в каких конкретно турах, но немного информации всё же дадим — чтобы вы хоть что-то угадали :)
+          </p>
+          <p class="text-brand-yellow text-sm font-bold uppercase tracking-widest mb-3">Вас ожидает:</p>
+          <ol class="space-y-2">
+            ${rounds.map((r, i) => `
+              <li class="flex items-start gap-3 text-white/80">
+                <span class="grad-brand text-navy font-bold text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
+                <span>${r}</span>
+              </li>`).join('')}
+          </ol>
+        </div>
+        <div class="border-t border-white/10 p-6 text-center shrink-0">
+          <button onclick="document.getElementById('music-mix-modal').remove()" class="grad-brand text-navy font-bold px-10 py-3.5 rounded-full hover:opacity-90 transition">Понятно</button>
+        </div>
+      </div>
+    </div>`;
+  const div = document.createElement('div');
+  div.innerHTML = modalHTML;
+  document.body.appendChild(div.firstElementChild);
+}
+
+document.querySelector('select[name="game"]').addEventListener('change', (e) => {
+  const gameLabel = e.target.options[e.target.selectedIndex].text;
+  document.getElementById('register-subject').value = `Регистрация — ${gameLabel}`;
+});
+
+const noTeamCheckbox = document.getElementById('no-team-checkbox');
+const noTeamTag = document.getElementById('no-team-tag');
+const teamNameField = document.getElementById('team-name-field');
+const teamNameInput = document.getElementById('team-name-input');
+const playersInput = document.getElementById('players-input');
+const playersLabel = document.getElementById('players-label');
+const noTeamFlag = document.getElementById('no-team-flag');
+const captainLabel = document.getElementById('captain-label');
+
+noTeamCheckbox.addEventListener('change', () => {
+  const noTeam = noTeamCheckbox.checked;
+  noTeamTag.classList.toggle('border-[color:var(--pink)]', noTeam);
+  noTeamTag.classList.toggle('bg-white/10', noTeam);
+  noTeamFlag.value = noTeam ? 'Да — прошу подсадить к команде' : '';
+  if (noTeam) {
+    teamNameField.classList.add('hidden');
+    teamNameInput.removeAttribute('required');
+    teamNameInput.value = 'Без команды';
+    playersInput.min = '1';
+    playersInput.max = '2';
+    playersInput.placeholder = '1–2';
+    playersLabel.textContent = 'Число человек (макс. 2)';
+    captainLabel.textContent = 'Имя игрока';
+  } else {
+    teamNameField.classList.remove('hidden');
+    teamNameInput.setAttribute('required', 'true');
+    teamNameInput.value = '';
+    playersInput.min = '2';
+    playersInput.max = '10';
+    playersInput.placeholder = '2–10';
+    playersLabel.textContent = 'Число игроков';
+    captainLabel.textContent = 'Имя капитана';
+  }
+});
+
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('register-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Отправляем...';
+  try {
+    const formData = new FormData(form);
+    const encoded = new URLSearchParams(formData).toString();
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encoded,
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    // Отправляем письмо-подтверждение участнику через Netlify Function.
+    // Не блокируем успешный экран, если это письмо не дойдёт — регистрация уже принята.
+    fetch('/.netlify/functions/send-confirmation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(formData)),
+    }).catch((err) => console.error('send-confirmation failed:', err));
+
+    if (formData.get('newsletter_optin') === 'yes' && formData.get('email')) {
+      fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.get('email'), source: 'form' }),
+      }).catch((err) => console.error('newsletter subscribe failed:', err));
+    }
+
+    form.classList.add('hidden');
+    document.getElementById('register-success').classList.remove('hidden');
+  } catch (err) {
+    console.error('Netlify form submit failed:', err);
+    alert('Ошибка отправки: ' + err.message + '\nПопробуйте ещё раз или напишите нам в Instagram/Telegram напрямую.');
+    btn.disabled = false;
+    btn.textContent = 'Отправить заявку';
+  }
+});
+document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('subscribe-btn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: document.getElementById('subscribe-email').value, source: 'subscribe' }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    e.target.classList.add('hidden');
+    document.getElementById('subscribe-done').classList.remove('hidden');
+  } catch (err) {
+    alert('Не удалось подписаться: ' + err.message);
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

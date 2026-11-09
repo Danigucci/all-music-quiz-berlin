@@ -35,7 +35,7 @@ export function unsubscribeUrl(token) {
 
 export function buildAnnouncement(game, token, legacy = false) {
   const venueLine = game.venue.address ? `${game.venue.name}, ${game.venue.address}` : game.venue.name;
-  const registerUrl = `${SITE_URL}/#register`;
+  const registerUrl = `${SITE_URL}/music.html#register`;
   const unsub = unsubscribeUrl(token);
   const html = `
 <div style="background:#f4f2fb;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">
