@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OFFSIDE Quiz • KAIFZEIT Sport · Berlin</title>
-<link rel="icon" type="image/png" href="brand/favicon.png">
-<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<title>KAIFZEIT Sport • Berlin · Sport Quiz Nights</title>
+<link rel="icon" type="image/png" href="brand/sport-favicon.png">
+<link rel="apple-touch-icon" href="brand/sport-apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="css/fontawesome.css">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -87,12 +87,12 @@ body{ font-family:'Manrope', system-ui, sans-serif; background:var(--ink); color
 <header class="fixed top-0 w-full backdrop-blur-md z-50 border-b border-white/10" style="background:rgba(9,7,15,.94)">
 <div class="max-w-7xl mx-auto px-6">
 <div class="flex items-center justify-between h-16 md:h-[72px]">
-<div onclick="scrollToTop()" class="flex items-center gap-3 cursor-pointer select-none flex-shrink-0">
-<img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-10 h-10 md:w-11 md:h-11 shrink-0 rounded-full">
+<a href="/" title="На главную KAIFZEIT" class="flex items-center gap-3 select-none flex-shrink-0">
+<img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT Sport" class="w-10 h-10 md:w-11 md:h-11 shrink-0 rounded-full">
 <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-accent">Sport</span></span>
-</div>
+</a>
 <nav id="desktop-menu" class="hidden md:flex gap-8 text-sm font-semibold tracking-wide uppercase"></nav>
-<a href="music.html" class="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-white/70 hover:text-white transition"><i class="fa-solid fa-music"></i> Music</a>
+<div class="hidden md:flex items-center gap-5 text-sm font-semibold text-white/70"><a href="/" class="hover:text-white transition"><i class="fa-solid fa-house"></i> Главная</a><a href="music.html" class="hover:text-white transition"><i class="fa-solid fa-music"></i> Music</a></div>
 <button id="kebab-btn"
 class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium px-4 py-2 rounded-full transition active:scale-95">
 <span class="text-sm">Меню</span>
@@ -108,8 +108,8 @@ class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border bor
 <!-- HERO -->
 <section id="top" class="relative min-h-[100dvh] grid md:grid-cols-2 pt-16 md:pt-0">
 <div class="flex flex-col justify-center px-6 md:px-14 py-16 md:py-0 relative z-10">
-<span class="inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10 mb-6" style="color:var(--soft)"><i class="fa-solid fa-futbol"></i> KAIFZEIT Sport · Berlin</span>
-<h1 class="font-display text-6xl sm:text-7xl md:text-7xl text-white glow-soft tracking-tight leading-[0.95] mb-6">OFFSIDE<br>QUIZ</h1>
+<img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT — Berlin · Sport Quiz Nights" class="w-36 h-36 sm:w-44 sm:h-44 rounded-full mb-6" style="box-shadow:0 0 50px -10px rgba(255,79,163,.55)">
+<h1 class="font-display text-6xl sm:text-7xl md:text-7xl text-white glow-soft tracking-tight leading-[0.95] mb-6">KAIFZEIT<br>SPORT</h1>
 <p class="text-lg md:text-xl text-zinc-400 max-w-sm mb-10 leading-relaxed">Самый атмосферный спортивный квиз Берлина. Команды, эфир, азарт — каждый месяц в новом раунде.</p>
 <a href="#games" class="inline-flex w-fit items-center gap-3 bg-accent hover:brightness-110 text-black font-bold text-lg px-9 py-4 rounded-full transition btn-press">
 <i class="fa-solid fa-futbol"></i>
@@ -274,7 +274,7 @@ class="btn-press inline-flex items-center gap-3 bg-accent hover:brightness-110 t
 <a href="datenschutz.html" class="hover:text-accent transition">Datenschutz</a>
 <a href="teilnahmebedingungen.html" class="hover:text-accent transition">Условия участия</a>
 </div>
-<div class="text-center md:text-right">© 2026 Kaifzeit Quiz · OFFSIDE</div>
+<div class="text-center md:text-right">© 2026 Kaifzeit Quiz</div>
 </div>
 </div>
 </footer>
@@ -457,6 +457,7 @@ function renderNav() {
         const id = ['games','formats','rating','past-results','contacts'][i];
         mobileHTML += `<a href="#${id}" onclick="closeMobileMenu()" class="text-zinc-300 hover:text-accent transition block py-2">${text}</a>`;
     });
+    mobileHTML += `<a href="/" class="text-zinc-300 hover:text-accent transition block py-2">🏠 Главная KAIFZEIT</a><a href="music.html" class="text-zinc-300 hover:text-accent transition block py-2">♪ Music</a>`;
     document.getElementById('mobile-menu-links').innerHTML = mobileHTML;
 }
 

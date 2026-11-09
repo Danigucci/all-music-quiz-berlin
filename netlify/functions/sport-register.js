@@ -49,7 +49,7 @@ export default async (req) => {
         💶 Вход: <strong>${game.price}</strong> с человека<br>
         👥 Команда: <strong>${escapeHtml(team || "—")}</strong>
       </p>
-      <p>До встречи на игре!<br>OFFSIDE Quiz · KAIFZEIT Sport</p>
+      <p>До встречи на игре!<br>KAIFZEIT Sport</p>
     `;
 
     const [adminRes, confirmRes] = await Promise.all([
@@ -76,7 +76,7 @@ export default async (req) => {
         body: JSON.stringify({
           from: fromEmail,
           to: email,
-          subject: "Вы зарегистрированы — OFFSIDE Quiz · KAIFZEIT Sport ⚽",
+          subject: "Вы зарегистрированы — KAIFZEIT Sport ⚽",
           html: confirmationHtml,
         }),
       }),
