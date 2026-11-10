@@ -29,3 +29,10 @@ a.grad-brand,button.grad-brand{ box-shadow:0 0 28px -6px rgba(255,79,163,.6); }
 .bg-navy.rounded-2xl,.bg-navy.rounded-3xl{ border:1px solid rgba(255,255,255,.1); }
 header a[href="#top"] span, header a[href="/"] span{ white-space:nowrap; }
 @media (max-width:1023px){ header > div > a:first-child > span > span{ display:none; } }
+
+/* mobile: never allow sideways page scroll */
+html{ overflow-x:hidden; max-width:100%; }
+body{ overflow-x:hidden; max-width:100%; }
+img,video,iframe,svg{ max-width:100%; }
+select,input,textarea,button{ max-width:100%; }
+select{ text-overflow:ellipsis; }
