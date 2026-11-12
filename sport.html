@@ -112,8 +112,7 @@ class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border bor
 <h1 class="font-display text-6xl sm:text-7xl md:text-7xl text-white glow-soft tracking-tight leading-[0.95] mb-6">KAIFZEIT<br>SPORT</h1>
 <p class="text-lg md:text-xl text-zinc-400 max-w-sm mb-10 leading-relaxed">Самый атмосферный спортивный квиз Берлина. Команды, эфир, азарт — каждый месяц в новом раунде.</p>
 <a href="#games" class="inline-flex w-fit items-center gap-3 bg-accent hover:brightness-110 text-black font-bold text-lg px-9 py-4 rounded-full transition btn-press">
-<i class="fa-solid fa-futbol"></i>
-<span>ХОЧУ ИГРАТЬ</span>
+<span>Записать команду</span>
 </a>
 </div>
 <div class="hero-panel h-72 md:h-auto relative"></div>
@@ -284,7 +283,7 @@ class="btn-press inline-flex items-center gap-3 bg-accent hover:brightness-110 t
 // ==================== ДАННЫЕ ====================
 const translations = {
 ru: {
-nav: ["Хочу играть", "Форматы", "Рейтинг", "Результаты", "Контакты"],
+nav: ["Записаться", "Форматы", "Рейтинг", "Результаты", "Контакты"],
 games: [
     {
         date: "07.10.26",
@@ -453,12 +452,12 @@ function startLiveCountdown(targetDateStr, container) {
 function renderNav() {
     const t = translations.ru;
     document.getElementById('desktop-menu').innerHTML = t.nav.map((text, i) =>
-        `<a href="#${['games','formats','rating','past-results','contacts'][i]}" class="text-zinc-300 hover:text-accent transition">${text}</a>`
+        `<a href="#${['games','formats','rating','past-results','contacts'][i]}" class="${i === 0 ? 'bg-accent text-black px-4 py-2 rounded-full hover:opacity-90 transition normal-case' : 'text-zinc-300 hover:text-accent transition'}">${text}</a>`
     ).join('');
     let mobileHTML = '';
     t.nav.forEach((text, i) => {
         const id = ['games','formats','rating','past-results','contacts'][i];
-        mobileHTML += `<a href="#${id}" onclick="closeMobileMenu()" class="text-zinc-300 hover:text-accent transition block py-2">${text}</a>`;
+        mobileHTML += `<a href="#${id}" onclick="closeMobileMenu()" class="${i === 0 ? 'text-accent font-bold' : 'text-zinc-300 hover:text-accent'} transition block py-2">${text}${i === 0 ? ' →' : ''}</a>`;
     });
     mobileHTML += `<a href="/" class="text-zinc-300 hover:text-accent transition block py-2">Главная KAIFZEIT</a><a href="music.html" class="transition block py-2" style="color:#ff4fa3;text-shadow:0 0 14px rgba(255,79,163,.75)">♪ Music</a>`;
     document.getElementById('mobile-menu-links').innerHTML = mobileHTML;
