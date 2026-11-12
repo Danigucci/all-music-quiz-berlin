@@ -21,3 +21,77 @@
   to = "/404.html"
   status = 404
   force = true
+
+# offsidequiz.com (old Offside site) -> Kaifzeit Sport (active once the domain is attached to this site)
+[[redirects]]
+  from = "https://offsidequiz.com/live.html"
+  to = "https://kaifzeit.com/sport-live.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/live.html"
+  to = "https://kaifzeit.com/sport-live.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://offsidequiz.com/live-host.html"
+  to = "https://kaifzeit.com/sport-live-host.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/live-host.html"
+  to = "https://kaifzeit.com/sport-live-host.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://offsidequiz.com/scoreboard.html"
+  to = "https://kaifzeit.com/sport-scoreboard.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/scoreboard.html"
+  to = "https://kaifzeit.com/sport-scoreboard.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://offsidequiz.com/scoreboard-admin.html"
+  to = "https://kaifzeit.com/sport-scoreboard-admin.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/scoreboard-admin.html"
+  to = "https://kaifzeit.com/sport-scoreboard-admin.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://offsidequiz.com/results.html"
+  to = "https://kaifzeit.com/sport-results.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/results.html"
+  to = "https://kaifzeit.com/sport-results.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://offsidequiz.com/*"
+  to = "https://kaifzeit.com/sport.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.offsidequiz.com/*"
+  to = "https://kaifzeit.com/sport.html"
+  status = 301
+  force = true
+
