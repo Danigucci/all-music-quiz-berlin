@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { PRIZES, ROUNDS } from './live-questions.mjs';
+import { PRIZES, SETS } from './live-questions.mjs';
 import { hasBannedWord } from './live-banned.mjs';
 
 export const QUESTION_MS = 10000;
@@ -23,7 +23,12 @@ const rank = (scores) =>
     .map(([pid, s]) => ({ pid, ...s }))
     .sort((a, b) => b.correct - a.correct || a.time - b.time || a.joinedAt - b.joinedAt);
 
-export function createLive(store, { now = Date.now, random = Math.random, rounds = ROUNDS, prizes = PRIZES } = {}) {
+export function createLive(store, { now = Date.now, random = Math.random, sets = SETS, rounds, prizes = PRIZES } = {}) {
+  if (rounds) sets = [{ id: 'main', title: 'Игра', rounds }];
+  // Each game is played with one question set, picked when the host opens it
+  const setOf = (state) => sets.find((s) => s.id === state.set) || sets[0];
+  const R = (state) => setOf(state).rounds;
+  const setList = sets.map(({ id, title }) => ({ id, title }));
   const readState = async () => (await store.get('state', { type: 'json' })) || { phase: 'off' };
   const writeState = (state) => store.setJSON('state', state);
   const readScores = async (session) => (await store.get(`s/${session}/scores`, { type: 'json' })) || {};
@@ -35,11 +40,11 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
   };
 
   // Each game gets its own question order and option order
-  const makePlan = () =>
+  const makePlan = (rounds) =>
     rounds.map((r) => shuffle(r.questions.map((_, i) => i), random).map((qi) => ({ qi, order: shuffle([0, 1, 2, 3], random) })));
 
   const current = (state) => {
-    const round = rounds[state.round];
+    const round = R(state)[state.round];
     const slot = state.plan[state.round][state.q];
     const src = round.questions[slot.qi];
     const all = [src.a, ...src.w];
@@ -51,15 +56,18 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
   const mediaOf = (q) => q.media + (q.start ? `#t=${q.start}` : '');
 
   const roundInfo = (state) => {
-    const r = rounds[state.round];
-    return { index: state.round, count: rounds.length, title: r.title, rule: r.rule, kind: r.kind, id: r.id };
+    const r = R(state)[state.round];
+    return { index: state.round, count: R(state).length, title: r.title, rule: r.rule, kind: r.kind, id: r.id };
   };
 
   // ---------- players ----------
 
+  const totalOf = (state) => R(state).reduce((s, r) => s + r.questions.length, 0);
+
   async function view(pid) {
     const state = await readState();
     const base = { phase: state.phase, session: state.session || null, prizes };
+    if (state.phase !== 'off') base.game = setOf(state).title;
     if (state.phase === 'off' || state.phase === 'lobby') return base;
     if (state.phase === 'final') {
       const board = rank(await readScores(state.session));
@@ -68,7 +76,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
       const hidden = me >= 0 && me + 1 <= 3 && me + 1 < (state.podium ?? 1);
       return {
         ...base,
-        total: rounds.reduce((s, r) => s + r.questions.length, 0),
+        total: totalOf(state),
         me: me < 0 ? null : hidden ? { pending: true } : { place: me + 1, correct: board[me].correct, time: board[me].time },
         players: board.length,
       };
@@ -136,7 +144,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function hostStatus() {
     const state = await readState();
-    if (state.phase === 'off') return { phase: 'off', prizes };
+    if (state.phase === 'off') return { phase: 'off', prizes, sets: setList };
     const players = await listJson(`s/${state.session}/p/`);
     const scores = await readScores(state.session);
     const out = {
@@ -144,9 +152,12 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
       prizes,
       step: stepOf(state),
       session: state.session,
+      set: setOf(state).id,
+      game: setOf(state).title,
+      sets: setList,
       players: Object.values(players).sort((a, b) => a.joinedAt - b.joinedAt).map(({ name, team }) => ({ name, team })),
       board: rank(scores).map(({ name, team, correct, time }) => ({ name, team, correct, time })),
-      total: rounds.reduce((s, r) => s + r.questions.length, 0),
+      total: totalOf(state),
     };
     if (state.phase === 'final') out.podium = state.podium ?? 1;
     if (state.phase === 'lobby' || state.phase === 'final') return out;
@@ -154,7 +165,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     // What comes next, so the host screen can preload it
     if (state.phase === 'intro' || state.phase === 'reveal') {
       const nx = nextSlot(state);
-      if (nx) out.upcoming = mediaOf(rounds[nx.round].questions[state.plan[nx.round][nx.q].qi]);
+      if (nx) out.upcoming = mediaOf(R(state)[nx.round].questions[state.plan[nx.round][nx.q].qi]);
     }
     if (state.phase === 'intro') return out;
     const { round, src, opts, correct, key } = current(state);
@@ -171,8 +182,8 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   const nextSlot = (state) => {
     if (state.phase === 'intro') return { round: state.round, q: 0 };
-    if (state.q + 1 < rounds[state.round].questions.length) return { round: state.round, q: state.q + 1 };
-    if (state.round + 1 < rounds.length) return { round: state.round + 1, q: 0 };
+    if (state.q + 1 < R(state)[state.round].questions.length) return { round: state.round, q: state.q + 1 };
+    if (state.round + 1 < R(state).length) return { round: state.round + 1, q: 0 };
     return null;
   };
 
@@ -184,18 +195,28 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     }
   }
 
-  async function newGame() {
+  async function newGame({ set } = {}) {
     const prev = await readState();
-    const state = { phase: 'lobby', session: randomBytes(6).toString('hex'), plan: makePlan(), round: 0, q: 0, revealed: 0 };
+    const chosen = sets.find((s) => s.id === set) || setOf(prev);
+    const state = { phase: 'lobby', session: randomBytes(6).toString('hex'), set: chosen.id, plan: makePlan(chosen.rounds), round: 0, q: 0, revealed: 0 };
     await writeState(state);
     await purgeSession(prev.session);
+    return hostStatus();
+  }
+
+  // Switch the question set while still in the lobby; joined players stay
+  async function pickSet({ set } = {}) {
+    const state = await readState();
+    const chosen = sets.find((s) => s.id === set);
+    if (state.phase !== 'lobby' || !chosen || chosen.id === setOf(state).id) return hostStatus();
+    await writeState({ ...state, set: chosen.id, plan: makePlan(chosen.rounds), round: 0, q: 0 });
     return hostStatus();
   }
 
   // Closed between quiz nights: players see a "closed" screen and can't join
   async function close() {
     const prev = await readState();
-    await writeState({ phase: 'off' });
+    await writeState({ phase: 'off', set: prev.set });
     await purgeSession(prev.session);
     return hostStatus();
   }
@@ -235,7 +256,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function next({ step } = {}) {
     const state = await readState();
-    if (state.phase === 'off') return newGame();
+    if (state.phase === 'off') return newGame({ set: setOf(state).id });
     if (step && step !== stepOf(state)) return hostStatus();
     if (state.phase === 'lobby') {
       await writeState({ ...state, phase: 'intro', round: 0, q: 0 });
@@ -264,5 +285,5 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     return hostStatus();
   }
 
-  return { view, join, answer, hostStatus, newGame, close, next, reveal, announce };
+  return { view, join, answer, hostStatus, newGame, pickSet, close, next, reveal, announce };
 }

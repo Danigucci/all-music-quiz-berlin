@@ -38,7 +38,7 @@ exports.handler = async (event) => {
         <tr><td style="padding:6px 0; color:#666;">Число игроков</td><td style="padding:6px 0;">${escapeHtml(players || '')}</td></tr>
       </table>
       <p>До встречи на игре! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @kaifzeitquiz</p>
     </div>
   `;
 

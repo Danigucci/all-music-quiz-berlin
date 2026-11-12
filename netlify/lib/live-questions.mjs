@@ -63,3 +63,64 @@ export const ROUNDS = [
     ],
   },
 ];
+
+// "Romantic Collection" — a second, love-themed game. Clips are live/audio/m*.mp4.
+export const ROMANTIC_ROUNDS = [
+  {
+    id: 'love', kind: 'audio', title: 'Песни о любви',
+    rule: 'Звучит фрагмент песни о любви — выбери исполнителя и название.',
+    prompt: 'Что это за песня?',
+    questions: [
+      { media: 'live/audio/m1-01.mp4', gain: 1.06, a: 'Elvis Presley — Can\'t Help Falling in Love', w: ['Elvis Presley — Love Me Tender', 'Frank Sinatra — Strangers in the Night', 'The Platters — Only You'], info: 'Из фильма «Голубые Гавайи», 1961' },
+      { media: 'live/audio/m1-02.mp4', gain: 0.89, a: 'Lionel Richie — Hello', w: ['Lionel Richie — Say You, Say Me', 'Stevie Wonder — I Just Called to Say I Love You', 'Phil Collins — Against All Odds'], info: 'Альбом «Can\'t Slow Down», 1983' },
+      { media: 'live/audio/m1-03.mp4', gain: 0.82, a: 'Bryan Adams — Heaven', w: ['Bryan Adams — (Everything I Do) I Do It for You', 'Richard Marx — Right Here Waiting', 'Foreigner — I Want to Know What Love Is'], info: 'Альбом «Reckless», 1984' },
+      { media: 'live/audio/m1-04.mp4', gain: 0.9, a: 'Adele — Someone Like You', w: ['Adele — Hello', 'Amy Winehouse — Back to Black', 'Sam Smith — Stay with Me'], info: 'Альбом «21», 2011' },
+      { media: 'live/audio/m1-05.mp4', gain: 0.61, a: 'Bruno Mars — Just the Way You Are', w: ['Bruno Mars — When I Was Your Man', 'Jason Mraz — I\'m Yours', 'Maroon 5 — Sugar'], info: 'Альбом «Doo-Wops & Hooligans», 2010' },
+      { media: 'live/audio/m1-06.mp4', gain: 0.71, a: 'John Legend — All of Me', w: ['John Legend — Ordinary People', 'James Arthur — Say You Won\'t Let Go', 'Sam Smith — I\'m Not the Only One'], info: 'Альбом «Love in the Future», 2013' },
+      { media: 'live/audio/m1-07.mp4', gain: 0.84, a: 'Ed Sheeran — Perfect', w: ['Ed Sheeran — Thinking Out Loud', 'Lewis Capaldi — Someone You Loved', 'Shawn Mendes — Treat You Better'], info: 'Альбом «÷», 2017' },
+      { media: 'live/audio/m1-08.mp4', gain: 1.5, a: 'Алла Пугачёва — Миллион алых роз', w: ['Алла Пугачёва — Позови меня с собой', 'София Ротару — Лаванда', 'Валерий Леонтьев — Дельтаплан'], info: 'Музыка Раймонда Паулса, слова Андрея Вознесенского' },
+      { media: 'live/audio/m1-09.mp4', gain: 0.48, a: 'Звери — Всё, что тебя касается', w: ['Звери — Районы-кварталы', 'Мумий Тролль — Владивосток 2000', 'Сплин — Романс'], info: 'Роман Билык и группа «Звери»' },
+      { media: 'live/audio/m1-10.mp4', gain: 0.55, a: 'Валерий Меладзе — Красиво', w: ['Валерий Меладзе — Сэра', 'Григорий Лепс — Натали', 'Леонид Агутин — Хоп хей лала лей'], info: 'Музыка и слова Константина Меладзе' },
+    ],
+  },
+  {
+    id: 'duets', kind: 'audio', title: 'Дуэты',
+    rule: 'Звучит песня о любви на два голоса — угадай, кто её поёт.',
+    prompt: 'Кто поёт этот дуэт?',
+    questions: [
+      { media: 'live/audio/m2-01.mp4', start: 3, gain: 1.28, a: 'Lady Gaga & Bradley Cooper', w: ['Lady Gaga & Tony Bennett', 'Pink & Nate Ruess', 'Miley Cyrus & Billy Ray Cyrus'], info: 'Shallow — из фильма «Звезда родилась», 2018' },
+      { media: 'live/audio/m2-02.mp4', gain: 0.93, a: 'Elton John & Kiki Dee', w: ['Elton John & George Michael', 'Rod Stewart & Tina Turner', 'Paul McCartney & Stevie Wonder'], info: 'Don\'t Go Breaking My Heart, 1976' },
+      { media: 'live/audio/m2-03.mp4', gain: 0.74, a: 'Marvin Gaye & Tammi Terrell', w: ['Diana Ross & Lionel Richie', 'Ike & Tina Turner', 'Sonny & Cher'], info: 'Ain\'t No Mountain High Enough, 1967' },
+      { media: 'live/audio/m2-04.mp4', gain: 1.06, a: 'Dolly Parton & Kenny Rogers', w: ['Johnny Cash & June Carter', 'Shania Twain & Bryan White', 'Willie Nelson & Julio Iglesias'], info: 'Islands in the Stream, 1983 — песню написали Bee Gees' },
+      { media: 'live/audio/m2-05.mp4', gain: 1.27, a: 'Céline Dion & Peabo Bryson', w: ['Céline Dion & Andrea Bocelli', 'Mariah Carey & Luther Vandross', 'Whitney Houston & Bobby Brown'], info: 'Beauty and the Beast — из мультфильма «Красавица и Чудовище», 1991' },
+      { media: 'live/audio/m2-06.mp4', gain: 0.78, a: 'Rihanna & Mikky Ekko', w: ['Rihanna & Eminem', 'Rihanna & Calvin Harris', 'Selena Gomez & Kygo'], info: 'Stay, 2012' },
+      { media: 'live/audio/m2-07.mp4', gain: 0.5, a: 'ZAYN & Taylor Swift', w: ['Taylor Swift & Ed Sheeran', 'Shawn Mendes & Camila Cabello', 'Harry Styles & Dua Lipa'], info: 'I Don\'t Wanna Live Forever — из фильма «На пятьдесят оттенков темнее», 2016' },
+      { media: 'live/audio/m2-08.mp4', gain: 0.81, a: 'Леонид Агутин & Анжелика Варум', w: ['Филипп Киркоров & Алла Пугачёва', 'Владимир Пресняков & Наталья Подольская', 'Дмитрий Маликов & Наталья Ветлицкая'], info: 'Королева' },
+      { media: 'live/audio/m2-09.mp4', gain: 0.63, a: 'Валерия & Стас Пьеха', w: ['Ани Лорак & Григорий Лепс', 'Жасмин & Стас Михайлов', 'Валерия & Иосиф Пригожин'], info: 'Ты грустишь' },
+      { media: 'live/audio/m2-10.mp4', gain: 0.65, a: 'Artik & Asti', w: ['Мот & Бьянка', 'Баста & Полина Гагарина', 'Егор Крид & Нюша'], info: 'Неделимы, 2017' },
+    ],
+  },
+  {
+    id: 'romfilm', kind: 'audio', title: 'Романтическое кино',
+    rule: 'Звучит песня или музыка из фильма о любви — угадай фильм.',
+    prompt: 'Из какого фильма?',
+    questions: [
+      { media: 'live/audio/m3-01.mp4', gain: 1.04, a: 'Титаник', w: ['Пёрл-Харбор', 'Унесённые ветром', 'Великий Гэтсби'], info: 'Céline Dion — My Heart Will Go On, 1997' },
+      { media: 'live/audio/m3-02.mp4', gain: 1.34, a: 'Грязные танцы', w: ['Бриолин', 'Флэшдэнс', 'Шаг вперёд'], info: 'Bill Medley & Jennifer Warnes — (I\'ve Had) The Time of My Life, 1987' },
+      { media: 'live/audio/m3-03.mp4', gain: 0.89, a: 'Красотка', w: ['Сбежавшая невеста', 'Свадьба лучшего друга', 'Как отделаться от парня за 10 дней'], info: 'Roy Orbison — Oh, Pretty Woman' },
+      { media: 'live/audio/m3-04.mp4', gain: 1.15, a: 'Ноттинг Хилл', w: ['Реальная любовь', 'Четыре свадьбы и одни похороны', 'Дневник Бриджит Джонс'], info: 'Elvis Costello — She, 1999' },
+      { media: 'live/audio/m3-05.mp4', gain: 1.81, a: 'Привидение', w: ['Дневник памяти', 'Город ангелов', 'Офицер и джентльмен'], info: 'The Righteous Brothers — Unchained Melody' },
+      { media: 'live/audio/m3-06.mp4', gain: 2.34, a: 'Телохранитель', w: ['Неспящие в Сиэтле', 'Ромео + Джульетта', 'Предложение'], info: 'Whitney Houston — I Will Always Love You, 1992' },
+      { media: 'live/audio/m3-07.mp4', gain: 1.31, a: 'Ла-Ла Ленд', w: ['Звезда родилась', 'Величайший шоумен', 'Мулен Руж'], info: 'Ryan Gosling — City of Stars, 2016' },
+      { media: 'live/audio/m3-08.mp4', gain: 0.76, a: 'Сумерки', w: ['Дневник памяти', 'Виноваты звёзды', 'После'], info: 'Christina Perri — A Thousand Years («Сумерки. Сага. Рассвет», 2011)' },
+      { media: 'live/audio/m3-09.mp4', gain: 1.2, a: 'Амели', w: ['Вечное сияние чистого разума', '500 дней лета', 'Полночь в Париже'], info: 'Yann Tiersen — Comptine d\'un autre été, 2001' },
+      { media: 'live/audio/m3-10.mp4', gain: 1.33, a: 'Москва слезам не верит', w: ['Служебный роман', 'Ирония судьбы, или С лёгким паром!', 'Покровские ворота'], info: 'Татьяна и Сергей Никитины — «Александра», 1979' },
+    ],
+  },
+];
+
+// Games the host can open. The first one is the default.
+export const SETS = [
+  { id: 'main', title: 'Основная игра', rounds: ROUNDS },
+  { id: 'romantic', title: 'Romantic Collection', rounds: ROMANTIC_ROUNDS },
+];

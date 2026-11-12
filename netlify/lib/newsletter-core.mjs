@@ -57,7 +57,7 @@ export function buildAnnouncement(game, token, legacy = false) {
       <div style="text-align:center;margin:26px 0;">
         <a href="${registerUrl}" style="display:inline-block;background:#ff4fa3;color:#09070f;text-decoration:none;font-weight:bold;font-size:18px;padding:14px 34px;border-radius:999px;">Записать команду</a>
       </div>
-      <p style="margin:0;font-size:14px;color:#5b5890;">Instagram: <a href="https://instagram.com/allmusicquiz_berlin" style="color:#ff4fa3;">@allmusicquiz_berlin</a></p>
+      <p style="margin:0;font-size:14px;color:#5b5890;">Instagram: <a href="https://instagram.com/kaifzeitquiz" style="color:#ff4fa3;">@kaifzeitquiz</a></p>
     </div>
     <div style="background:#f4f2fb;padding:16px 24px;color:#7a77a8;font-size:12px;line-height:1.5;">
       ${legacy ? 'Вы получили это письмо, потому что ранее регистрировались на игры Kaifzeit Quiz.' : 'Вы получили это письмо, потому что подписались на анонсы игр Kaifzeit Quiz.'}

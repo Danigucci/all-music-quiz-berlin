@@ -49,7 +49,7 @@ async function sendReminderEmail({ email, captain, teamLine, game, venue }) {
         <tr><td style="padding:6px 0; color:#666;">Команда</td><td style="padding:6px 0;">${escapeHtml(teamLine)}</td></tr>
       </table>
       <p>До встречи! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @kaifzeitquiz</p>
     </div>
   `;
   const res = await fetch('https://api.resend.com/emails', {

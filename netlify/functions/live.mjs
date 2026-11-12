@@ -48,7 +48,8 @@ export default async (req) => {
     const data = (await readBody(req)) || {};
     const action = route.slice('admin/'.length);
     if (action === 'status') return json(200, await live.hostStatus());
-    if (action === 'new') return json(200, await live.newGame());
+    if (action === 'new') return json(200, await live.newGame(data));
+    if (action === 'set') return json(200, await live.pickSet(data));
     if (action === 'close') return json(200, await live.close());
     if (action === 'next') return json(200, await live.next(data));
     if (action === 'reveal') return json(200, await live.reveal(data));

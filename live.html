@@ -302,7 +302,7 @@ p { margin: 0; }
     };
     show(
       h('div', { class: 'stack', style: 'padding-top:4vh' },
-        h('span', { class: 'eyebrow' }, 'IT’S ALL YOU'),
+        h('span', { class: 'eyebrow' }, 'IT’S ALL YOU' + (S && S.game && S.game !== 'Основная игра' ? ' · ' + S.game : '')),
         h('h1', {}, 'Играем вместе на большом экране'),
         h('p', { class: 'muted' }, 'Вопросы и музыка — на экране в баре, ответы — здесь. 10 секунд на вопрос, 1 очко за верный ответ, при равенстве побеждает скорость.')
       ),

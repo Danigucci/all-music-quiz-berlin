@@ -33,7 +33,7 @@ async function sendEmail({ email, name, team, number }) {
       <div style="font-size:64px; font-weight:800; color:#ff4fa3; margin:16px 0;">${number}</div>
       ${teamLine}
       <p>Сохрани это письмо или сделай скриншот — номер понадобится при розыгрыше призов. Удачи! 🎶</p>
-      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @allmusicquiz_berlin</p>
+      <p style="color:#999; font-size:12px; margin-top:24px;">Kaifzeit Quiz · Instagram: @kaifzeitquiz</p>
     </div>`;
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
