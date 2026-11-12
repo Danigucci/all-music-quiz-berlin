@@ -92,7 +92,7 @@ body{ font-family:'Manrope', system-ui, sans-serif; background:var(--ink); color
 <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-accent">Sport</span></span>
 </a>
 <nav id="desktop-menu" class="hidden md:flex gap-8 text-sm font-semibold tracking-wide uppercase"></nav>
-<div class="hidden md:flex items-center gap-5 text-sm font-semibold text-white/70"><a href="/" class="hover:text-white transition">Главная</a><a href="music.html" class="hover:text-white transition"><i class="fa-solid fa-music"></i> Music</a></div>
+<div class="hidden md:flex items-center gap-5 text-sm font-semibold text-white/70"><a href="/" class="hover:text-white transition">Главная</a><a href="music.html" class="transition hover:brightness-125" style="color:#ff4fa3;text-shadow:0 0 14px rgba(255,79,163,.75)"><i class="fa-solid fa-music"></i> Music</a></div>
 <button id="kebab-btn"
 class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium px-4 py-2 rounded-full transition active:scale-95">
 <span class="text-sm">Меню</span>
@@ -460,7 +460,7 @@ function renderNav() {
         const id = ['games','formats','rating','past-results','contacts'][i];
         mobileHTML += `<a href="#${id}" onclick="closeMobileMenu()" class="text-zinc-300 hover:text-accent transition block py-2">${text}</a>`;
     });
-    mobileHTML += `<a href="/" class="text-zinc-300 hover:text-accent transition block py-2">Главная KAIFZEIT</a><a href="music.html" class="text-zinc-300 hover:text-accent transition block py-2">♪ Music</a>`;
+    mobileHTML += `<a href="/" class="text-zinc-300 hover:text-accent transition block py-2">Главная KAIFZEIT</a><a href="music.html" class="transition block py-2" style="color:#ff4fa3;text-shadow:0 0 14px rgba(255,79,163,.75)">♪ Music</a>`;
     document.getElementById('mobile-menu-links').innerHTML = mobileHTML;
 }
 
