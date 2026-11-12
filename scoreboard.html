@@ -76,7 +76,7 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 <body class="overflow-x-hidden min-h-screen flex flex-col">
 
 <form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
-  <div class="display text-2xl font-extrabold">KAIFZEIT <span class="text-brand-yellow">Berlin</span></div>
+  <img src="brand/kaifzeit-music-logo.webp" alt="KAIFZEIT Music Quiz" class="w-40 h-40 rounded-full">
   <p class="text-white/50 text-sm">Таблица результатов</p>
   <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-full text-center outline-none focus:border-[color:var(--pink)]">
   <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>
@@ -84,6 +84,7 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 </form>
 
 <div id="stage" class="hidden flex-1 flex flex-col px-[3vw] py-4 min-h-0">
+  <img src="brand/kaifzeit-music-logo.webp" alt="KAIFZEIT Music Quiz" class="rounded-full pointer-events-none" style="position:fixed; top:16px; left:16px; z-index:20; width:clamp(56px, 8vw, 120px); height:auto;">
   <div class="text-center">
     <h1 class="display font-extrabold leading-none" style="font-size:clamp(1.8rem,4.2vw,3.6rem); color:var(--yellow)">KAIFZEIT QUIZ</h1>
     <p id="subtitle" class="text-white/70 mt-1" style="font-size:clamp(1rem,1.8vw,1.6rem)"></p>
