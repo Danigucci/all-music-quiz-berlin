@@ -1,7 +1,7 @@
 const gameResults = {
   game1: [
     { place: 1, team: 'Sukafrukty', t1: 16, t2: 13, t3: 14, sum3: 43, t4: 14, t5: 12, t6: 17, sum6: 86, t7: 20, total: 106 },
-    { place: 2, team: 'Не знали, но не забыли', t1: 16, t2: 13, t3: 12, sum3: 41, t4: 12, t5: 11, t6: 14, sum6: 78, t7: 14, total: 92 },
+    { place: 2, team: 'Не знали, но забыли', t1: 16, t2: 13, t3: 12, sum3: 41, t4: 12, t5: 11, t6: 14, sum6: 78, t7: 14, total: 92 },
     { place: 3, team: 'Молодежь', t1: 14, t2: 11, t3: 8, sum3: 33, t4: 11, t5: 11, t6: 12, sum6: 67, t7: 13, total: 80 },
     { place: 4, team: 'В яблочко', t1: 16, t2: 9, t3: 8, sum3: 33, t4: 12, t5: 10, t6: 15, sum6: 70, t7: 10, total: 80 },
     { place: 5, team: 'Бублики', t1: 13, t2: 10, t3: 9, sum3: 32, t4: 11, t5: 9, t6: 12, sum6: 64, t7: 10, total: 74 },
@@ -40,7 +40,7 @@ const gameResults = {
   game4: null,
   game5: [
     { place: 1, team: 'Sukafrukty', t1: 13, t2: 12, t3: 16, sum3: 41, t4: 15, t5: 12, t6: 14, sum6: 82, t7: 33, total: 115 },
-    { place: 2, team: 'Не знали, но не забыли', t1: 11, t2: 12, t3: 15, sum3: 38, t4: 17, t5: 10, t6: 16, sum6: 81, t7: 30, total: 111 },
+    { place: 2, team: 'Не знали, но забыли', t1: 11, t2: 12, t3: 15, sum3: 38, t4: 17, t5: 10, t6: 16, sum6: 81, t7: 30, total: 111 },
     { place: 3, team: 'Давай Попозже', t1: 9, t2: 9, t3: 17, sum3: 35, t4: 12, t5: 8, t6: 13, sum6: 68, t7: 26, total: 94 },
     { place: 4, team: 'В яблочко', t1: 7, t2: 5, t3: 12, sum3: 24, t4: 9, t5: 7, t6: 9, sum6: 49, t7: 24, total: 73 },
     { place: 5, team: 'Молодежь', t1: 6, t2: 8, t3: 11, sum3: 25, t4: 9, t5: 8, t6: 8, sum6: 50, t7: 22, total: 72 },
@@ -48,7 +48,7 @@ const gameResults = {
     { place: 7, team: 'Бюро тефтелек', t1: 6, t2: 11, t3: 9, sum3: 26, t4: 7, t5: 6, t6: 6, sum6: 45, t7: 15, total: 60 },
   ],
   game6: [
-    { place: 1, team: 'Не знали, но не забыли', t1: 10, t2: 16, t3: 7, sum3: 33, t4: 12, t5: 13, t6: 15, sum6: 73, t7: 23, total: 96 },
+    { place: 1, team: 'Не знали, но забыли', t1: 10, t2: 16, t3: 7, sum3: 33, t4: 12, t5: 13, t6: 15, sum6: 73, t7: 23, total: 96 },
     { place: 2, team: 'Давай попозже', t1: 8, t2: 17, t3: 3, sum3: 28, t4: 11, t5: 12, t6: 16, sum6: 67, t7: 21, total: 88 },
     { place: 3, team: 'В яблочко', t1: 5, t2: 17, t3: 4, sum3: 26, t4: 10, t5: 15, t6: 12, sum6: 63, t7: 17, total: 80 },
     { place: 4, team: 'Молодежь', t1: 7, t2: 14, t3: 9, sum3: 30, t4: 10, t5: 10, t6: 13, sum6: 63, t7: 11, total: 74 },
