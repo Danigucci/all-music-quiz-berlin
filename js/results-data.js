@@ -90,7 +90,7 @@ const gamePlaylists = {
   game2: 'https://open.spotify.com/playlist/5dqVegNKwzALAJtGflw8Os',
   game3: 'https://open.spotify.com/playlist/2ByY82j1tSlYYvpDuNovpS',
   game5: 'https://open.spotify.com/playlist/2j9f9nRFqR9C3Q9eXHnAan',
-  game6: null,
+  game6: 'https://open.spotify.com/playlist/64bQm0xwGqigpF71c2AXMP',
   game7: null,
   game8: null,
   game9: null,
