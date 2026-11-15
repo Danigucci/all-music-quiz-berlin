@@ -186,7 +186,7 @@ function renderScores() {
   $('score-list').innerHTML = state.teams.map((t) => `
     <div class="score-row">
       <span class="name">${esc(t.name)}</span>
-      <input class="field score-field" type="number" step="1" enterkeyhint="next" data-id="${t.id}" value="${roundScores[t.id] ?? ''}" placeholder="—">
+      <input class="field score-field" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="next" data-id="${t.id}" value="${roundScores[t.id] ?? ''}" placeholder="—">
     </div>`).join('');
 }
 
@@ -256,8 +256,10 @@ $('btn-bulk-add').addEventListener('click', () => {
 
 $('score-list').addEventListener('input', (e) => {
   if (!e.target.classList.contains('score-field')) return;
+  const clean = e.target.value.replace(/\D/g, '');
+  if (clean !== e.target.value) e.target.value = clean;
   if (!state.scores[currentRound]) state.scores[currentRound] = {};
-  state.scores[currentRound][e.target.dataset.id] = e.target.value;
+  state.scores[currentRound][e.target.dataset.id] = clean;
   markDirty();
 });
 
