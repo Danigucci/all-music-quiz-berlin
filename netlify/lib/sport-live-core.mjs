@@ -24,6 +24,19 @@ const rank = (scores) =>
     .sort((a, b) => b.correct - a.correct || a.time - b.time || a.joinedAt - b.joinedAt);
 
 export function createLive(store, { now = Date.now, random = Math.random, rounds = ROUNDS, prizes = PRIZES } = {}) {
+  // Prizes can be edited by the host; fall back to the defaults from the question bank
+  const getPrizes = async () => {
+    const saved = await store.get('prizes', { type: 'json' });
+    return Array.isArray(saved) ? saved : prizes;
+  };
+  async function setPrizes(list) {
+    const clean = (Array.isArray(list) ? list : []).slice(0, 3)
+      .map((p) => ({ text: String(p?.text ?? '').trim().slice(0, 120) }))
+      .filter((p) => p.text);
+    await store.setJSON('prizes', clean);
+    return clean;
+  }
+
   const readState = async () => (await store.get('state', { type: 'json' })) || { phase: 'off' };
   const writeState = (state) => store.setJSON('state', state);
   const readScores = async (session) => (await store.get(`s/${session}/scores`, { type: 'json' })) || {};
@@ -59,7 +72,7 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function view(pid) {
     const state = await readState();
-    const base = { phase: state.phase, session: state.session || null, prizes };
+    const base = { phase: state.phase, session: state.session || null, prizes: await getPrizes() };
     if (state.phase === 'off' || state.phase === 'lobby') return base;
     if (state.phase === 'final') {
       const board = rank(await readScores(state.session));
@@ -136,12 +149,12 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
 
   async function hostStatus() {
     const state = await readState();
-    if (state.phase === 'off') return { phase: 'off', prizes };
+    if (state.phase === 'off') return { phase: 'off', prizes: await getPrizes() };
     const players = await listJson(`s/${state.session}/p/`);
     const scores = await readScores(state.session);
     const out = {
       phase: state.phase,
-      prizes,
+      prizes: await getPrizes(),
       step: stepOf(state),
       session: state.session,
       players: Object.values(players).sort((a, b) => a.joinedAt - b.joinedAt).map(({ name, team }) => ({ name, team })),
@@ -264,5 +277,5 @@ export function createLive(store, { now = Date.now, random = Math.random, rounds
     return hostStatus();
   }
 
-  return { view, join, answer, hostStatus, newGame, close, next, reveal, announce };
+  return { view, join, answer, hostStatus, newGame, close, next, reveal, announce, setPrizes };
 }

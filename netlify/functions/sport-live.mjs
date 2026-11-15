@@ -52,6 +52,7 @@ export default async (req) => {
     if (action === 'close') return json(200, await live.close());
     if (action === 'next') return json(200, await live.next(data));
     if (action === 'reveal') return json(200, await live.reveal(data));
+    if (action === 'prizes') { await live.setPrizes(data.prizes); return json(200, await live.hostStatus()); }
     if (action === 'announce') return json(200, await live.announce(data));
   }
 
