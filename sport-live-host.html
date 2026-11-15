@@ -595,7 +595,7 @@ main { min-height: 0; display: grid; }
     document.getElementById('reset').hidden = st.phase === 'off';
     document.getElementById('close').hidden = st.phase === 'off';
     renderTop();
-    if (st.step === shown) {
+    if ((st.phase === 'off' ? 'off' : st.step) === shown) {
       if (st.phase === 'lobby') updateLobby(st);
       if (st.phase === 'question') updateQuestion(st);
       return;
