@@ -112,6 +112,7 @@ main { min-height: 0; display: grid; }
 .intro { display: grid; justify-items: center; align-content: center; text-align: center; gap: calc(var(--u) * 2.4); height: 100%; }
 .big-ico { width: calc(var(--u) * 13); height: calc(var(--u) * 13); border-radius: calc(var(--u) * 4); display: grid; place-items: center; background: var(--grad); color: var(--navy-ink); box-shadow: 0 20px 60px -20px rgba(255,79,163, .8); }
 .big-ico svg { width: 50%; height: 50%; }
+.intro.off { overflow-y: auto; align-content: safe center; padding: calc(var(--u) * 2) 0; }
 .intro h1 { font-size: calc(var(--u) * 8); }
 .intro p { font-size: calc(var(--u) * 2.2); color: var(--muted); max-width: 40ch; }
 
@@ -579,7 +580,7 @@ main { min-height: 0; display: grid; }
   function renderOff(st) {
     stopRaf();
     primary = h('button', { class: 'btn', type: 'button', onclick: () => act('new') }, 'Открыть игру');
-    show(h('div', { class: 'intro' },
+    show(h('div', { class: 'intro off' },
       h('span', { class: 'eyebrow' }, 'Игра закрыта'),
       h('h1', {}, 'KAIFZEIT SPORT LIVE'),
       h('p', {}, 'Сейчас гости видят, что игра закрыта, и не могут в неё войти. Открой игру во время квиза, выведи этот экран на большой телевизор и дай гостям отсканировать QR-код.'),
