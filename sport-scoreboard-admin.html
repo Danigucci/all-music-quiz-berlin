@@ -186,7 +186,8 @@ function renderScores() {
   $('score-list').innerHTML = state.teams.map((t) => `
     <div class="score-row">
       <span class="name">${esc(t.name)}</span>
-      <input class="field score-field" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="next" data-id="${t.id}" value="${roundScores[t.id] ?? ''}" placeholder="—">
+      <input class="field score-field" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" data-id="${t.id}" value="${roundScores[t.id] ?? ''}" placeholder="—">
+      <button type="button" class="score-sign" data-id="${t.id}" aria-label="Минус" style="flex:none;width:2.75rem;height:2.75rem;border-radius:.75rem;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:1.25rem;font-weight:700">±</button>
     </div>`).join('');
 }
 
@@ -254,9 +255,27 @@ $('btn-bulk-add').addEventListener('click', () => {
   renderAll();
 });
 
+function cleanScore(v) {
+  v = String(v).replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
+  const neg = v.startsWith('-');
+  v = v.replace(/-/g, '');
+  const i = v.indexOf('.');
+  if (i >= 0) v = v.slice(0, i + 1) + v.slice(i + 1).replace(/\./g, '');
+  return (neg ? '-' : '') + v;
+}
+
+$('score-list').addEventListener('click', (e) => {
+  const b = e.target.closest('.score-sign');
+  if (!b) return;
+  const inp = b.parentElement.querySelector('.score-field');
+  inp.value = inp.value.startsWith('-') ? inp.value.slice(1) : '-' + inp.value;
+  inp.dispatchEvent(new Event('input', { bubbles: true }));
+  inp.focus();
+});
+
 $('score-list').addEventListener('input', (e) => {
   if (!e.target.classList.contains('score-field')) return;
-  const clean = e.target.value.replace(/\D/g, '');
+  const clean = cleanScore(e.target.value);
   if (clean !== e.target.value) e.target.value = clean;
   if (!state.scores[currentRound]) state.scores[currentRound] = {};
   state.scores[currentRound][e.target.dataset.id] = clean;
