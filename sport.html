@@ -91,7 +91,7 @@ body{ font-family:'Manrope', system-ui, sans-serif; background:var(--ink); color
 <img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT Sport" class="w-10 h-10 md:w-11 md:h-11 shrink-0 rounded-full">
 <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-accent">Sport</span></span>
 </a>
-<nav id="desktop-menu" class="hidden md:flex gap-8 text-sm font-semibold tracking-wide uppercase"></nav>
+<nav id="desktop-menu" class="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide uppercase"></nav>
 <div class="hidden md:flex items-center gap-5 text-sm font-semibold text-white/70"><a href="/" class="hover:text-white transition">Главная</a><a href="music.html" class="transition hover:brightness-125" style="color:#ff4fa3;text-shadow:0 0 14px rgba(255,79,163,.75)"><i class="fa-solid fa-music"></i> Music</a></div>
 <button id="kebab-btn"
 class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium px-4 py-2 rounded-full transition active:scale-95">
@@ -452,7 +452,7 @@ function startLiveCountdown(targetDateStr, container) {
 function renderNav() {
     const t = translations.ru;
     document.getElementById('desktop-menu').innerHTML = t.nav.map((text, i) =>
-        `<a href="#${['games','formats','rating','past-results','contacts'][i]}" class="${i === 0 ? 'bg-accent text-black px-4 py-2 rounded-full hover:opacity-90 transition normal-case' : 'text-zinc-300 hover:text-accent transition'}">${text}</a>`
+        `<a href="#${['games','formats','rating','past-results','contacts'][i]}" class="${i === 0 ? 'bg-accent text-black px-5 py-2 rounded-full hover:opacity-90 transition whitespace-nowrap leading-none' : 'text-zinc-300 hover:text-accent transition'}">${text}</a>`
     ).join('');
     let mobileHTML = '';
     t.nav.forEach((text, i) => {
