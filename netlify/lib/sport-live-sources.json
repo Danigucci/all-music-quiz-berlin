@@ -238,5 +238,85 @@
   "author": "",
   "license": "Fair use (club logo)",
   "nonfree": true
+ },
+ "sa1-01": {
+  "article": "Club Atlético River Plate",
+  "file": "Club Atlético River Plate logo.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Club_Atl%C3%A9tico_River_Plate_logo.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-02": {
+  "article": "CR Flamengo",
+  "file": "Clube de Regatas do Flamengo logo.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Clube_de_Regatas_do_Flamengo_logo.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-03": {
+  "article": "CR Vasco da Gama",
+  "file": "Club de Regatas Vasco da Gama logo (2021).svg",
+  "page": "https://en.wikipedia.org/wiki/File:Club_de_Regatas_Vasco_da_Gama_logo_(2021).svg",
+  "author": "",
+  "license": "Fair use",
+  "nonfree": true
+ },
+ "sa1-04": {
+  "article": "Peñarol",
+  "file": "Escudo del Club Atlético Peñarol.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-05": {
+  "article": "Club Universidad de Chile",
+  "file": "Emblema del Club Universidad de Chile.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Emblema_del_Club_Universidad_de_Chile.png",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-06": {
+  "article": "Club Atlético Vélez Sarsfield",
+  "file": "Escudo del Club Atlético Vélez Sarsfield.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-07": {
+  "article": "Estudiantes de La Plata",
+  "file": "Estudiantes de la Plata crest (2025) cropped.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Estudiantes_de_la_Plata_crest_(2025)_cropped.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-08": {
+  "article": "Atlético Nacional",
+  "file": "Atletico Nacional Logo.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Atletico_Nacional_Logo.svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
+ },
+ "sa1-09": {
+  "article": "Cerro Porteño",
+  "file": "Escudo Club Cerro Porteño 2023-Actual.svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Escudo_Club_Cerro_Porte%C3%B1o_2023-Actual.svg",
+  "author": "",
+  "license": "CC0",
+  "nonfree": false
+ },
+ "sa1-10": {
+  "article": "L.D.U. Quito",
+  "file": "Liga Deportiva Universitaria (Ecuador) logo (5 stars).svg",
+  "page": "https://commons.wikimedia.org/wiki/File:Liga_Deportiva_Universitaria_(Ecuador)_logo_(5_stars).svg",
+  "author": "",
+  "license": "Public domain",
+  "nonfree": false
  }
 }
