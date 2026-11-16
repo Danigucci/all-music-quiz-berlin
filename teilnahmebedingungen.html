@@ -1,88 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Условия участия • KAIFZEIT Berlin</title>
-<link rel="stylesheet" href="css/tailwind.css">
-<link rel="stylesheet" href="css/fontawesome.css">
-<style>
-@font-face {
-  font-family: 'Baloo 2';
-  font-style: normal;
-  font-weight: 500 800;
-  font-display: swap;
-  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
-}
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
-}
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
 
-:root{
-  --navy:#09070f;
-  --navy-deep:#050409;
-  --yellow:#ffb3d9;
-  --pink:#ff4fa3;
-  --orange:#22d6e8;
-}
-
-body{ font-family:'Manrope', system-ui, sans-serif; background:#09070f; color:#09070f; }
-h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
-
-.bg-navy{ background:var(--navy); }
-.bg-navy-deep{ background:var(--navy-deep); }
-.text-brand-yellow{ color:var(--yellow); }
-.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
-.grad-brand-text{
-  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-}
-
-.logo-mark{
-  position:relative; width:100%; height:100%; border-radius:9999px;
-  background:var(--navy); overflow:hidden;
-  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
-}
-.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
-.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
-.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
-</style>
 <link rel="icon" type="image/png" href="brand/favicon.png">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/kz.css">
 </head>
-<body class="overflow-x-hidden">
-
-<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(9,7,15,0.97); backdrop-filter:blur(8px);">
-  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
-      <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-brand-yellow">Berlin</span></span>
-    </a>
-    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/">KAIFZEIT<small>BERLIN · QUIZ NIGHTS</small></a>
+    <nav class="navlinks" id="navigation" aria-label="Навигация">
+      <a href="/">Все игры</a>
+      <a href="music.html">Music Quiz</a>
+      <a href="sport.html">Sport Quiz</a>
+    </nav>
+    <button class="menu" aria-label="Открыть меню" aria-controls="navigation" aria-expanded="false">Меню</button>
   </div>
 </header>
 
-<main class="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-  <h1 class="display text-3xl sm:text-5xl font-extrabold mb-10 break-words">Условия участия</h1>
-
-  <div class="space-y-8 text-[15px] leading-relaxed">
-    <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">1. Область действия</h2>
+<main class="wrap">
+  <div class="page narrow">
+    <div class="page-head">
+      <div class="eyebrow">Teilnahmebedingungen</div>
+      <h1>Условия участия</h1>
+    </div>
+    <div class="prose">
+<section>
+      <h2>1. Область действия</h2>
       <p>
         Настоящие условия участия (Teilnahmebedingungen) распространяются на участие в мероприятиях
         <strong>Kaifzeit Quiz</strong> (организатор: Danil Lappo, Konrad-Zuse-Str. 17, 12489 Berlin).
@@ -90,7 +38,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">2. Регистрация</h2>
+      <h2>2. Регистрация</h2>
       <p>
         Регистрация через форму на этом сайте — это необязывающий запрос на место. Подтверждённое место участия
         возникает только после нашего подтверждения (по Telegram или email). Число мест на каждую игру ограничено;
@@ -101,7 +49,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">3. Стоимость участия и оплата</h2>
+      <h2>3. Стоимость участия и оплата</h2>
       <p>
         Подтверждение регистрации по Telegram или email является бесплатным резервированием места на игру и
         не создаёт обязанности оплаты. Договор об участии в игре с платёжным обязательством заключается
@@ -112,7 +60,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">4. Неявка и отмена регистрации</h2>
+      <h2>4. Неявка и отмена регистрации</h2>
       <p>
         Поскольку предоплата не взимается, неявка или отмена регистрации командой не влечёт финансовых
         последствий. Тем не менее просим по возможности заранее сообщить об отмене — через Telegram или email —
@@ -121,7 +69,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">5. Проведение и изменения со стороны организатора</h2>
+      <h2>5. Проведение и изменения со стороны организатора</h2>
       <p>
         Организатор оставляет за собой право изменить дату, место или формат мероприятия по уважительной причине
         (например, форс-мажор, отмена со стороны локации) либо отменить мероприятие. Зарегистрированные команды
@@ -131,7 +79,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">6. Поведение и отстранение от участия</h2>
+      <h2>6. Поведение и отстранение от участия</h2>
       <p>
         Участники обязуются вести себя честно и уважительно по отношению друг к другу. При грубых нарушениях
         порядка, попытках обмана или нарушении правил заведения, в котором проходит игра, организатор вправе
@@ -140,7 +88,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">7. Фото- и видеосъёмка</h2>
+      <h2>7. Фото- и видеосъёмка</h2>
       <p>
         Во время мероприятий может вестись документальная фото- и видеосъёмка происходящего. Общие кадры
         мероприятия (атмосфера, зал, команды за игрой) могут публиковаться в Instagram Kaifzeit Quiz
@@ -152,7 +100,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">8. Авторские права</h2>
+      <h2>8. Авторские права</h2>
       <p>
         Материалы квиза (в том числе оформленные вопросы, тексты и другие материалы), в той мере, в которой
         они охраняются авторским или иным законодательством, не могут копироваться, распространяться или
@@ -161,19 +109,19 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">9. Ответственность</h2>
+      <h2>9. Ответственность</h2>
       <p>
         Организатор несёт неограниченную ответственность за вред жизни, здоровью или телу, возникший вследствие
         умышленного или неосторожного нарушения обязанностей, а также за иной вред, причинённый умышленно или
         по грубой неосторожности.
       </p>
-      <p class="mt-2">
+      <p>
         При лёгкой неосторожности организатор отвечает только за нарушение существенных договорных обязательств
         (кардинальных обязанностей, то есть обязанностей, исполнение которых вообще делает возможным надлежащее
         проведение мероприятия и на соблюдение которых участник вправе полагаться) — и в этом случае ответственность
         ограничена предвидимым, типичным для подобного договора вредом.
       </p>
-      <p class="mt-2">
+      <p>
         Указанные ограничения не затрагивают ответственность по Produkthaftungsgesetz (закон об ответственности
         за качество продукции), если применимо. Дополнительно действуют собственные правила заведения (Hausrecht),
         в котором проходит мероприятие.
@@ -181,7 +129,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">10. Розыгрыш призов</h2>
+      <h2>10. Розыгрыш призов</h2>
       <p>
         Во время игр организатор может проводить розыгрыш призов среди участников. Участие бесплатное и не
         требует покупки или иного платежа. Чтобы участвовать, нужно получить номер на странице розыгрыша
@@ -189,16 +137,16 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
         получить только один номер на одну игру (проверка по email и по устройству); попытки получить несколько
         номеров могут привести к исключению из розыгрыша.
       </p>
-      <p class="mt-2">
+      <p>
         Победитель определяется случайным образом. Приз не подлежит обмену на деньги. Если победитель отсутствует,
         организатор вправе связаться с ним по указанному email либо провести розыгрыш приза повторно.
         Юридический путь по вопросам проведения розыгрыша исключается, насколько это допустимо по закону.
-        Обработка персональных данных описана в <a href="datenschutz.html" class="text-[color:var(--pink)] hover:underline">политике конфиденциальности</a>.
+        Обработка персональных данных описана в <a href="datenschutz.html">политике конфиденциальности</a>.
       </p>
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">11. Заключительные положения</h2>
+      <h2>11. Заключительные положения</h2>
       <p>
         Применяется право Федеративной Республики Германия. Подсудность, насколько это допустимо по закону, — Берлин.
         Если отдельные положения этих условий окажутся недействительными, это не затрагивает действительность
@@ -207,21 +155,32 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <p class="text-xs text-navy/50">Актуально на сентябрь 2026 года</p>
+      <p>Актуально на сентябрь 2026 года</p>
     </section>
+    </div>
   </div>
 </main>
 
-<footer class="bg-navy-deep">
-  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
-    <div class="flex flex-wrap gap-x-6 gap-y-2">
-      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
-      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
-      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
-    </div>
-    <span>© 2026 Kaifzeit Quiz</span>
+<footer class="wrap">
+  <div class="footer">
+    <a class="brand" href="/">KAIFZEIT</a>
+    <a href="/">Все игры</a>
+    <a href="music.html">Музыкальный квиз</a>
+    <a href="sport.html">Спортивный квиз</a>
+    <a href="seasons.html">Сезоны</a>
+    <a href="playlists.html">Плейлисты</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 KAIFZEIT Berlin</span>
+    <a href="impressum.html">Импрессум</a>
+    <a href="datenschutz.html">Конфиденциальность</a>
+    <a href="teilnahmebedingungen.html">Условия участия</a>
   </div>
 </footer>
 
+<script>
+const menu = document.querySelector('.menu'), nav = document.getElementById('navigation');
+menu.addEventListener('click', () => { const o = nav.classList.toggle('open'); menu.setAttribute('aria-expanded', String(o)); });
+</script>
 </body>
 </html>
