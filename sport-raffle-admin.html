@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Панель розыгрыша • KAIFZEIT Sport</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#c9ec9b;
+  --pink:#c9ec9b;
+  --orange:#7fd36b;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:#09070f; color:#09070f; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.bg-navy{ background:var(--navy); }
+.bg-navy-deep{ background:var(--navy-deep); }
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+.logo-mark{
+  position:relative; width:100%; height:100%; border-radius:9999px;
+  background:var(--navy); overflow:hidden;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
+}
+.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
+.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
+.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
+
+.rank-badge{
+  font-family:'Baloo 2', system-ui, sans-serif;
+  width:2rem; height:2rem; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,179,217,.14); color:var(--yellow); flex-shrink:0;
+  font-size:.85rem; font-weight:700;
+}
+
+</style>
+
+<link rel="icon" type="image/png" href="brand/sport-favicon.png">
+<link rel="apple-touch-icon" href="brand/sport-apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body class="overflow-x-hidden">
+
+<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(9,7,15,0.97); backdrop-filter:blur(8px);">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="sport.html" class="flex items-center gap-3">
+      <img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
+      <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-brand-yellow">Berlin</span></span>
+    </a>
+    <a href="sport-raffle-stage.html" target="_blank" class="text-brand-yellow hover:text-white text-sm font-semibold transition"><i class="fa-solid fa-tv mr-1.5"></i>Экран для гостей</a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+  <h1 class="display text-3xl sm:text-4xl font-extrabold text-center break-words">Панель розыгрыша</h1>
+
+  <form id="login" class="max-w-sm mx-auto mt-8 flex gap-3">
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="flex-1 min-w-0 bg-white border border-zinc-300 px-4 py-3 rounded-full outline-none focus:border-[color:var(--pink)]">
+    <button class="grad-brand text-navy font-bold px-6 py-3 rounded-full hover:opacity-90 transition">Войти</button>
+  </form>
+  <p id="login-error" class="text-center text-sm text-[color:var(--pink)] mt-3 hidden"></p>
+
+  <div id="panel" class="hidden mt-8 space-y-6">
+    <div class="bg-navy rounded-2xl p-6 text-white">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p id="state-label" class="font-bold text-lg"></p>
+          <p id="state-count" class="text-white/60 text-sm mt-1"></p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button id="btn-open" class="grad-brand text-navy font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition">Открыть новую выдачу</button>
+          <button id="btn-close" class="border border-white/30 text-white font-bold px-5 py-2.5 rounded-full hover:border-white transition">Закрыть выдачу</button>
+        </div>
+      </div>
+      <p class="text-white/40 text-xs mt-3">«Открыть новую выдачу» удаляет данные предыдущей игры и начинает нумерацию с нуля.</p>
+    </div>
+
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <h2 class="font-bold text-lg">Призы</h2>
+      <p class="text-zinc-500 text-sm mt-1">По одному призу на строку, в порядке розыгрыша. Формат: <span class="font-mono">Название | @instagram | картинка.png | видео.mp4</span> — все поля кроме названия необязательны; если указаны и картинка, и видео, показывается видео. Файлы лежат в папке <span class="font-mono">prizes/</span> сайта. Список сохраняется между играми.</p>
+      <textarea id="prizes-input" rows="4" placeholder="Protokoll Taproom | @protokollberlin | protokoll-taproom.png&#10;Депиляция&#10;Кальян в shadow lounge | @shadow.berlin | | shadow-lounge-kalyan.mp4" class="w-full mt-3 bg-white border border-zinc-300 px-4 py-3 rounded-xl outline-none focus:border-[color:var(--pink)] text-sm font-mono"></textarea>
+      <div class="flex items-center gap-3 mt-3">
+        <button id="btn-save-prizes" class="grad-brand text-navy font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition text-sm">Сохранить список</button>
+        <span id="prizes-saved" class="text-sm text-zinc-400 hidden">Сохранено</span>
+      </div>
+    </div>
+
+    <div class="bg-navy rounded-2xl p-6 sm:p-8 text-white text-center">
+      <div id="draw-prize-label" class="min-h-[2.5rem] flex flex-col items-center justify-center gap-2"></div>
+      <div id="draw-number" class="display grad-brand-text font-extrabold leading-none my-6" style="font-size:9rem;">—</div>
+      <p id="draw-team" class="text-xl font-semibold min-h-[1.75rem]"></p>
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+        <button id="btn-spin" class="border-2 border-[color:var(--yellow)] text-brand-yellow font-bold text-xl px-10 py-4 rounded-full hover:bg-white/10 transition whitespace-nowrap">1. Выбрать приз</button>
+        <button id="btn-draw" class="grad-brand text-navy font-bold text-xl px-10 py-4 rounded-full hover:opacity-90 transition whitespace-nowrap">2. Вытянуть номер</button>
+      </div>
+      <p class="text-white/40 text-xs mt-3">Сначала выбирается приз (как на колесе на экране для гостей), затем номер-победитель.</p>
+      <p id="draw-error" class="text-sm text-[color:var(--pink)] mt-3 hidden"></p>
+    </div>
+
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="font-bold text-lg">Уже вытянуты</h2>
+        <label class="text-sm text-zinc-500 flex items-center gap-2 cursor-pointer"><input id="show-email" type="checkbox" class="accent-[color:var(--pink)]"> показать email</label>
+      </div>
+      <ul id="drawn-list" class="mt-3 divide-y divide-zinc-100 text-sm"></ul>
+    </div>
+
+    <details class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm">
+      <summary class="font-bold text-lg cursor-pointer">Все участники (<span id="participants-count">0</span>)</summary>
+      <input id="participants-search" type="search" placeholder="Поиск по номеру, команде или email" class="w-full mt-4 bg-white border border-zinc-300 px-4 py-2.5 rounded-full outline-none focus:border-[color:var(--pink)] text-sm">
+      <ul id="participants-list" class="mt-3 divide-y divide-zinc-100 text-sm max-h-96 overflow-y-auto"></ul>
+    </details>
+
+    <div class="bg-white border border-zinc-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center gap-6">
+      <img src="qr/sport-raffle.svg" alt="QR-код розыгрыша" class="w-40 h-40 shrink-0 rounded-xl border border-zinc-200">
+      <div class="text-sm text-zinc-600">
+        <p class="font-bold text-navy text-base">QR-код для игроков</p>
+        <p class="mt-1">Ведёт на <span class="font-semibold">kaifzeit.com/sport-raffle.html</span>. Выведи на экран в баре или распечатай (файлы <span class="font-semibold">qr/sport-raffle.svg</span> и <span class="font-semibold">qr/sport-raffle.png</span>).</p>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button id="btn-purge" class="text-sm text-zinc-500 hover:text-[color:var(--pink)] underline transition">Удалить все данные розыгрыша</button>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-navy-deep">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
+    <div class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
+      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
+      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
+    </div>
+    <span>© 2026 KAIFZEIT Sport</span>
+  </div>
+</footer>
+
+<script src="js/confetti.min.js"></script>
+<script>
+const API = '/api/sport-raffle/admin/';
+let password = '';
+let timer = null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+async function call(action, body) {
+  const opts = { method: 'POST', headers: { 'x-admin-password': password } };
+  if (body !== undefined) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(API + action, opts);
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function renderStatus(s) {
+  $('state-label').textContent = s.open ? 'Выдача номеров открыта' : (s.session ? 'Выдача закрыта' : 'Нет активной игры');
+  $('state-label').className = 'font-bold text-lg ' + (s.open ? 'text-brand-yellow' : 'text-white');
+  $('state-count').textContent = 'Выдано номеров: ' + s.issued + ' из ' + s.max + ' · вытянуто: ' + s.drawn.length;
+  $('btn-close').disabled = !s.open;
+  $('btn-close').classList.toggle('opacity-40', !s.open);
+  renderDrawn(s.drawn);
+  renderParticipants(s.participants);
+  renderPrizeArea(s);
+  if (document.activeElement !== $('prizes-input')) {
+    $('prizes-input').value = (s.prizes || []).map(prizeToLine).join('\n');
+  }
+}
+
+function prizeToLine(p) {
+  const parts = [p.name, p.instagram ? '@' + p.instagram : '', p.image, p.video];
+  while (parts.length > 1 && !parts[parts.length - 1]) parts.pop();
+  return parts.join(' | ');
+}
+
+function lineToPrize(line) {
+  const [name, instagram, image, video] = line.split('|').map((s) => s.trim());
+  return { name, instagram: instagram || '', image: image || '', video: video || '' };
+}
+
+function prizeBadge(index, total, prize) {
+  const instagram = prize.instagram
+    ? `<span class="text-white/80 text-sm font-semibold"><i class="fa-brands fa-instagram mr-1 text-brand-yellow"></i>@${esc(prize.instagram)}</span>`
+    : '';
+  return `
+    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-3 max-w-full">
+      <span class="text-brand-yellow text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-gift mr-1.5"></i>Приз №${index} из ${total}</span>
+      <span class="display grad-brand-text text-2xl font-extrabold leading-tight">${esc(prize.name)}</span>
+      ${instagram}
+    </div>`;
+}
+
+let resultPrizeHtml = '';
+
+function setPrizeHtml(el, html) {
+  el.innerHTML = html;
+  const v = el.querySelector('video');
+  if (v) v.play().catch(() => {});
+}
+
+function setDrawButtons(spinOn, drawOn) {
+  $('btn-spin').disabled = !spinOn;
+  $('btn-spin').classList.toggle('opacity-40', !spinOn);
+  $('btn-draw').disabled = !drawOn;
+  $('btn-draw').classList.toggle('opacity-40', !drawOn);
+}
+
+function renderPrizeArea(s) {
+  const el = $('draw-prize-label');
+  const hasPrizes = s.prizes.length > 0;
+  $('btn-spin').classList.toggle('hidden', !hasPrizes);
+  if (!hasPrizes) {
+    setPrizeHtml(el, '');
+    setDrawButtons(false, true);
+    return;
+  }
+  if (s.pendingPrize != null) {
+    setPrizeHtml(el, prizeBadge(s.drawn.length + 1, s.prizes.length, s.prizes[s.pendingPrize]));
+    setDrawButtons(false, true);
+  } else if (s.remainingPrizeIndexes.length === 0) {
+    setPrizeHtml(el, resultPrizeHtml + '<span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-champagne-glasses mr-1.5"></i>Все призы разыграны</span>');
+    setDrawButtons(false, false);
+  } else {
+    setPrizeHtml(el, resultPrizeHtml || '<span class="text-white/50 text-sm">Приз ещё не выбран — нажми «Выбрать приз»</span>');
+    setDrawButtons(true, false);
+  }
+}
+
+function renderDrawn(drawn) {
+  const showEmail = $('show-email').checked;
+  $('drawn-list').innerHTML = drawn.length ? drawn.slice().reverse().map((d) =>
+    '<li class="py-2"><div class="flex items-center gap-3">' +
+    '<span class="rank-badge" style="background:#09070f">' + d.number + '</span>' +
+    '<span class="font-semibold">' + (esc(d.name) || '—') + '</span><span class="text-zinc-500">' + (esc(d.team) || 'без команды') + '</span>' +
+    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(d.email) + '</span>' : '') + '</div>' +
+    (d.prize ? '<div class="text-xs text-[color:var(--pink)] font-semibold mt-1 ml-11">' + esc(d.prize.name) + (d.prize.instagram ? ' · @' + esc(d.prize.instagram) : '') + '</div>' : '') + '</li>'
+  ).join('') : '<li class="py-2 text-zinc-400">Пока никто</li>';
+}
+
+function renderParticipants(list) {
+  const showEmail = $('show-email').checked;
+  const q = $('participants-search').value.trim().toLowerCase();
+  $('participants-count').textContent = list.length;
+  const rows = list.filter((p) => !q || String(p.number) === q || p.team.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
+  $('participants-list').innerHTML = rows.length ? rows.map((p) =>
+    '<li class="py-2 flex items-center gap-3"><span class="rank-badge" style="background:#09070f">' + p.number + '</span>' +
+    '<span class="font-semibold">' + (esc(p.name) || '—') + '</span><span class="text-zinc-500">' + (esc(p.team) || 'без команды') + '</span>' +
+    (showEmail ? '<span class="text-zinc-500 ml-auto break-all">' + esc(p.email) + '</span>' : '') + '</li>'
+  ).join('') : '<li class="py-2 text-zinc-400">Никого нет</li>';
+}
+
+let lastStatus = null;
+async function refresh() {
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере (RAFFLE_ADMIN_PASSWORD).');
+  if (r.ok) { lastStatus = r.data; renderStatus(r.data); }
+}
+
+function logout(msg) {
+  clearInterval(timer);
+  try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  password = '';
+  $('panel').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('login-error').textContent = msg || '';
+  $('login-error').classList.toggle('hidden', !msg);
+}
+
+function fireConfetti() {
+  if (typeof confetti !== 'function') return;
+  const colors = ['#c9ec9b', '#7fd36b', '#ffffff'];
+  confetti({ particleCount: 140, spread: 100, startVelocity: 45, origin: { y: 0.6 }, colors });
+  setTimeout(() => confetti({ particleCount: 80, spread: 120, startVelocity: 35, origin: { y: 0.4 }, colors }), 200);
+}
+
+async function login(pw) {
+  password = pw;
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере (RAFFLE_ADMIN_PASSWORD).');
+  if (!r.ok) return logout('Ошибка сервера, попробуй ещё раз.');
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  $('login').classList.add('hidden');
+  $('login-error').classList.add('hidden');
+  $('panel').classList.remove('hidden');
+  lastStatus = r.data; renderStatus(r.data);
+  timer = setInterval(refresh, 5000);
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+$('show-email').addEventListener('change', () => { if (lastStatus) { renderDrawn(lastStatus.drawn); renderParticipants(lastStatus.participants); } });
+$('participants-search').addEventListener('input', () => lastStatus && renderParticipants(lastStatus.participants));
+
+$('btn-open').addEventListener('click', async () => {
+  if (!confirm('Открыть новую выдачу? Данные предыдущей игры (номера, email, вытянутые) будут удалены.')) return;
+  const r = await call('open'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); resetDraw(); }
+});
+$('btn-close').addEventListener('click', async () => {
+  const r = await call('close'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); }
+});
+$('btn-purge').addEventListener('click', async () => {
+  if (!confirm('Удалить ВСЕ данные розыгрыша (номера, email, команды)? Это необратимо.')) return;
+  const r = await call('purge'); if (r.ok) { lastStatus = r.data; renderStatus(r.data); resetDraw(); }
+});
+
+function resetDraw() { resultPrizeHtml = ''; $('draw-number').textContent = '—'; $('draw-team').textContent = ''; $('draw-error').classList.add('hidden'); }
+
+$('btn-save-prizes').addEventListener('click', async () => {
+  const prizes = $('prizes-input').value.split('\n').map((s) => s.trim()).filter(Boolean).map(lineToPrize);
+  const r = await call('prizes', { prizes });
+  if (r.ok) {
+    lastStatus = r.data; renderStatus(r.data);
+    $('prizes-saved').classList.remove('hidden');
+    setTimeout(() => $('prizes-saved').classList.add('hidden'), 2000);
+  }
+});
+
+const DRAW_ERRORS = {
+  nothing_to_draw: 'Больше нет номеров для розыгрыша.',
+  no_session: 'Сначала открой выдачу номеров.',
+  no_prizes_left: 'Все призы разыграны.',
+  no_prizes: 'Сначала добавь призы.',
+  spin_first: 'Сначала выбери приз.',
+};
+
+$('btn-spin').addEventListener('click', async () => {
+  setDrawButtons(false, false);
+  $('draw-error').classList.add('hidden');
+  const r = await call('spin');
+  if (!r.ok && r.data.error !== 'already_spun') {
+    $('draw-error').textContent = DRAW_ERRORS[r.data.error] || 'Ошибка, попробуй ещё раз.';
+    $('draw-error').classList.remove('hidden');
+  } else {
+    resultPrizeHtml = '';
+    $('draw-number').textContent = '—';
+    $('draw-team').textContent = '';
+  }
+  await refresh();
+});
+
+$('btn-draw').addEventListener('click', async () => {
+  const btn = $('btn-draw');
+  setDrawButtons(false, false);
+  $('draw-error').classList.add('hidden');
+  const r = await call('draw');
+  if (!r.ok) {
+    $('draw-error').textContent = DRAW_ERRORS[r.data.error] || 'Ошибка, попробуй ещё раз.';
+    $('draw-error').classList.remove('hidden');
+    await refresh();
+    return;
+  }
+  $('draw-team').textContent = '';
+  resultPrizeHtml = r.data.prize ? prizeBadge((lastStatus?.drawn?.length || 0) + 1, lastStatus?.prizes?.length || 1, r.data.prize) : '';
+  setPrizeHtml($('draw-prize-label'), resultPrizeHtml);
+  const el = $('draw-number');
+  const end = Date.now() + 2200;
+  const spin = setInterval(() => {
+    if (Date.now() >= end) {
+      clearInterval(spin);
+      el.textContent = r.data.number;
+      $('draw-team').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
+      fireConfetti();
+      refresh();
+    } else {
+      el.textContent = 1 + Math.floor(Math.random() * 90);
+    }
+  }, 70);
+});
+
+try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
+</script>
+
+</body>
+</html>

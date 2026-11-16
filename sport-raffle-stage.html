@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экран розыгрыша • KAIFZEIT Sport</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<style>
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root{
+  --navy:#09070f;
+  --navy-deep:#050409;
+  --yellow:#c9ec9b;
+  --pink:#c9ec9b;
+  --orange:#7fd36b;
+}
+
+body{ font-family:'Manrope', system-ui, sans-serif; background:var(--navy-deep); color:#fff; }
+h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+.text-brand-yellow{ color:var(--yellow); }
+.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
+.grad-brand-text{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+</style>
+<link rel="icon" type="image/png" href="brand/sport-favicon.png">
+<link rel="apple-touch-icon" href="brand/sport-apple-touch-icon.png">
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body class="overflow-x-hidden min-h-screen flex flex-col">
+
+<form id="login" class="m-auto max-w-sm w-full px-5 flex flex-col items-center gap-4 text-center">
+  <img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT Sport Quiz" class="w-40 h-40 rounded-full">
+  <p class="text-white/50 text-sm">Экран розыгрыша</p>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="Пароль" class="w-full bg-white/5 border border-white/15 text-white placeholder-white/30 px-4 py-3 rounded-full text-center outline-none focus:border-[color:var(--pink)]">
+  <button class="grad-brand text-navy font-bold px-8 py-3 rounded-full hover:opacity-90 transition w-full">Войти</button>
+  <p id="login-error" class="text-sm text-[color:var(--pink)] hidden"></p>
+</form>
+
+<div id="stage" class="hidden flex-1 flex flex-col items-center justify-center px-5 py-8 text-center">
+  <img src="brand/kaifzeit-sport-logo.png" alt="KAIFZEIT Sport Quiz" class="rounded-full pointer-events-none" style="position:fixed; top:16px; left:16px; z-index:20; width:clamp(64px, 11vh, 140px); height:auto;">
+  <div id="stage-grid" class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+    <div id="wheel-col" class="flex justify-center">
+      <div class="relative" style="width:min(86vw, 58vh, 520px); aspect-ratio:1;">
+        <div class="absolute left-1/2 z-10 -translate-x-1/2" style="top:-4px; width:0; height:0; border-left:16px solid transparent; border-right:16px solid transparent; border-top:34px solid #c9ec9b; filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));"></div>
+        <canvas id="wheel" class="w-full h-full rounded-full" style="box-shadow:0 0 0 6px #c9ec9b, 0 20px 50px rgba(0,0,0,.5);"></canvas>
+      </div>
+    </div>
+    <div id="result-col" class="flex flex-col items-center min-w-0">
+      <div id="prize-badge" class="min-h-[4rem] flex items-center justify-center mb-4 max-w-full"></div>
+      <div id="number" class="display grad-brand-text font-extrabold leading-none" style="font-size:min(30vw, 14rem);">—</div>
+      <p id="winner" class="text-2xl sm:text-3xl font-semibold mt-4 min-h-[2.5rem]"></p>
+    </div>
+  </div>
+  <button id="btn-action" class="grad-brand text-navy font-bold text-2xl sm:text-3xl px-16 py-7 rounded-full hover:opacity-90 transition mt-8 whitespace-nowrap">Крутить колесо</button>
+  <p id="error" class="text-[color:var(--pink)] mt-4 hidden"></p>
+</div>
+
+<audio id="draw-audio" src="audio/draw-music.mp3" preload="auto" loop></audio>
+<button id="btn-logout" class="hidden fixed top-4 right-4 text-white/30 hover:text-white/70 text-sm transition">Выйти</button>
+
+<script src="js/confetti.min.js"></script>
+<script src="js/sport-raffle-wheel.js"></script>
+<script>
+const API = '/api/sport-raffle/admin/';
+let password = '';
+let status = null;
+let phase = 'spin';
+let busy = false;
+let wheelKey = null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const wheel = new PrizeWheel($('wheel'));
+
+async function call(action) {
+  const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password } });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function prizeBadge(index, total, prize) {
+  const instagram = prize.instagram
+    ? `<span class="text-white/80 text-lg font-semibold"><i class="fa-brands fa-instagram mr-1.5 text-brand-yellow"></i>@${esc(prize.instagram)}</span>`
+    : '';
+  return `
+    <div class="inline-flex flex-col items-center gap-1 bg-white/5 border border-white/10 rounded-2xl px-8 py-4 max-w-full">
+      <span class="text-brand-yellow text-sm font-bold uppercase tracking-widest"><i class="fa-solid fa-gift mr-2"></i>Приз №${index} из ${total}</span>
+      <span class="display grad-brand-text text-3xl sm:text-4xl font-extrabold leading-tight">${esc(prize.name)}</span>
+      ${instagram}
+    </div>`;
+}
+
+function setPrizeArea(html) {
+  const el = $('prize-badge');
+  el.innerHTML = html;
+  const v = el.querySelector('video');
+  if (v) v.play().catch(() => {});
+}
+
+function showError(msg) { $('error').textContent = msg; $('error').classList.remove('hidden'); }
+function hideError() { $('error').classList.add('hidden'); }
+
+function remainingCount() { return status && status.prizes.length ? status.remainingPrizeIndexes.length : 0; }
+
+function updateButton() {
+  const btn = $('btn-action');
+  const hasPrizes = Boolean(status && status.prizes.length);
+  const allGone = hasPrizes && phase === 'spin' && remainingCount() === 0;
+  btn.textContent = allGone ? 'Все призы разыграны' : (phase === 'spin' ? 'Крутить колесо' : 'Вытянуть номер');
+  btn.disabled = busy || allGone;
+  btn.classList.toggle('opacity-40', btn.disabled);
+}
+
+function applyStatus(s) {
+  status = s;
+  const hasPrizes = s.prizes.length > 0;
+  $('wheel-col').classList.toggle('hidden', !hasPrizes);
+  $('stage-grid').classList.toggle('lg:grid-cols-2', hasPrizes);
+
+  if (!hasPrizes) {
+    phase = 'draw';
+    updateButton();
+    return;
+  }
+
+  const key = s.remainingPrizeIndexes.join(',') + '|' + s.prizes.map((p) => p.name).join('/');
+  if (key !== wheelKey) {
+    wheelKey = key;
+    wheel.setItems(s.remainingPrizeIndexes.map((i) => ({ label: s.prizes[i].name })));
+  }
+
+  if (s.pendingPrize != null) {
+    phase = 'draw';
+    wheel.showStatic(s.remainingPrizeIndexes.indexOf(s.pendingPrize));
+    setPrizeArea(prizeBadge(s.drawn.length + 1, s.prizes.length, s.prizes[s.pendingPrize]));
+  } else {
+    phase = 'spin';
+  }
+  updateButton();
+}
+
+async function refreshStatus() {
+  const r = await call('status');
+  if (r.ok) applyStatus(r.data);
+  return r;
+}
+
+function logout(msg) {
+  password = '';
+  try { sessionStorage.removeItem('amq_admin_pw'); } catch (e) {}
+  $('draw-audio').pause();
+  $('stage').classList.add('hidden');
+  $('btn-logout').classList.add('hidden');
+  $('login').classList.remove('hidden');
+  $('login-error').textContent = msg || '';
+  $('login-error').classList.toggle('hidden', !msg);
+}
+
+function fireConfetti() {
+  if (typeof confetti !== 'function') return;
+  const colors = ['#c9ec9b', '#7fd36b', '#ffffff'];
+  confetti({ particleCount: 140, spread: 100, startVelocity: 45, origin: { y: 0.6 }, colors });
+  setTimeout(() => confetti({ particleCount: 80, spread: 120, startVelocity: 35, origin: { y: 0.4 }, colors }), 200);
+}
+
+async function login(pw) {
+  password = pw;
+  const r = await call('status');
+  if (r.status === 401) return logout('Неверный пароль.');
+  if (r.status === 503) return logout('Пароль не настроен на сервере.');
+  if (!r.ok) return logout('Ошибка сервера, попробуй ещё раз.');
+  try { sessionStorage.setItem('amq_admin_pw', pw); } catch (e) {}
+  $('login').classList.add('hidden');
+  $('stage').classList.remove('hidden');
+  $('btn-logout').classList.remove('hidden');
+  applyStatus(r.data);
+}
+
+const ERROR_TEXT = {
+  nothing_to_draw: 'Больше нет номеров для розыгрыша.',
+  no_session: 'Выдача номеров ещё не открыта.',
+  no_prizes_left: 'Все призы разыграны.',
+};
+
+async function startMusic() {
+  const audio = $('draw-audio');
+  if (audio.paused) { try { await audio.play(); } catch (e) {} }
+}
+
+async function doSpin() {
+  const r = await call('spin');
+  if (!r.ok) {
+    if (r.data.error === 'already_spun') { await refreshStatus(); return; }
+    showError(ERROR_TEXT[r.data.error] || 'Ошибка, попробуй ещё раз.');
+    return;
+  }
+  $('number').textContent = '—';
+  $('winner').textContent = '';
+  setPrizeArea('<span class="text-white/60 text-xl font-semibold"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Колесо крутится…</span>');
+
+  let pos = status.remainingPrizeIndexes.indexOf(r.data.prizeIndex);
+  if (pos < 0) { await refreshStatus(); pos = status.remainingPrizeIndexes.indexOf(r.data.prizeIndex); }
+  await wheel.spinTo(pos, 5500);
+
+  setPrizeArea(prizeBadge(status.drawn.length + 1, status.prizes.length, r.data.prize));
+  status.pendingPrize = r.data.prizeIndex;
+  phase = 'draw';
+}
+
+async function doDraw() {
+  const r = await call('draw');
+  if (!r.ok) {
+    if (r.data.error === 'spin_first') { await refreshStatus(); }
+    showError(ERROR_TEXT[r.data.error] || 'Ошибка, попробуй ещё раз.');
+    return;
+  }
+  $('winner').textContent = '';
+  const el = $('number');
+  const end = Date.now() + 3200;
+  await new Promise((resolve) => {
+    const spin = setInterval(() => {
+      if (Date.now() >= end) {
+        clearInterval(spin);
+        el.textContent = r.data.number;
+        $('winner').textContent = r.data.name ? (r.data.name + (r.data.team ? ' · ' + r.data.team : '')) : (r.data.team || 'Без команды');
+        fireConfetti();
+        resolve();
+      } else {
+        el.textContent = 1 + Math.floor(Math.random() * 90);
+      }
+    }, 70);
+  });
+  await refreshStatus();
+}
+
+$('login').addEventListener('submit', (e) => { e.preventDefault(); login($('pw').value); });
+$('btn-logout').addEventListener('click', () => logout());
+
+$('btn-action').addEventListener('click', async () => {
+  if (busy) return;
+  busy = true;
+  updateButton();
+  hideError();
+  await startMusic();
+  try {
+    if (phase === 'spin') await doSpin(); else await doDraw();
+  } finally {
+    busy = false;
+    updateButton();
+  }
+});
+
+window.addEventListener('resize', () => wheel.draw());
+
+try { const saved = sessionStorage.getItem('amq_admin_pw'); if (saved) login(saved); } catch (e) {}
+</script>
+
+</body>
+</html>
