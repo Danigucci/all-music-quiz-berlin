@@ -172,7 +172,8 @@ function render(keep = 0) {
   revealed = keepN;
 
   const last = roundsWithData[roundsWithData.length - 1];
-  $('footnote').textContent = last === Scoreboard.ROUNDS ? 'Итоговый рейтинг после 7-го тура' : `Рейтинг после ${last}-го тура`;
+  const total = Scoreboard.roundsOf(state);
+  $('footnote').textContent = last === total ? `Итоговый рейтинг после ${total}-го тура` : `Рейтинг после ${last}-го тура`;
   fit();
 }
 

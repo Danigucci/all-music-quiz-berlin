@@ -52,6 +52,8 @@ label.lbl{ display:block; font-size:.875rem; font-weight:700; margin-bottom:.5re
 .pill{ min-width:3rem; padding:.55rem .9rem; border-radius:9999px; font:inherit; font-weight:700; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.8); background:transparent; position:relative; cursor:pointer; }
 .pill.active{ background:var(--accent); color:#0b0b0d; border-color:transparent; }
 .pill .dot{ position:absolute; top:.3rem; right:.4rem; width:.4rem; height:.4rem; border-radius:9999px; background:var(--accent); }
+.pill-tool{ border-style:dashed; color:rgba(255,255,255,.65); }
+.pill-tool:disabled{ opacity:.3; cursor:default; }
 .pill.active .dot{ background:#0b0b0d; }
 .score-row{ display:flex; align-items:center; gap:.75rem; }
 .score-row .name{ flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:700; }
@@ -104,6 +106,7 @@ a.nav{ color:var(--accent); font-size:.875rem; text-decoration:none; font-weight
   <section class="card">
     <h2>Баллы за тур</h2>
     <div id="round-pills" class="pills"></div>
+    <p id="rounds-count" class="muted" style="font-size:.8rem;margin:.6rem 0 0"></p>
     <div id="score-list" class="stack" style="margin-top:1rem"></div>
     <p id="score-empty" class="muted hidden" style="font-size:.875rem;margin:.75rem 0 0">Сначала добавь команды выше.</p>
   </section>
@@ -157,15 +160,20 @@ function markDirty() {
 
 function adopt(data) {
   rev = data.rev;
-  state = { title: data.title || '', teams: data.teams || [], scores: data.scores || {} };
+  state = { title: data.title || '', rounds: Scoreboard.roundsOf(data), teams: data.teams || [], scores: data.scores || {} };
+  if (currentRound > state.rounds) currentRound = state.rounds;
   dirty = false;
 }
 
 function renderPills() {
   const withData = new Set(Scoreboard.computeRows(state).roundsWithData);
-  $('round-pills').innerHTML = Array.from({ length: Scoreboard.ROUNDS }, (_, i) => i + 1).map((r) =>
+  const R = Scoreboard.roundsOf(state);
+  $('round-pills').innerHTML = Array.from({ length: R }, (_, i) => i + 1).map((r) =>
     `<button type="button" class="pill ${r === currentRound ? 'active' : ''}" data-round="${r}">${r}${withData.has(r) ? '<span class="dot"></span>' : ''}</button>`
-  ).join('');
+  ).join('')
+    + `<button type="button" class="pill pill-tool" data-rounds="-1" title="Убрать последний тур" aria-label="Убрать последний тур" ${R <= 1 ? 'disabled' : ''}>−</button>`
+    + `<button type="button" class="pill pill-tool" data-rounds="1" title="Добавить тур" aria-label="Добавить тур" ${R >= Scoreboard.MAX_ROUNDS ? 'disabled' : ''}>+ тур</button>`;
+  $('rounds-count').textContent = `Туров в игре: ${R}`;
 }
 
 function renderTeams() {
@@ -199,6 +207,27 @@ function renderAll() {
 }
 
 $('round-pills').addEventListener('click', (e) => {
+  const tool = e.target.closest('[data-rounds]');
+  if (tool) {
+    const R = Scoreboard.roundsOf(state);
+    if (tool.dataset.rounds === '1') {
+      if (R >= Scoreboard.MAX_ROUNDS) return;
+      state.rounds = R + 1;
+      currentRound = state.rounds;
+    } else {
+      if (R <= 1) return;
+      const lastRow = state.scores[R] || {};
+      const filled = Object.values(lastRow).some((v) => v !== '' && v !== null && v !== undefined);
+      if (filled && !confirm(`В ${R}-м туре уже есть баллы. Убрать тур вместе с ними?`)) return;
+      delete state.scores[R];
+      state.rounds = R - 1;
+      if (currentRound > state.rounds) currentRound = state.rounds;
+    }
+    markDirty();
+    renderPills();
+    renderScores();
+    return;
+  }
   const btn = e.target.closest('.pill');
   if (!btn) return;
   currentRound = Number(btn.dataset.round);

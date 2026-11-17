@@ -1,18 +1,21 @@
 (function (root) {
-  const ROUNDS = 7;
+  const ROUNDS = 7; // default; a table can have its own number of rounds in state.rounds
+  const MAX_ROUNDS = 15;
+  const roundsOf = (state) => Math.min(MAX_ROUNDS, Math.max(1, Math.round(Number(state && state.rounds)) || ROUNDS));
 
   function computeRows(state) {
+    const R = roundsOf(state);
     const teams = (state && state.teams) || [];
     const scores = (state && state.scores) || {};
     const roundsWithData = [];
-    for (let r = 1; r <= ROUNDS; r++) {
+    for (let r = 1; r <= R; r++) {
       if (scores[r] && Object.keys(scores[r]).length) roundsWithData.push(r);
     }
 
     const rows = teams.map((t) => {
       const per = {};
       let total = 0;
-      for (let r = 1; r <= ROUNDS; r++) {
+      for (let r = 1; r <= R; r++) {
         const v = scores[r] && scores[r][t.id];
         per[r] = v === undefined ? null : v;
         total += v || 0;
@@ -25,7 +28,7 @@
     // tie on total: higher score in the latest round wins, then the one before it, ...
     rows.sort((a, b) => {
       if (b.total !== a.total) return b.total - a.total;
-      for (let r = ROUNDS; r >= 1; r--) {
+      for (let r = R; r >= 1; r--) {
         const d = (b.per[r] || 0) - (a.per[r] || 0);
         if (d) return d;
       }
@@ -33,18 +36,19 @@
     });
     rows.forEach((row, i) => { row.place = i + 1; });
 
-    return { rows, roundsWithData };
+    return { rows, roundsWithData, rounds: R };
   }
 
   function columns(roundsWithData) {
     const has = new Set(roundsWithData);
+    const last = roundsWithData.length ? Math.max(...roundsWithData) : 0;
     const cols = [];
-    for (let r = 1; r <= ROUNDS; r++) {
+    for (let r = 1; r <= last; r++) {
       if (has.has(r)) cols.push({ kind: 'round', r, label: r + ' тур' });
       if (r === 3 && has.has(3) && roundsWithData.some((x) => x > 3)) {
         cols.push({ kind: 'sum3', label: 'После 3' });
       }
-      if (r === 6 && has.has(6) && has.has(7)) {
+      if (r === 6 && has.has(6) && roundsWithData.some((x) => x > 6)) {
         cols.push({ kind: 'sum6', label: 'После 6' });
       }
     }
@@ -52,7 +56,7 @@
     return cols;
   }
 
-  const api = { ROUNDS, computeRows, columns };
+  const api = { ROUNDS, MAX_ROUNDS, roundsOf, computeRows, columns };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Scoreboard = api;
 })(typeof window !== 'undefined' ? window : globalThis);
