@@ -165,6 +165,7 @@ class="md:hidden flex items-center gap-2 bg-white/5 hover:bg-white/10 border bor
 <div class="flex justify-center mb-10">
 <select id="quiz-select" onchange="showPastQuizResults()" class="bg-[var(--ink)] border border-white/15 text-white px-7 py-3.5 rounded-full text-base focus:border-accent outline-none cursor-pointer">
 <option value="">Выберите квиз...</option>
+<option value="quiz9">Квиз #9</option>
 <option value="quiz8">Квиз #8</option>
 <option value="quiz7">Квиз #7</option>
 <option value="quiz6">Квиз #6</option>
@@ -319,11 +320,11 @@ formats: [
 fullDesc: `<strong>Формат «Спортивная классика»</strong><br><br>Игра состоит из <strong>7 туров</strong>:<br><br>• Тур 1 — Разминка<br>• Тур 2 — Правда или ложь<br>• Тур 3 — Музыкальный<br>• Тур 4 — ЧМ <br>• Тур 5 — Картинки <br>• Тур 6 — 3 факта<br>• Тур 7 — Блиц<br><br><span class="text-accent">Максимум 10 человек в команде</span>` }
 ],
 rating: [
-    { place: 1, team: "Вне игры", games: 7, wins: 5, points: 403 },
-    { place: 2, team: "Гладиаторы", games: 7, wins: 1, points: 368 },
-    { place: 3, team: "Легионеры", games: 8, wins: 0, points: 366.5 },
-    { place: 4, team: "Легенды futbology", games: 7, wins: 0, points: 348.5 },
-    { place: 5, team: "Пивка для рывка", games: 6, wins: 2, points: 328 },
+    { place: 1, team: "Вне игры", games: 8, wins: 5, points: 480 },
+    { place: 2, team: "Гладиаторы", games: 8, wins: 1, points: 444 },
+    { place: 3, team: "Легенды futbology", games: 8, wins: 1, points: 431.5 },
+    { place: 4, team: "Легионеры", games: 9, wins: 0, points: 428.5 },
+    { place: 5, team: "Пивка для рывка", games: 7, wins: 2, points: 405 },
     { place: 6, team: "Воротник Филимонова", games: 4, wins: 0, points: 204.5 },
     { place: 7, team: "Фёникс Вильдау", games: 3, wins: 0, points: 140.5 },
     { place: 8, team: "Ялла", games: 2, wins: 0, points: 114.5 },
@@ -356,6 +357,7 @@ emailInvalid: "Введите корректный email"
 };
 
 const pastQuizzes = {
+quiz9: { title: "Квиз #9", results: [{ place: 1, team: "Легенды Futbology", points: 83 }, { place: 2, team: "Пивка для рывка", points: 77 }, { place: 3, team: "Вне игры", points: 77 }, { place: 4, team: "Гладиаторы", points: 76 }, { place: 5, team: "Легионеры", points: 62 }] },
 quiz8: { title: "Квиз #8", results: [{ place: 1, team: "Вне игры", points: 52 }, { place: 2, team: "Легенды futbology", points: 48 }, { place: 3, team: "Оливье без Жиру", points: 45 }, { place: 4, team: "Гладиаторы", points: 43 }, { place: 5, team: "Легионеры", points: 37 }] },
 quiz7: { title: "Квиз #7", results: [{ place: 1, team: "Вне игры", points: 68 }, { place: 2, team: "Легенды futbology", points: 61 }, { place: 3, team: "Воротник Филимонова", points: 60 }, { place: 4, team: "Гладиаторы", points: 49 }, { place: 5, team: "Легионеры", points: 29.5 }] },
 quiz6: { title: "Квиз #6", results: [{ place: 1, team: "Гладиаторы", points: 58.5 }, { place: 2, team: "Вне Игры", points: 56.5 }, { place: 3, team: "Горе-цкааа", points: 51.5 }, { place: 4, team: "Сан Сиро", points: 48.5 }, { place: 5, team: "Легионеры", points: 46 }, { place: 6, team: "Пивка для рывка", points: 44.5 }] },
