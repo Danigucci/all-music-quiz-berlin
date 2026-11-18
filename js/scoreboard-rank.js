@@ -16,13 +16,17 @@
       const per = {};
       let total = 0;
       for (let r = 1; r <= R; r++) {
-        const v = scores[r] && scores[r][t.id];
-        per[r] = v === undefined ? null : v;
-        total += v || 0;
+        const raw = scores[r] && scores[r][t.id];
+        const v = raw === undefined || raw === null || raw === '' ? undefined : Number(raw);
+        per[r] = v === undefined || !Number.isFinite(v) ? null : v;
+        total += per[r] || 0;
       }
       const sum3 = (per[1] || 0) + (per[2] || 0) + (per[3] || 0);
       const sum6 = sum3 + (per[4] || 0) + (per[5] || 0) + (per[6] || 0);
-      return { id: t.id, team: t.name, per, sum3, sum6, total };
+      const cum = {}; // running total after each round
+      let acc = 0;
+      for (let r = 1; r <= R; r++) { acc += per[r] || 0; cum[r] = acc; }
+      return { id: t.id, team: t.name, per, sum3, sum6, cum, total };
     });
 
     // tie on total: higher score in the latest round wins, then the one before it, ...
@@ -39,10 +43,23 @@
     return { rows, roundsWithData, rounds: R };
   }
 
-  function columns(roundsWithData) {
+  // splits (optional): rounds after which to show a running total, e.g. [3, 6, 8].
+  // Without it the classic layout is used: after 3 and after 6.
+  function columns(roundsWithData, splits) {
     const has = new Set(roundsWithData);
     const last = roundsWithData.length ? Math.max(...roundsWithData) : 0;
     const cols = [];
+    if (Array.isArray(splits)) {
+      const after = new Set(splits);
+      for (let r = 1; r <= last; r++) {
+        if (has.has(r)) cols.push({ kind: 'round', r, label: r + ' тур' });
+        if (after.has(r) && has.has(r) && roundsWithData.some((x) => x > r)) {
+          cols.push({ kind: 'sum', r, label: 'После ' + r });
+        }
+      }
+      cols.push({ kind: 'total', label: 'Итого' });
+      return cols;
+    }
     for (let r = 1; r <= last; r++) {
       if (has.has(r)) cols.push({ kind: 'round', r, label: r + ' тур' });
       if (r === 3 && has.has(3) && roundsWithData.some((x) => x > 3)) {

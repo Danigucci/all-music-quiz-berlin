@@ -107,6 +107,12 @@ a.nav{ color:var(--accent); font-size:.875rem; text-decoration:none; font-weight
     <h2>Баллы за тур</h2>
     <div id="round-pills" class="pills"></div>
     <p id="rounds-count" class="muted" style="font-size:.8rem;margin:.6rem 0 0"></p>
+    <div style="margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--line)">
+      <div style="font-weight:700;font-size:.95rem">Промежуточные итоги на экране</div>
+      <p class="muted" style="font-size:.8rem;margin:.25rem 0 0">Отметь туры, после которых показывать колонку «После N»</p>
+      <div id="split-pills" class="pills"></div>
+      <p id="split-summary" class="muted" style="font-size:.8rem;margin:.6rem 0 0"></p>
+    </div>
     <div id="score-list" class="stack" style="margin-top:1rem"></div>
     <p id="score-empty" class="muted hidden" style="font-size:.875rem;margin:.75rem 0 0">Сначала добавь команды выше.</p>
   </section>
@@ -161,6 +167,7 @@ function markDirty() {
 function adopt(data) {
   rev = data.rev;
   state = { title: data.title || '', rounds: Scoreboard.roundsOf(data), teams: data.teams || [], scores: data.scores || {} };
+  if (Array.isArray(data.splits)) state.splits = data.splits.slice();
   if (currentRound > state.rounds) currentRound = state.rounds;
   dirty = false;
 }
@@ -174,6 +181,24 @@ function renderPills() {
     + `<button type="button" class="pill pill-tool" data-rounds="-1" title="Убрать последний тур" aria-label="Убрать последний тур" ${R <= 1 ? 'disabled' : ''}>−</button>`
     + `<button type="button" class="pill pill-tool" data-rounds="1" title="Добавить тур" aria-label="Добавить тур" ${R >= Scoreboard.MAX_ROUNDS ? 'disabled' : ''}>+ тур</button>`;
   $('rounds-count').textContent = `Туров в игре: ${R}`;
+  renderSplits();
+}
+
+// Running totals on the screen ("После N"): default after 3 and 6
+function currentSplits() {
+  const R = Scoreboard.roundsOf(state);
+  return (Array.isArray(state.splits) ? state.splits : [3, 6]).filter((x) => x < R);
+}
+function renderSplits() {
+  const R = Scoreboard.roundsOf(state);
+  const on = new Set(currentSplits());
+  $('split-pills').innerHTML = R < 2 ? '<span class="muted" style="font-size:.85rem">Нужно хотя бы 2 тура</span>' :
+    Array.from({ length: R - 1 }, (_, i) => i + 1).map((r) =>
+      `<button type="button" class="pill split-pill ${on.has(r) ? 'active' : ''}" data-split="${r}" aria-pressed="${on.has(r)}">${r}</button>`).join('');
+  const list = [...on].sort((a, b) => a - b);
+  $('split-summary').textContent = list.length
+    ? 'На экране: ' + list.map((r) => 'После ' + r).join(' · ') + ' · Итого после ' + R
+    : 'На экране только «Итого» после ' + R + '-го тура';
 }
 
 function renderTeams() {
@@ -233,6 +258,17 @@ $('round-pills').addEventListener('click', (e) => {
   currentRound = Number(btn.dataset.round);
   renderPills();
   renderScores();
+});
+
+$('split-pills').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-split]');
+  if (!b) return;
+  const r = Number(b.dataset.split);
+  const on = new Set(currentSplits());
+  if (on.has(r)) on.delete(r); else on.add(r);
+  state.splits = [...on].sort((a, c) => a - c);
+  markDirty();
+  renderSplits();
 });
 
 $('title').addEventListener('input', (e) => { state.title = e.target.value; markDirty(); });

@@ -13,7 +13,7 @@ export function checkPassword(given, expected) {
 
 export const emptyState = () => ({ title: '', rounds: ROUNDS, teams: [], scores: {}, rev: 0 });
 
-export function sanitizeState(input, fallbackRounds = ROUNDS) {
+export function sanitizeState(input, fallbackRounds = ROUNDS, fallbackSplits) {
   const src = input && typeof input === 'object' ? input : {};
   const title = String(src.title ?? '').trim().replace(/\s+/g, ' ').slice(0, 80);
 
@@ -49,7 +49,15 @@ export function sanitizeState(input, fallbackRounds = ROUNDS) {
     }
     if (Object.keys(out).length) scores[r] = out;
   }
-  return { title, rounds, teams, scores };
+  // Rounds after which the screen shows a running total ("После N"). Not stored = default (after 3 and 6).
+  const rawSplits = Array.isArray(src.splits) ? src.splits : (Array.isArray(fallbackSplits) ? fallbackSplits : null);
+  const out = { title, rounds, teams, scores };
+  if (rawSplits) {
+    out.splits = [...new Set(rawSplits.map((x) => Math.round(Number(x))))]
+      .filter((x) => Number.isFinite(x) && x >= 1 && x < rounds)
+      .sort((a, b) => a - b);
+  }
+  return out;
 }
 
 export async function handleScoreboard({ route, method, password, body }, store, adminPassword) {
@@ -68,7 +76,7 @@ export async function handleScoreboard({ route, method, password, body }, store,
   if (route === 'save') {
     const current = await load();
     if (Number(body?.baseRev) !== current.rev) return { status: 409, body: { error: 'stale', ...current } };
-    const next = { ...sanitizeState(body?.state, current.rounds || ROUNDS), rev: current.rev + 1 };
+    const next = { ...sanitizeState(body?.state, current.rounds || ROUNDS, current.splits), rev: current.rev + 1 };
     await store.setJSON('state', next);
     return { status: 200, body: next };
   }

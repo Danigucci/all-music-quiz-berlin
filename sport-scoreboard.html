@@ -102,12 +102,13 @@ async function call(route) {
   return { ok: res.ok, status: res.status, data };
 }
 
-const COL_EM = { place: 3.4, team: 16.5, round: 3.2, sum3: 3.8, sum6: 3.8, total: 4.0 };
+const COL_EM = { place: 3.4, team: 16.5, round: 3.2, sum3: 3.8, sum6: 3.8, sum: 3.8, total: 4.0 };
 
 function cellValue(c, row) {
   if (c.kind === 'round') return row.per[c.r] === null ? '–' : row.per[c.r];
   if (c.kind === 'sum3') return row.sum3;
   if (c.kind === 'sum6') return row.sum6;
+  if (c.kind === 'sum') return row.cum[c.r];
   return row.total;
 }
 
@@ -122,8 +123,8 @@ function render(keep = 0) {
   revealed = 0;
   if (!hasData) return;
 
-  cols = Scoreboard.columns(roundsWithData);
-  const template = `${COL_EM.place}em minmax(${COL_EM.team}em,1fr) ` + cols.map((c) => `var(--w-${c.kind === 'sum3' || c.kind === 'sum6' ? 'sum' : c.kind})`).join(' ');
+  cols = Scoreboard.columns(roundsWithData, state.splits);
+  const template = `${COL_EM.place}em minmax(${COL_EM.team}em,1fr) ` + cols.map((c) => `var(--w-${c.kind === 'sum3' || c.kind === 'sum6' || c.kind === 'sum' ? 'sum' : c.kind})`).join(' ');
   const head = `<div class="grow-row head-row" style="grid-template-columns:${template}">
       <div class="cell-c">Место</div><div class="cell-team" style="font-weight:800">Команда</div>
       ${cols.map((c) => `<div class="cell-c">${esc(c.label)}</div>`).join('')}
