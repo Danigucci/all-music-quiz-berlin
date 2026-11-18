@@ -35,7 +35,7 @@ export function sanitizeState(input, fallbackRounds = ROUNDS, fallbackSplits) {
   let rounds = Math.round(Number(src.rounds));
   if (!Number.isFinite(rounds)) rounds = Math.round(Number(fallbackRounds)) || ROUNDS;
   rounds = Math.min(MAX_ROUNDS, Math.max(1, rounds));
-  for (let r = 1; r <= rounds; r++) {
+  for (let r = 0; r <= rounds; r++) { // round 0: optional warm-up round
     const row = srcScores[r];
     if (!row || typeof row !== 'object') continue;
     const out = {};

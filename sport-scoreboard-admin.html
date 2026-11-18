@@ -175,12 +175,12 @@ function adopt(data) {
 function renderPills() {
   const withData = new Set(Scoreboard.computeRows(state).roundsWithData);
   const R = Scoreboard.roundsOf(state);
-  $('round-pills').innerHTML = Array.from({ length: R }, (_, i) => i + 1).map((r) =>
+  $('round-pills').innerHTML = Array.from({ length: R + 1 }, (_, i) => i).map((r) =>
     `<button type="button" class="pill ${r === currentRound ? 'active' : ''}" data-round="${r}">${r}${withData.has(r) ? '<span class="dot"></span>' : ''}</button>`
   ).join('')
     + `<button type="button" class="pill pill-tool" data-rounds="-1" title="Убрать последний тур" aria-label="Убрать последний тур" ${R <= 1 ? 'disabled' : ''}>−</button>`
     + `<button type="button" class="pill pill-tool" data-rounds="1" title="Добавить тур" aria-label="Добавить тур" ${R >= Scoreboard.MAX_ROUNDS ? 'disabled' : ''}>+ тур</button>`;
-  $('rounds-count').textContent = `Туров в игре: ${R}`;
+  $('rounds-count').textContent = `Туров в игре: ${R}` + (withData.has(0) ? ' + нулевой' : ' · «0» — нулевой тур, по желанию');
   renderSplits();
 }
 
