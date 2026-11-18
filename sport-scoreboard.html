@@ -150,7 +150,7 @@ function render(keep = 0) {
 
   const last = roundsWithData[roundsWithData.length - 1];
   const total = Scoreboard.roundsOf(state);
-  $('footnote').textContent = last === total ? `Итоговый рейтинг после ${total}-го тура` : last === 0 ? 'Рейтинг после нулевого тура' : `Рейтинг после ${last}-го тура`;
+  $('footnote').textContent = Scoreboard.groupOf(last) === total ? `Итоговый рейтинг после ${total}-го тура` : last === 0 ? 'Рейтинг после нулевого тура' : Scoreboard.isExtra(last) ? `Рейтинг после тура ${last}` : `Рейтинг после ${last}-го тура`;
   fit();
 }
 

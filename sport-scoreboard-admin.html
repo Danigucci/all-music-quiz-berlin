@@ -52,6 +52,7 @@ label.lbl{ display:block; font-size:.875rem; font-weight:700; margin-bottom:.5re
 .pill{ min-width:3rem; padding:.55rem .9rem; border-radius:9999px; font:inherit; font-weight:700; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.8); background:transparent; position:relative; cursor:pointer; }
 .pill.active{ background:var(--accent); color:#0b0b0d; border-color:transparent; }
 .pill .dot{ position:absolute; top:.3rem; right:.4rem; width:.4rem; height:.4rem; border-radius:9999px; background:var(--accent); }
+.pill-sub{ min-width:3.4rem; border-style:dotted; }
 .pill-tool{ border-style:dashed; color:rgba(255,255,255,.65); }
 .pill-tool:disabled{ opacity:.3; cursor:default; }
 .pill.active .dot{ background:#0b0b0d; }
@@ -168,6 +169,8 @@ function adopt(data) {
   rev = data.rev;
   state = { title: data.title || '', rounds: Scoreboard.roundsOf(data), teams: data.teams || [], scores: data.scores || {} };
   if (Array.isArray(data.splits)) state.splits = data.splits.slice();
+  state.extra = Array.isArray(data.extra) ? data.extra.map(String) : [];
+  if (!Scoreboard.keysOf(state).includes(currentRound)) currentRound = 1;
   if (currentRound > state.rounds) currentRound = state.rounds;
   dirty = false;
 }
@@ -175,13 +178,25 @@ function adopt(data) {
 function renderPills() {
   const withData = new Set(Scoreboard.computeRows(state).roundsWithData);
   const R = Scoreboard.roundsOf(state);
-  $('round-pills').innerHTML = Array.from({ length: R + 1 }, (_, i) => i).map((r) =>
-    `<button type="button" class="pill ${r === currentRound ? 'active' : ''}" data-round="${r}">${r}${withData.has(r) ? '<span class="dot"></span>' : ''}</button>`
+  const g = Scoreboard.groupOf(currentRound);
+  const nextSub = nextExtraOf(g);
+  $('round-pills').innerHTML = Scoreboard.keysOf(state).map((r) =>
+    `<button type="button" class="pill ${Scoreboard.isExtra(r) ? 'pill-sub' : ''} ${r === currentRound ? 'active' : ''}" data-round="${r}">${r}${withData.has(r) ? '<span class="dot"></span>' : ''}</button>`
   ).join('')
     + `<button type="button" class="pill pill-tool" data-rounds="-1" title="Убрать последний тур" aria-label="Убрать последний тур" ${R <= 1 ? 'disabled' : ''}>−</button>`
-    + `<button type="button" class="pill pill-tool" data-rounds="1" title="Добавить тур" aria-label="Добавить тур" ${R >= Scoreboard.MAX_ROUNDS ? 'disabled' : ''}>+ тур</button>`;
+    + `<button type="button" class="pill pill-tool" data-rounds="1" title="Добавить тур" aria-label="Добавить тур" ${R >= Scoreboard.MAX_ROUNDS ? 'disabled' : ''}>+ тур</button>`
+    + (nextSub ? `<button type="button" class="pill pill-tool" data-sub="add" title="Дополнительный тур после ${g}-го">+ ${nextSub}</button>` : '')
+    + (Scoreboard.isExtra(currentRound) ? `<button type="button" class="pill pill-tool" data-sub="del" title="Убрать тур ${currentRound}">✕ ${currentRound}</button>` : '');
   $('rounds-count').textContent = `Туров в игре: ${R}` + (withData.has(0) ? ' + нулевой' : ' · «0» — нулевой тур, по желанию');
   renderSplits();
+}
+
+// Extra rounds like 6.1, 6.2: added after the selected round
+function nextExtraOf(g) {
+  if (g < 0 || g > Scoreboard.roundsOf(state)) return null;
+  const have = new Set((state.extra || []).map(String));
+  for (let n = 1; n <= 9; n++) if (!have.has(`${g}.${n}`)) return `${g}.${n}`;
+  return null;
 }
 
 // Running totals on the screen ("После N"): default after 3 and 6
@@ -232,6 +247,27 @@ function renderAll() {
 }
 
 $('round-pills').addEventListener('click', (e) => {
+  const sub = e.target.closest('[data-sub]');
+  if (sub) {
+    if (sub.dataset.sub === 'add') {
+      const k = nextExtraOf(Scoreboard.groupOf(currentRound));
+      if (!k) return;
+      state.extra = [...(state.extra || []), k].sort((a, b) => Number(a) - Number(b));
+      currentRound = Number(k);
+    } else {
+      const k = String(currentRound);
+      const row = state.scores[k] || {};
+      const filled = Object.values(row).some((v) => v !== '' && v !== null && v !== undefined);
+      if (filled && !confirm(`В туре ${k} уже есть баллы. Убрать его вместе с ними?`)) return;
+      delete state.scores[k];
+      state.extra = (state.extra || []).filter((x) => x !== k);
+      currentRound = Scoreboard.groupOf(k);
+    }
+    markDirty();
+    renderPills();
+    renderScores();
+    return;
+  }
   const tool = e.target.closest('[data-rounds]');
   if (tool) {
     const R = Scoreboard.roundsOf(state);
@@ -241,12 +277,14 @@ $('round-pills').addEventListener('click', (e) => {
       currentRound = state.rounds;
     } else {
       if (R <= 1) return;
-      const lastRow = state.scores[R] || {};
-      const filled = Object.values(lastRow).some((v) => v !== '' && v !== null && v !== undefined);
+      const rowsOfR = [R, ...(state.extra || []).filter((x) => Scoreboard.groupOf(x) === R)].map((k) => state.scores[k] || {});
+      const filled = rowsOfR.some((row) => Object.values(row).some((v) => v !== '' && v !== null && v !== undefined));
       if (filled && !confirm(`В ${R}-м туре уже есть баллы. Убрать тур вместе с ними?`)) return;
       delete state.scores[R];
+      for (const k of (state.extra || []).filter((x) => Scoreboard.groupOf(x) === R)) delete state.scores[k];
+      state.extra = (state.extra || []).filter((x) => Scoreboard.groupOf(x) !== R);
       state.rounds = R - 1;
-      if (currentRound > state.rounds) currentRound = state.rounds;
+      if (Scoreboard.groupOf(currentRound) > state.rounds) currentRound = state.rounds;
     }
     markDirty();
     renderPills();
