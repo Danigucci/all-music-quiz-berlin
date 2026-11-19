@@ -1,100 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Конфиденциальность • KAIFZEIT Berlin</title>
-<link rel="stylesheet" href="css/tailwind.css">
-<link rel="stylesheet" href="css/fontawesome.css">
-<style>
-@font-face {
-  font-family: 'Baloo 2';
-  font-style: normal;
-  font-weight: 500 800;
-  font-display: swap;
-  src: url('fonts/baloo2-latin-variable.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
-}
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('fonts/manrope-latin-variable.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
-}
-@font-face {
-  font-family: 'Manrope';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2');
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Политика конфиденциальности • KAIFZEIT Berlin</title>
 
-:root{
-  --navy:#09070f;
-  --navy-deep:#050409;
-  --yellow:#ffb3d9;
-  --pink:#ff4fa3;
-  --orange:#22d6e8;
-}
-
-body{ font-family:'Manrope', system-ui, sans-serif; background:#09070f; color:#09070f; }
-h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
-
-.bg-navy{ background:var(--navy); }
-.bg-navy-deep{ background:var(--navy-deep); }
-.text-brand-yellow{ color:var(--yellow); }
-.grad-brand{ background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%); }
-.grad-brand-text{
-  background:linear-gradient(135deg,var(--pink) 0%,var(--orange) 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-}
-
-.logo-mark{
-  position:relative; width:100%; height:100%; border-radius:9999px;
-  background:var(--navy); overflow:hidden;
-  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.06);
-}
-.logo-mark .blob{ position:absolute; background:linear-gradient(135deg,var(--pink),var(--orange)); }
-.logo-mark .blob-1{ width:70%; height:60%; top:-8%; left:-6%; border-radius:38% 62% 55% 45% / 45% 40% 60% 55%; transform:rotate(-18deg); }
-.logo-mark .blob-2{ width:55%; height:34%; bottom:6%; right:-8%; border-radius:60% 40% 50% 50% / 55% 45% 55% 45%; transform:rotate(10deg); }
-</style>
 <link rel="icon" type="image/png" href="brand/favicon.png">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/kz.css">
 </head>
-<body class="overflow-x-hidden">
-
-<header class="sticky top-0 z-50 border-b border-white/10" style="background:rgba(9,7,15,0.97); backdrop-filter:blur(8px);">
-  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT" class="w-9 h-9 shrink-0 rounded-full">
-      <span class="text-white font-bold text-lg tracking-tight">KAIFZEIT <span class="text-brand-yellow">Berlin</span></span>
-    </a>
-    <a href="index.html" class="text-white/70 hover:text-white text-sm font-semibold transition">← На главную</a>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/">KAIFZEIT<small>BERLIN · QUIZ NIGHTS</small></a>
+    <nav class="navlinks" id="navigation" aria-label="Навигация">
+      <a href="/">Все игры</a>
+      <a href="music.html">Music Quiz</a>
+      <a href="sport.html">Sport Quiz</a>
+    </nav>
+    <button class="menu" aria-label="Открыть меню" aria-controls="navigation" aria-expanded="false">Меню</button>
   </div>
 </header>
 
-<main class="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-  <h1 class="display text-3xl sm:text-5xl font-extrabold mb-10 break-words">Политика конфиденциальности</h1>
-
-  <div class="space-y-8 text-[15px] leading-relaxed">
-    <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">1. Ответственное лицо</h2>
+<main class="wrap">
+  <div class="page narrow">
+    <div class="page-head">
+      <div class="eyebrow">Datenschutz</div>
+      <h1>Политика конфиденциальности</h1>
+    </div>
+    <div class="prose">
+<section>
+      <h2>1. Ответственное лицо</h2>
       <p>
         Kaifzeit Quiz<br>
         Inhaber: Danil Lappo<br>
         Konrad-Zuse-Str. 17<br>
         12489 Berlin<br>
-        Telefon: <a href="tel:+4915779548470" class="text-[color:var(--pink)] hover:underline">+49 1577 9548470</a><br>
-        E-Mail: <a href="mailto:danlappo@yahoo.com" class="text-[color:var(--pink)] hover:underline">danlappo@yahoo.com</a>
+        Telefon: <a href="tel:+4915779548470">+49 1577 9548470</a><br>
+        E-Mail: <a href="mailto:danlappo@yahoo.com">danlappo@yahoo.com</a>
       </p>
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">2. Общие сведения об обработке данных</h2>
+      <h2>2. Общие сведения об обработке данных</h2>
       <p>
         Мы обрабатываем персональные данные пользователей нашего сайта только в объёме, необходимом для обеспечения
         работы сайта и наших услуг. Правовые основания приведены отдельно для каждого случая обработки ниже
@@ -104,14 +52,14 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">3. Хостинг</h2>
+      <h2>3. Хостинг</h2>
       <p>
         Этот сайт размещён на серверах компании <strong>Netlify, Inc.</strong>, 44 Montgomery Street, Suite 300,
         San Francisco, CA 94104, США. При посещении сайта Netlify технически обрабатывает данные доступа
         (в частности, IP-адрес, дата и время запроса, запрошенная страница, User-Agent браузера) в виде
         server-логов, необходимых для доставки страницы и обеспечения безопасности.
       </p>
-      <p class="mt-2">
+      <p>
         Поскольку Netlify — американская компания, обработка данных может происходить в США. Мы используем
         стандартные договорные положения ЕС (Standardvertragsklauseln) и иные предусмотренные GDPR гарантии,
         которые предоставляет Netlify для передачи данных в третьи страны. Правовое основание —
@@ -120,19 +68,19 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">4. Форма регистрации на квиз</h2>
+      <h2>4. Форма регистрации на квиз</h2>
       <p>
         При регистрации через форму на сайте мы обрабатываем введённые вами данные (название команды, имя капитана,
         число игроков, контакт в Telegram, выбранная дата игры) исключительно для организации и подтверждения вашего
         участия в конкретной игре. Правовое основание — <strong>Art. 6 Abs. 1 lit. b DSGVO</strong> (преддоговорные
         меры / исполнение договора об участии).
       </p>
-      <p class="mt-2">
+      <p>
         Техническая обработка формы происходит через <strong>Netlify Forms</strong> — встроенную функцию нашего
         хостинг-провайдера Netlify, Inc. (см. раздел 3 выше); отдельный сторонний сервис для приёма формы не
         используется. Введённые данные передаются нам по email через уведомление Netlify Forms.
       </p>
-      <p class="mt-2">
+      <p>
         Дополнительно, для автоматического письма-подтверждения участнику, данные формы (email, имя, название
         команды, выбранная игра, число игроков) передаются через серверную функцию (Netlify Function) сервису
         <strong>Resend</strong> (Resend, Inc., США), который отправляет письмо-подтверждение на указанный email.
@@ -140,7 +88,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
         договорными положениями ЕС (Standard Contractual Clauses) и/или иными предусмотренными GDPR гарантиями.
         Правовое основание — Art. 6 Abs. 1 lit. b DSGVO (исполнение договора об участии).
       </p>
-      <p class="mt-2">
+      <p>
         Кроме того, за 2 дня до выбранной игры автоматически отправляется письмо-напоминание с датой, временем
         и адресом площадки. Для этого данные формы регистрации (email, имя капитана, название команды, выбранная
         игра) считываются нашей серверной функцией через API нашего хостинг-провайдера Netlify и передаются
@@ -150,33 +98,33 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section id="sport-form">
-      <h2 class="font-bold text-lg mb-2 text-navy">4b. Форма заявки Kaifzeit Sport</h2>
+      <h2>4b. Форма заявки Kaifzeit Sport</h2>
       <p>
         При отправке заявки на странице Kaifzeit Sport мы обрабатываем введённые вами данные (имя, название команды
         или отметка «без команды», число игроков, контакт в Telegram или телефон, email, дата игры и необязательное сообщение) исключительно для организации
         участия в спортивном квизе и связи с вами. Правовое основание — <strong>Art. 6 Abs. 1 lit. b DSGVO</strong>
         (преддоговорные меры / исполнение договора об участии).
       </p>
-      <p class="mt-2">
+      <p>
         Заявка передаётся серверной функцией (Netlify Function) сервису <strong>Resend</strong> (Resend, Inc., США),
         который доставляет её нам по email. Международная передача регулируется стандартными договорными
         положениями ЕС (Standard Contractual Clauses) и/или иными предусмотренными GDPR гарантиями.
       </p>
-      <p class="mt-2">
+      <p>
         Во время live-игры вы можете ввести имя или ник и название команды на странице live; эти данные хранятся в
         хранилище Netlify Blobs только на время игры и используются для показа таблицы результатов.
       </p>
     </section>
 
     <section id="newsletter">
-      <h2 class="font-bold text-lg mb-2 text-navy">4a. Рассылка анонсов игр</h2>
+      <h2>4a. Рассылка анонсов игр</h2>
       <p>
         Если вы поставили галочку в форме регистрации, мы отправим на указанный email письмо со ссылкой для
         подтверждения (double opt-in). Только после подтверждения мы будем присылать вам анонсы новых игр.
         Для этого мы храним ваш email, дату запроса и подтверждения, а также технический токен для отписки.
         Правовое основание — ваше согласие (<strong>Art. 6 Abs. 1 lit. a DSGVO</strong>, §7 Abs. 2 Nr. 3 UWG).
       </p>
-      <p class="mt-2">
+      <p>
         Данные хранятся в базе нашего хостинг-провайдера Netlify (Netlify Blobs), письма отправляет сервис
         <strong>Resend</strong> (см. раздел 4). Согласие можно отозвать в любой момент по ссылке «Отписаться» в каждом
         письме или по email из раздела 1; законность обработки до отзыва это не затрагивает. После отписки мы
@@ -185,7 +133,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">5. Шрифты, стили и скрипты</h2>
+      <h2>5. Шрифты, стили и скрипты</h2>
       <p>
         Все шрифты (Baloo 2, Manrope), стили оформления (Tailwind CSS) и иконки (Font Awesome) размещены на
         нашем собственном сервере вместе с остальными файлами сайта. Внешние сети доставки контента (CDN)
@@ -195,7 +143,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">6. Фото- и видеосъёмка на мероприятиях</h2>
+      <h2>6. Фото- и видеосъёмка на мероприятиях</h2>
       <p>
         Во время квиз-игр может вестись документальная фото- и видеосъёмка происходящего. Общие кадры
         мероприятия (атмосфера, зал, команды за игрой) могут публиковаться в Instagram Kaifzeit Quiz
@@ -204,7 +152,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
         крупным планом в рекламных целях требует отдельного согласия этого участника (Art. 6 Abs. 1 lit. a
         DSGVO). Если вы не хотите попадать в кадр — сообщите об этом персоналу на месте.
       </p>
-      <p class="mt-2">
+      <p>
         Получателем таких публикаций является платформа Instagram (Meta Platforms Ireland Limited; обработка
         данных Meta может включать передачу в третьи страны, включая США, на основании собственных гарантий
         Meta по GDPR). У вас есть право в любой момент возразить против публикации общих фотографий на этом
@@ -213,7 +161,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">7. Розыгрыш призов (выдача номеров)</h2>
+      <h2>7. Розыгрыш призов (выдача номеров)</h2>
       <p>
         Во время игр мы проводим бесплатный розыгрыш призов. Для получения номера на странице розыгрыша
         (доступ по QR-коду на игре) вы вводите имя, email и, по желанию, название команды. Мы обрабатываем эти данные,
@@ -222,13 +170,13 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
         нескольких номеров одним участником (один номер на email и на устройство), провести розыгрыш и связаться
         с победителем. Правовое основание — <strong>Art. 6 Abs. 1 lit. b DSGVO</strong> (участие в розыгрыше).
       </p>
-      <p class="mt-2">
+      <p>
         Идентификатор устройства в localStorage необходим для работы запрошенной вами функции (защита от повторной
         выдачи номера) и не используется для отслеживания или рекламы (§ 25 Abs. 2 Nr. 2 TDDDG). Имя и email хранятся
         на сервере в виде, позволяющем отправить вам номер и связаться с победителем; для проверки повторной
         регистрации дополнительно сохраняется хеш email.
       </p>
-      <p class="mt-2">
+      <p>
         Данные хранятся в службе хранения данных Netlify (Netlify Blobs; см. раздел 3), письмо с номером отправляется
         через сервис Resend (см. раздел 4). <strong>Срок хранения:</strong> данные розыгрыша удаляются после
         окончания розыгрыша и вручения призов, не позднее чем через 7 дней после игры. Номер, сохранённый в вашем
@@ -237,7 +185,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">8. Ссылки на внешние платформы</h2>
+      <h2>8. Ссылки на внешние платформы</h2>
       <p>
         На сайте есть ссылки на Instagram, Telegram и Google Maps. При переходе по этим ссылкам вы покидаете наш
         сайт, и далее действует политика конфиденциальности соответствующего сервиса. Эти сервисы не встроены
@@ -246,9 +194,9 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <h2 class="font-bold text-lg mb-2 text-navy">9. Ваши права</h2>
+      <h2>9. Ваши права</h2>
       <p>Вы в любой момент имеете право:</p>
-      <ul class="list-disc pl-6 mt-2 space-y-1">
+      <ul>
         <li>запросить информацию о хранящихся у нас персональных данных (Art. 15 DSGVO),</li>
         <li>потребовать исправления неверных данных (Art. 16 DSGVO),</li>
         <li>потребовать удаления ваших данных (Art. 17 DSGVO),</li>
@@ -256,7 +204,7 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
         <li>возразить против обработки ваших данных (Art. 21 DSGVO),</li>
         <li>потребовать переносимости данных (Art. 20 DSGVO).</li>
       </ul>
-      <p class="mt-2">
+      <p>
         Для этого напишите на email или телефон, указанные выше. Также у вас есть право подать жалобу в надзорный
         орган по защите данных, например в Berliner Beauftragte für Datenschutz und Informationsfreiheit
         (берлинское ведомство по защите данных).
@@ -264,21 +212,32 @@ h1,h2,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
     </section>
 
     <section>
-      <p class="text-xs text-navy/50">Актуально на сентябрь 2026 года</p>
+      <p>Актуально на сентябрь 2026 года</p>
     </section>
+    </div>
   </div>
 </main>
 
-<footer class="bg-navy-deep">
-  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/50">
-    <div class="flex flex-wrap gap-x-6 gap-y-2">
-      <a href="impressum.html" class="hover:text-brand-yellow transition">Импрессум</a>
-      <a href="datenschutz.html" class="hover:text-brand-yellow transition">Конфиденциальность</a>
-      <a href="teilnahmebedingungen.html" class="hover:text-brand-yellow transition">Условия участия</a>
-    </div>
-    <span>© 2026 Kaifzeit Quiz</span>
+<footer class="wrap">
+  <div class="footer">
+    <a class="brand" href="/">KAIFZEIT</a>
+    <a href="/">Все игры</a>
+    <a href="music.html">Музыкальный квиз</a>
+    <a href="sport.html">Спортивный квиз</a>
+    <a href="seasons.html">Сезоны</a>
+    <a href="playlists.html">Плейлисты</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 KAIFZEIT Berlin</span>
+    <a href="impressum.html">Импрессум</a>
+    <a href="datenschutz.html">Конфиденциальность</a>
+    <a href="teilnahmebedingungen.html">Условия участия</a>
   </div>
 </footer>
 
+<script>
+const menu = document.querySelector('.menu'), nav = document.getElementById('navigation');
+menu.addEventListener('click', () => { const o = nav.classList.toggle('open'); menu.setAttribute('aria-expanded', String(o)); });
+</script>
 </body>
 </html>

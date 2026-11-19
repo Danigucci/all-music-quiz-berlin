@@ -2,67 +2,37 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>KAIFZEIT Sport · Результаты</title>
 <link rel="icon" type="image/png" href="brand/sport-favicon.png">
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #09070f;
-    color: #e0e0e0;
-    padding: 20px;
-    text-align: center;
-}
-h1 { color: #ff4fa3; }
-table {
-    width: 100%; 
-    max-width: 1100px; 
-    margin: 20px auto;
-    border-collapse: collapse; 
-    background: #120e1d;
-}
-th, td { 
-    border: 1px solid #444; 
-    padding: 12px; 
-    text-align: center; 
-}
-th { 
-    background: #1b1530; 
-    color: #ff4fa3; 
-}
-tr:nth-child(even) { background: #111; }
-td.editable { 
-    cursor: pointer; 
-}
-td.editable:hover { 
-    background: #333; 
-}
-td input {
-    width: 100%; 
-    background: #222; 
-    color: white;
-    border: 1px solid #ff4fa3; 
-    text-align: center;
-    box-sizing: border-box;
-}
-.buttons {
-    margin: 15px 0;
-}
-button {
-    margin: 0 8px;
-    padding: 12px 25px;
-    font-size: 1.1em;
-    background: #ff4fa3;
-    color: black;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-button:hover { background: #22d6e8; }
-button#hideBtn {
-    background: #555;
-}
-button#hideBtn:hover { background: #777; }
+@font-face{font-family:'Manrope';font-weight:400 800;font-display:swap;src:url('fonts/manrope-latin-variable.woff2') format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+@font-face{font-family:'Manrope';font-weight:400 800;font-display:swap;src:url('fonts/manrope-cyrillic-variable.woff2') format('woff2');unicode-range:U+0400-045F,U+2116}
+@font-face{font-family:'Outfit';font-weight:100 900;font-display:swap;src:url('fonts/outfit-latin-variable.woff2') format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+:root{--acc:#c9ec9b;--line:#ffffff1c}
+body{font-family:Manrope,Arial,sans-serif;background:radial-gradient(ellipse at 80% 0%,#283b2455,transparent 50%),#101010;color:#f3efed;padding:28px 36px;text-align:center;margin:0;min-height:100vh;box-sizing:border-box}
+body>p:first-of-type{font-size:13px}
+body>p:first-of-type a{color:#a8a0a0!important;text-decoration:none;border-bottom:1px solid #ffffff30}
+h1{font:500 clamp(40px,6vw,80px)/1 Outfit,Manrope,sans-serif;letter-spacing:-2px;color:#f3efed;margin:30px 0 10px}
+table{width:100%;max-width:1200px;margin:24px auto;border-collapse:collapse;background:#161414;border:1px solid var(--line);font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid #ffffff12;padding:16px 12px;text-align:center}
+th{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a8a0a0;font-weight:600;border-bottom:1px solid var(--line)}
+th:nth-child(6),th:nth-child(10),td:nth-child(6),td:nth-child(10){color:var(--acc)}
+th:last-child{color:var(--acc)}
+td{font-size:18px;color:#cfc8c6}
+td:nth-child(2){text-align:left;font-weight:700;color:#f3efed}
+td:first-child{font-weight:700;color:#f3efed}
+td:last-child{font:600 26px Outfit,Manrope,sans-serif;color:#f3efed}
+tbody tr:first-child td:first-child{color:var(--acc)}
+td.editable{cursor:pointer}
+td.editable:hover{background:#ffffff0a}
+td input{width:100%;background:#101010;color:#fff;border:1px solid var(--acc);text-align:center;box-sizing:border-box;font:inherit;padding:4px}
+.buttons{margin:18px 0}
+button{margin:0 6px;padding:14px 28px;font:700 14px Manrope,Arial,sans-serif;background:var(--acc);color:#191919;border:none;border-radius:2px;cursor:pointer;transition:.2s}
+button:hover{background:#f3efed}
+button#hideBtn{background:transparent;color:#f3efed;border:1px solid var(--line)}
+button#hideBtn:hover{border-color:var(--acc);color:var(--acc)}
 </style>
 </head>
 <body>

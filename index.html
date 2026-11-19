@@ -1,42 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KAIFZEIT • Berlin · Music &amp; Sport Quiz Nights</title>
-<meta name="description" content="KAIFZEIT Berlin — музыкальный и спортивный квизы в Берлине. Собирай команду и приходи на игру.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KAIFZEIT — Music &amp; Sport квизы в Берлине</title>
+<meta name="description" content="KAIFZEIT Berlin — музыкальный и спортивный квизы в Берлине. Собирай команду, выбирай тему и приходи на игру.">
 <link rel="icon" type="image/png" href="brand/favicon.png">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="css/fontawesome.css">
 <style>
-@font-face{font-family:'Baloo 2';font-style:normal;font-weight:500 800;font-display:swap;src:url('fonts/baloo2-latin-variable.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122}
 @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/manrope-latin-variable.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122}
 @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/manrope-cyrillic-variable.woff2') format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-:root{--ink:#09070f;--panel:#120e1d;--neon:#ff4fa3;--cyan:#22d6e8;--soft:#ffb3d9}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--ink);color:#f3eff8;font-family:'Manrope',system-ui,sans-serif}
-a{color:inherit;text-decoration:none}
-h1,h2,h3{font-family:'Baloo 2',system-ui,sans-serif;color:#fff;margin:0}
-.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
-.hero{text-align:center;padding:56px 0 32px;background:radial-gradient(circle at 20% 10%,rgba(255,79,163,.18),transparent 45%),radial-gradient(circle at 85% 40%,rgba(34,214,232,.16),transparent 45%)}
-.hero img{width:200px;height:200px;border-radius:50%;box-shadow:0 0 60px -10px rgba(255,79,163,.55)}
-.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.1;margin-top:22px}
-.grad{background:linear-gradient(135deg,var(--neon),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:rgba(255,255,255,.7);font-size:1.1rem;max-width:520px;margin:14px auto 0}
-.cards{display:grid;grid-template-columns:1fr;gap:20px;padding:28px 0 56px}
-@media(min-width:760px){.cards{grid-template-columns:1fr 1fr}}
-.card{display:flex;flex-direction:column;gap:12px;background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:30px;transition:transform .25s,box-shadow .25s,border-color .25s}
-.card:hover{transform:translateY(-4px);border-color:rgba(255,79,163,.5);box-shadow:0 24px 48px -20px rgba(255,79,163,.45)}
-.card .ico{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:linear-gradient(135deg,var(--neon),var(--cyan));color:#09070f}
-.card h2{font-size:1.9rem;font-weight:800}
-.card p{margin:0;color:rgba(255,255,255,.7);line-height:1.55}
-.card ul{margin:4px 0 0;padding:0;list-style:none;color:rgba(255,255,255,.6);font-size:.95rem;display:grid;gap:6px}
-.card ul li::before{content:"•";color:var(--soft);margin-right:8px}
-.btn{margin-top:auto;align-self:flex-start;background:linear-gradient(135deg,var(--neon),var(--cyan));color:#09070f;font-weight:800;padding:13px 26px;border-radius:999px;box-shadow:0 0 28px -6px rgba(255,79,163,.6)}
-footer{border-top:1px solid rgba(255,255,255,.1);background:#050409}
-footer .wrap{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;padding-top:26px;padding-bottom:26px;font-size:.85rem;color:rgba(255,255,255,.55)}
-footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
-footer a:hover{color:#fff}
+@font-face{font-family:'Outfit';font-style:normal;font-weight:100 900;font-display:swap;src:url('fonts/outfit-latin-variable.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122}
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#f8f3eb;font:15px/1.7 Manrope,Arial,sans-serif;background:radial-gradient(ellipse at 10% 20%,#39232d55,transparent 50%),#101010}a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid #fff;outline-offset:5px}.wrap{max-width:1320px;margin:auto;padding:0 48px}header{height:100px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff20}.brand{font:700 30px Outfit,Arial,sans-serif;letter-spacing:-1px}.city{font-size:11px;letter-spacing:3px;color:#b1aba8}.intro{padding:70px 0 45px}.intro p{color:#b1aba8;max-width:550px;margin:22px 0 0;font-size:16px}h1{font:500 clamp(45px,5.5vw,76px)/1.08 Outfit,Arial,sans-serif;letter-spacing:-2.5px;margin:0}.choices{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-bottom:65px}.choice{position:relative;display:flex;flex-direction:column;min-height:460px;padding:36px;border:1px solid #ffffff25;background:#191719;overflow:hidden;transition:transform .3s,border-color .3s}.choice:hover{transform:translateY(-5px);border-color:var(--accent)}.music{--accent:#eeb3cc;background:linear-gradient(130deg,#39252f,#1a171b 80%)}.sport{--accent:#c9ec9b;background:linear-gradient(130deg,#283025,#171a17 80%)}.type{color:var(--accent);font:500 17px Outfit,sans-serif;letter-spacing:3px}.choice h2{font:500 clamp(32px,3.8vw,49px)/1.12 Outfit,sans-serif;letter-spacing:-1px;margin:25px 0 18px;position:relative;z-index:1}.choice p{color:#c3bdbf;max-width:390px;font-size:14px;position:relative;z-index:1}.choice ul{padding:0;list-style:none;margin:15px 0 35px;color:#b1aba8;font-size:12px}.choice li{padding:7px 0;border-bottom:1px solid #ffffff15}.cta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}.cta b{display:inline-block;background:var(--accent);color:#172014;padding:13px 22px;font-size:13px}.cta small{color:#b1aba8;font-size:11px}.music .cta b{color:#21151a}.music-art{position:absolute;right:-30px;top:-25px;width:170px;height:170px;border-radius:50%;border:20px solid #eeb3cc08;box-shadow:0 0 0 25px #eeb3cc04}.sport-art{position:absolute;right:24px;top:20px;width:135px;height:135px;border:1px solid #c9ec9b15;border-radius:50%;box-shadow:0 0 0 20px #c9ec9b04}footer{padding:25px 0 35px;border-top:1px solid #ffffff20;display:flex;gap:24px;flex-wrap:wrap;font-size:11px;color:#b1aba8}footer span{margin-right:auto}@media(max-width:700px){.wrap{padding:0 22px}header{height:78px}.brand{font-size:27px}.city{font-size:9px;letter-spacing:2px}.intro{padding:45px 0 30px}h1{font-size:47px}.intro p{font-size:14px}.choices{grid-template-columns:1fr;gap:18px;padding-bottom:40px}.choice{min-height:410px;padding:28px}.choice h2{font-size:37px}.cta small{max-width:120px}footer{gap:16px}footer span{width:100%}}@media(prefers-reduced-motion:reduce){*{transition:none!important}.choice:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -44,43 +19,6 @@ footer a:hover{color:#fff}
 // Old links like kaifzeit.com/#register (QR codes, emails) used to point at the music page.
 (function(){var h=location.hash;if(h&&h!=='#')location.replace('music.html'+h);})();
 </script>
-
-<section class="hero">
-  <div class="wrap">
-    <img src="brand/kaifzeit-logo.png" alt="KAIFZEIT — Berlin · Quiz Nights">
-    <h1><span class="grad">KAIFZEIT</span><br>Больше, чем квиз</h1>
-    <p>Игровые вечера в Берлине. Выбирай свою тему, собирай команду и приходи.</p>
-  </div>
-</section>
-
-<main class="wrap">
-  <div class="cards">
-    <a class="card" href="music.html">
-      <div class="ico"><i class="fa-solid fa-music"></i></div>
-      <h2>Музыкальный квиз</h2>
-      <p>Kaifzeit Music — это про душевно-драйвовую атмосферу каждые 2 недели, где на следующее утро у вас будут болеть голосовые связки.</p>
-      <ul><li>7 раундов, более 110 композиций, команды до 10 человек</li><li>Расписание, результаты и общий зачёт сезона</li><li>Live-квиз и розыгрыш призов</li></ul>
-      <span class="btn">Хочу играть →</span>
-    </a>
-    <a class="card" href="sport.html">
-      <div class="ico"><i class="fa-solid fa-futbol"></i></div>
-      <h2>Про футбол и спорт</h2>
-      <p>Kaifzeit Sport — спортивный квиз: команды и азарт, 70% вопросов про футбол. Если вы знаете, что Лэмпард играл за Ман Сити, а Чилаверт — вратарь сборной Парагвая, то вам к нам.</p>
-      <ul><li>7 туров по всем видам спорта</li><li>Ближайшие игры и таблица лиги</li><li>Live-квиз и розыгрыш призов</li></ul>
-      <span class="btn">Хочу играть →</span>
-    </a>
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>© 2026 Kaifzeit Quiz · Berlin</span>
-    <nav>
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html">Datenschutz</a>
-      <a href="teilnahmebedingungen.html">Условия участия</a>
-    </nav>
-  </div>
-</footer>
+<div class="wrap"><header><a class="brand" href="/">KAIFZEIT</a><span class="city">BERLIN · QUIZ NIGHTS</span></header><main><section class="intro"><h1>Больше, чем квиз.<br>Выбирай свой вечер.</h1><p>Музыка или спорт? Собирай команду, выбирай тему и приходи на игровые вечера KAIFZEIT в Берлине.</p></section><section class="choices" aria-label="Выбрать направление квиза"><a class="choice music" href="music.html"><div class="music-art" aria-hidden="true"></div><span class="type">KAIFZEIT MUSIC</span><h2>Знаешь с первых нот.</h2><p>Интро, ремиксы, саундтреки и любимые хиты. Вечер, после которого хочется продолжать петь.</p><ul><li>7 музыкальных раундов · команды до 10 человек</li><li>Расписание, результаты и сезонный зачёт</li><li>Живая игра и розыгрыш призов</li></ul><div class="cta"><b>Хочу на музыкальный</b><small>Выбрать игру и записаться</small></div></a><a class="choice sport" href="sport.html"><div class="sport-art" aria-hidden="true"></div><span class="type">KAIFZEIT SPORT</span><h2>Помнишь каждый гол.</h2><p>Футбол и другие виды спорта. Знакомые имена, неожиданные вопросы и командный азарт.</p><ul><li>7 туров · 70% вопросов про футбол</li><li>Ближайшие игры и таблица лиги</li><li>Живая игра и розыгрыш призов</li></ul><div class="cta"><b>Хочу на спортивный</b><small>Выбрать игру и записаться</small></div></a></section></main><footer><span>© 2026 KAIFZEIT Berlin</span><a href="impressum.html">Импрессум</a><a href="datenschutz.html">Конфиденциальность</a><a href="teilnahmebedingungen.html">Условия участия</a></footer></div>
 </body>
 </html>
