@@ -146,7 +146,7 @@ p { margin: 0; }
 .answer-card b { font: 800 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
 .answer-card p { font-weight: 800; font-size: 18px; }
 .answer-card small { color: var(--muted); font-size: 14px; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; }
 .stat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 8px; text-align: center; }
 .stat b { display: block; font: 800 26px/1.1 var(--display); font-variant-numeric: tabular-nums; }
 .stat small { color: var(--muted); font-size: 12px; font-weight: 700; }
@@ -389,8 +389,8 @@ p { margin: 0; }
         h('span', { class: 'eyebrow' }, `${st.round.title} · ${st.question.num}/${st.question.of}`),
         h('p', { class: 'verdict ' + (ok ? 'ok' : 'no') }, picked == null ? 'Без ответа' : ok ? 'Верно!' : 'Мимо'),
         h('div', { class: 'answer-card' }, h('b', {}, 'Правильный ответ'), h('p', {}, R.a), R.info ? h('small', {}, R.info) : null),
+        // Places stay secret until the final, to keep the suspense
         m ? h('div', { class: 'stats' },
-          h('div', { class: 'stat' }, h('b', {}, m.place), h('small', {}, `место из ${st.players}`)),
           h('div', { class: 'stat' }, h('b', {}, m.correct), h('small', {}, plural(m.correct, 'очко', 'очка', 'очков'))),
           h('div', { class: 'stat' }, h('b', {}, m.ms != null ? fmtSec(m.ms).replace(' с', '') : '—'), h('small', {}, 'секунд'))
         ) : h('p', { class: 'muted' }, 'Ты в игре с середины вопроса — очки начнут считаться со следующего.')
@@ -434,7 +434,7 @@ p { margin: 0; }
     else if (st.phase === 'lobby') key = 'lobby';
     else if (st.phase === 'intro') key = 'intro:' + st.round.index;
     else if (st.phase === 'question') key = 'q:' + st.question.key;
-    else if (st.phase === 'reveal') key = 'r:' + st.question.key + ':' + (st.me ? st.me.place + '/' + st.players : '-');
+    else if (st.phase === 'reveal') key = 'r:' + st.question.key + ':' + (st.me ? st.me.correct : '-');
     else key = 'final:' + (st.me ? (st.me.pending ? 'wait' : st.me.place) : '-');
     if (key === shown) return;
     shown = key;
