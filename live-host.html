@@ -612,7 +612,8 @@ main { min-height: 0; display: grid; }
     })();
   }
 
-  let rolling = false, celebrate = 0, showTable = false;
+  // `peek` is the place whose score is already on screen while the name is still hidden
+  let rolling = false, celebrate = 0, showTable = false, peek = 0;
   async function announceNext() {
     if (!S || S.phase !== 'final' || rolling || busy || S.podium <= 1) return;
     const place = S.podium - 1;
@@ -643,13 +644,18 @@ main { min-height: 0; display: grid; }
               h('span', { class: 'tm' }, r.team),
               h('span', { class: 'sc' }, `${r.correct} из ${st.total} · ${fmtTime(r.time)}`),
               prize ? h('span', { class: 'prz' }, prize.text) : null)
-          : h('div', { class: 'who' }, h('span', { class: 'qmark' }, '?'), h('span', { class: 'wait' }, `Кто на ${place} месте?`)),
+          : h('div', { class: 'who' }, h('span', { class: 'qmark' }, '?'),
+              peek === place ? h('span', { class: 'sc' }, `${r.correct} из ${st.total} · ${fmtTime(r.time)}`) : null,
+              h('span', { class: 'wait' }, `Кто на ${place} месте?`)),
         h('div', { class: 'blk' }, place)
       );
     };
-    const label = !allOut ? (shownFrom - 1 === 1 ? 'Кто победил?' : `${shownFrom - 1} место`) : showTable ? 'К подиуму' : 'Вся таблица';
+    // Each podium place takes two clicks: first its score, then the name with a drum roll
+    const nextPlace = shownFrom - 1;
+    const label = !allOut ? (peek !== nextPlace ? `Очки за ${nextPlace} место` : nextPlace === 1 ? 'Кто победил?' : `Кто на ${nextPlace} месте?`) : showTable ? 'К подиуму' : 'Вся таблица';
     primary = h('button', { class: 'btn', type: 'button', onclick: () => {
-      if (!allOut) announceNext();
+      if (!allOut && peek !== nextPlace) { peek = nextPlace; shown = ''; render(S); }
+      else if (!allOut) announceNext();
       else { showTable = !showTable; shown = ''; render(S); }
     } }, label);
     const perCol = Math.ceil(Math.min(b.length, 14) / 2);
@@ -696,7 +702,7 @@ main { min-height: 0; display: grid; }
       return;
     }
     shown = key;
-    if (st.phase !== 'final') showTable = false;
+    if (st.phase !== 'final') { showTable = false; peek = 0; }
     if (st.phase === 'off') renderOff(st);
     else if (st.phase === 'lobby') renderLobby(st);
     else if (st.phase === 'intro') renderIntro(st);
