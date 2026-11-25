@@ -478,5 +478,245 @@
   "album": "Песни на стихи Дмитрия Сухарёва",
   "year": 1996,
   "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/57/70/d8/5770d8c8-b656-e71b-d236-b8c42a0893a6/mzaf_7954563056559804001.plus.aac.p.m4a"
+ },
+ "c1-01": {
+  "trackId": 1484413134,
+  "artist": "Ray Parker Jr.",
+  "track": "Ghostbusters",
+  "album": "Ghostbusters (Original Motion Picture Soundtrack)",
+  "year": "1984",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/8b/e3/638be3a1-2f5e-5cff-9b58-085e3b793cbd/mzaf_10733010531783613784.plus.aac.p.m4a"
+ },
+ "c1-02": {
+  "trackId": 254685026,
+  "artist": "Survivor",
+  "track": "Eye of the Tiger",
+  "album": "Eye of the Tiger (Remastered)",
+  "year": "1982",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fe/fa/9e/fefa9edd-c023-4d1c-1012-08bfb0ec69e6/mzaf_4651653238471209843.plus.aac.p.m4a"
+ },
+ "c1-03": {
+  "trackId": 387194076,
+  "artist": "Berlin",
+  "track": "Take My Breath Away (Love Theme from \"Top Gun\")",
+  "album": "Top Gun (Original Motion Picture Soundtrack) [Special Expanded Edition]",
+  "year": "1986",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fb/74/fb/fb74fb0b-83f3-186a-4833-e0ebdb86cf10/mzaf_6965137412837280913.plus.aac.p.m4a"
+ },
+ "c1-04": {
+  "trackId": 1440829906,
+  "artist": "Huey Lewis & The News",
+  "track": "The Power of Love",
+  "album": "Back to the Future (Original Motion Picture Soundtrack)",
+  "year": "1985",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/72/78/b9/7278b965-d28d-36af-7b25-c5e556fb81b8/mzaf_9486799449732400731.plus.aac.p.m4a"
+ },
+ "c1-05": {
+  "trackId": 1164757333,
+  "artist": "Kenny Loggins",
+  "track": "Footloose",
+  "album": "Footloose (Original Motion Picture Soundtrack)",
+  "year": "1984",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/18/68/2218688a-ff36-7277-56de-c6b221d691c8/mzaf_12250270063124855744.plus.aac.p.m4a"
+ },
+ "c1-06": {
+  "trackId": 1599280029,
+  "artist": "Dick Dale",
+  "track": "Misirlou",
+  "album": "Wanna Surf?",
+  "year": "1962",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/54/92/83/5492836d-f92a-33e9-cc8e-24b3b32dce52/mzaf_5459224031806760031.plus.aac.p.m4a"
+ },
+ "c1-07": {
+  "trackId": 1440618281,
+  "artist": "Idina Menzel",
+  "track": "Let It Go",
+  "album": "Frozen (Original Motion Picture Soundtrack)",
+  "year": "2013",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/43/5f/36/435f3609-ddd5-bc10-3dbb-ddf5872b93ce/mzaf_9461789858996596537.plus.aac.p.m4a"
+ },
+ "c1-08": {
+  "trackId": 566322365,
+  "artist": "Adele",
+  "track": "Skyfall",
+  "album": "Skyfall - Single",
+  "year": "2012",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6c/48/0e/6c480edc-89f5-a9cf-b309-63c5237efe92/mzaf_3142604484249449871.plus.aac.p.m4a"
+ },
+ "c1-09": {
+  "trackId": 924503377,
+  "artist": "Blue Swede",
+  "track": "Hooked on a Feeling",
+  "album": "Hooked On a Feeling - 40th Anniversary Collection",
+  "year": "1973",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d3/6c/64/d36c6420-21f8-9e2d-9170-1eda13209617/mzaf_7003972075215037414.plus.aac.p.m4a"
+ },
+ "c1-10": {
+  "trackId": 1689238922,
+  "artist": "Dua Lipa",
+  "track": "Dance The Night",
+  "album": "Barbie The Album",
+  "year": "2023",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9d/9f/56/9d9f566f-abf6-5f10-bcdb-09e14dcace42/mzaf_10277018989080903908.plus.aac.p.m4a"
+ },
+ "c2-01": {
+  "trackId": 1375814284,
+  "artist": "John Williams & London Symphony Orchestra",
+  "track": "Main Title",
+  "album": "Star Wars: A New Hope (Original Motion Picture Score)",
+  "year": "1977",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e3/e1/fd/e3e1fdec-3483-fb83-3041-d01577fd1415/mzaf_13690916780854407664.plus.aac.p.m4a"
+ },
+ "c2-02": {
+  "trackId": 89285956,
+  "artist": "John Williams",
+  "track": "Hedwig's Theme",
+  "album": "Harry Potter and the Sorcerer's Stone (Original Motion Picture Soundtrack)",
+  "year": "2001",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/81/ee/ae/81eeae0a-da63-1fc7-42c1-21b498b85de8/mzaf_13621452881875123588.plus.aac.p.m4a"
+ },
+ "c2-03": {
+  "trackId": 1440650203,
+  "artist": "Klaus Badelt",
+  "track": "He's a Pirate",
+  "album": "Pirates of the Caribbean: The Curse of the Black Pearl (Original Soundtrack)",
+  "year": "2003",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0d/21/07/0d2107c4-573b-6649-229e-e715501010cc/mzaf_8361386078907471110.plus.aac.p.m4a"
+ },
+ "c2-04": {
+  "trackId": 1440563274,
+  "artist": "Lisa Gerrard, Gavin Greenaway, The Lyndhurst Orchestra, Bruce Fowler, Yvonne S. Moriarty, Walt Fowler, Ladd McIntosh, Elizabeth Finch, Jack Smalley & Hans Zimmer",
+  "track": "Now We Are Free",
+  "album": "Gladiator (Soundtrack from the Motion Picture)",
+  "year": "2000",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/1c/62/081c6242-de2e-80ef-d1d6-51c21620fbf1/mzaf_8911425336835289037.plus.aac.p.m4a"
+ },
+ "c2-05": {
+  "trackId": 1533984393,
+  "artist": "Hans Zimmer",
+  "track": "Cornfield Chase",
+  "album": "Interstellar (Original Motion Picture Soundtrack) [Expanded Edition]",
+  "year": "2014",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/ee/23/3aee2300-f6f7-a006-e20f-28092e814cbe/mzaf_1624587954644600228.plus.aac.p.m4a"
+ },
+ "c2-06": {
+  "trackId": 1649972596,
+  "artist": "Cincinnati Pops Orchestra, Erich Kunzel & Steven Reineke",
+  "track": "Feather Theme (From “Forrest Gump”)",
+  "album": "Breathe: Relaxing Music from the Movies",
+  "year": "1997",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/0a/08/5d0a08cf-87d4-9035-5005-d79cac1f5e3e/mzaf_15866539636703193554.plus.aac.p.m4a"
+ },
+ "c2-07": {
+  "trackId": 1500818944,
+  "artist": "Brad Fiedel",
+  "track": "The Terminator Theme (Extended Version)",
+  "album": "The Terminator (Original Soundtrack Album)",
+  "year": "1984",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/03/02/34030281-15f5-55df-4150-432c48490703/mzaf_6589395594332544640.plus.aac.p.m4a"
+ },
+ "c2-08": {
+  "trackId": 715628797,
+  "artist": "Ennio Morricone",
+  "track": "The Good, The Bad & The Ugly (Main Title)",
+  "album": "The Good, The Bad & The Ugly (Expanded Edition) [Original Motion Picture Soundtrack]",
+  "year": "1966",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/99/86/b09986f5-ef2c-801f-ec3a-f6f2e7189826/mzaf_9640375822381239964.plus.aac.p.m4a"
+ },
+ "c2-09": {
+  "trackId": 1049529734,
+  "artist": "John Williams",
+  "track": "Somewhere in My Memory (Chorus & Orchestra Version)",
+  "album": "Home Alone (Original Motion Picture Soundtrack) [Anniversary Edition]",
+  "year": "1990",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3e/05/43/3e05439d-f3f4-3198-a1ee-bc2c42630a93/mzaf_9781291485407434494.plus.aac.p.m4a"
+ },
+ "c2-10": {
+  "trackId": 1440799057,
+  "artist": "Ramin Djawadi",
+  "track": "Main Title",
+  "album": "Game of Thrones (Music From the HBO Series)",
+  "year": "2011",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/61/28/ad/6128ade4-d49a-3811-df92-b231bb3b3803/mzaf_1140403213038657471.plus.aac.p.m4a"
+ },
+ "c3-01": {
+  "trackId": 1104328899,
+  "artist": "Юрий Никулин",
+  "track": "Песня про зайцев (А нам всё равно)",
+  "album": "Бриллиантовая рука (Из к/ф \"Бриллиантовая рука\")",
+  "year": "2014",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dc/60/b4/dc60b406-a9c4-356d-e0a6-402cd4c16d35/mzaf_13702671820312666160.plus.aac.p.m4a"
+ },
+ "c3-02": {
+  "trackId": 1766198704,
+  "artist": "Аида Ведищева",
+  "track": "Песенка о медведях (Где-то на белом свете)",
+  "album": "Лучшие песни",
+  "year": "1978",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8c/02/87/8c028710-fa3d-a2b2-8dc6-2b183c59bb86/mzaf_12772078864310903326.plus.aac.p.m4a"
+ },
+ "c3-03": {
+  "trackId": 1103234283,
+  "artist": "Валерий Золотухин",
+  "track": "Разговор со счастьем",
+  "album": "Иван Васильевич меняет профессию (Из к/ф \"Иван Васильевич меняет профессию\") - EP",
+  "year": "2014",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e2/15/84/e21584eb-6d42-e5dd-452e-d2ad704c9c2b/mzaf_8185875808686367205.plus.aac.p.m4a"
+ },
+ "c3-04": {
+  "trackId": 1096602337,
+  "artist": "Дмитрий Харатьян & Олег Анофриев",
+  "track": "Не вешать нос (Из т/с \"Гардемарины, вперёд!\")",
+  "album": "Гардемарины вперёд! (Лучшие песни из кинофильмов)",
+  "year": "1987",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2f/85/7b/2f857b45-a2a1-ee37-7bd8-fb5dba1c4134/mzaf_6840702768994542276.plus.aac.p.m4a"
+ },
+ "c3-05": {
+  "trackId": 1635725590,
+  "artist": "Вячеслав Назаров, Леонид Серебренников, Марк Айзикович, Михаил Боярский & Инструментальный ансамбль \"Фестиваль\"",
+  "track": "Песня мушкетёров",
+  "album": "Максим Дунаевский: Три мушкетёра",
+  "year": "2008",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/0f/96/7a/0f967a87-7690-4738-edfd-7baab9f166a4/mzaf_15369806526892990191.plus.aac.p.m4a"
+ },
+ "c3-06": {
+  "trackId": 1648258172,
+  "artist": "Таня Мелёхина, Большой детский хор Всесоюзного радио и Центрального телевидения & Оркестр п/у Александра Михайлова",
+  "track": "Качели",
+  "album": "Крылатые качели (песни из т/ф \"Приключения Электроника\")",
+  "year": "1981",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/39/2a/d7392afa-97fe-1c41-f534-25422b35cb12/mzaf_13796165581296359148.plus.aac.p.m4a"
+ },
+ "c3-07": {
+  "trackId": 1508771780,
+  "artist": "Алиса Фрейндлих & Вокально-инструментальный ансамбль \"Солнце\"",
+  "track": "В моей душе покоя нет (Из к/ф \"Служебный роман\")",
+  "album": "Поёт Алиса Фрейндлих",
+  "year": "1979",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a0/62/03/a0620318-ddda-54da-191d-608ebef8beef/mzaf_15095418309873809193.plus.aac.p.m4a"
+ },
+ "c3-08": {
+  "trackId": 1680827994,
+  "artist": "Вахтанг Кикабидзе",
+  "track": "Чито-гврито (Из к/ф Мимино) [Версия 1 (Саундтрек)]",
+  "album": "В жизни всякое бывает",
+  "year": "2014",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/24/78/1a/24781a97-bc54-89d8-0f0f-1c9b9e309c0b/mzaf_5199311351849737945.plus.aac.p.m4a"
+ },
+ "c3-09": {
+  "trackId": 1735554931,
+  "artist": "Павел Луспекаев",
+  "track": "Ваше благородие, госпожа удача (Из к/ф \"Белое солнце пустыни\")",
+  "album": "Радио дача на первомай",
+  "year": "2021",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/db/60/94/db6094f6-97b8-4e11-fafd-4965359ccc17/mzaf_4823976113977821688.plus.aac.p.m4a"
+ },
+ "c3-10": {
+  "trackId": 1079867672,
+  "artist": "Наутилус Помпилиус",
+  "track": "Крылья",
+  "album": "Крылья",
+  "year": "1996",
+  "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/8f/ae/5f8fae82-9bcd-3e25-b6f1-06c7c7334661/mzaf_4019252567442714698.plus.aac.p.m4a"
  }
 }

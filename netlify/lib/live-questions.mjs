@@ -119,8 +119,64 @@ export const ROMANTIC_ROUNDS = [
   },
 ];
 
+// "Музыка в кино" — a film-music game. Clips are live/audio/c*.mp4.
+export const CINEMA_ROUNDS = [
+  {
+    id: 'cinehits', kind: 'audio', title: 'Хиты из фильмов',
+    rule: 'Звучит песня из фильма — угадай фильм.',
+    prompt: 'Из какого фильма эта песня?',
+    questions: [
+      { media: 'live/audio/c1-01.mp4', gain: 1.68, a: 'Охотники за привидениями', w: ['Гремлины', 'Битлджус', 'Назад в будущее'], info: 'Ray Parker Jr. — Ghostbusters, 1984' },
+      { media: 'live/audio/c1-02.mp4', gain: 2.37, a: 'Рокки 3', w: ['Рэмбо: Первая кровь', 'Парень-каратист', 'Лучший стрелок'], info: 'Survivor — Eye of the Tiger, 1982' },
+      { media: 'live/audio/c1-03.mp4', gain: 1.17, a: 'Лучший стрелок', w: ['Грязные танцы', 'Флэшдэнс', 'Офицер и джентльмен'], info: 'Berlin — Take My Breath Away, 1986' },
+      { media: 'live/audio/c1-04.mp4', gain: 1.97, a: 'Назад в будущее', w: ['Охотники за привидениями', 'Феррис Бьюллер берёт выходной', 'Гремлины'], info: 'Huey Lewis & The News — The Power of Love, 1985' },
+      { media: 'live/audio/c1-05.mp4', gain: 1.43, a: 'Свободные (Footloose)', w: ['Флэшдэнс', 'Грязные танцы', 'Бриолин'], info: 'Kenny Loggins — Footloose, 1984' },
+      { media: 'live/audio/c1-06.mp4', gain: 0.74, a: 'Криминальное чтиво', w: ['Убить Билла', 'Бешеные псы', 'Однажды в… Голливуде'], info: 'Dick Dale — Misirlou' },
+      { media: 'live/audio/c1-07.mp4', gain: 0.76, a: 'Холодное сердце', w: ['Рапунцель: Запутанная история', 'Моана', 'Энканто'], info: 'Idina Menzel — Let It Go, 2013' },
+      { media: 'live/audio/c1-08.mp4', gain: 3.63, a: '007: Координаты «Скайфолл»', w: ['Казино «Рояль»', 'Квант милосердия', '007: Спектр'], info: 'Adele — Skyfall, 2012 — «Оскар» за лучшую песню' },
+      { media: 'live/audio/c1-09.mp4', gain: 0.97, a: 'Стражи Галактики', w: ['Мстители', 'Дэдпул', 'Тор: Рагнарёк'], info: 'Blue Swede — Hooked on a Feeling' },
+      { media: 'live/audio/c1-10.mp4', gain: 0.69, a: 'Барби', w: ['Дрянные девчонки', 'Блондинка в законе', 'Бедные-несчастные'], info: 'Dua Lipa — Dance the Night, 2023' },
+    ],
+  },
+  {
+    id: 'themes', kind: 'audio', title: 'Великие темы',
+    rule: 'Звучит инструментальная тема — угадай фильм или сериал.',
+    prompt: 'Из какого фильма или сериала?',
+    questions: [
+      { media: 'live/audio/c2-01.mp4', gain: 1.23, a: 'Звёздные войны', w: ['Звёздный путь', 'Супермен', 'Дюна'], info: 'John Williams — Main Title, 1977' },
+      { media: 'live/audio/c2-02.mp4', gain: 5.5, a: 'Гарри Поттер', w: ['Хроники Нарнии', 'Властелин колец', 'Золотой компас'], info: 'John Williams — Hedwig\'s Theme, 2001' },
+      { media: 'live/audio/c2-03.mp4', start: 3, gain: 0.88, a: 'Пираты Карибского моря', w: ['Гладиатор', 'Остров головорезов', 'Хозяин морей'], info: 'Klaus Badelt — He\'s a Pirate, 2003' },
+      { media: 'live/audio/c2-04.mp4', gain: 1.78, a: 'Гладиатор', w: ['Троя', 'Царство небесное', 'Храброе сердце'], info: 'Lisa Gerrard & Hans Zimmer — Now We Are Free, 2000' },
+      { media: 'live/audio/c2-05.mp4', gain: 1.93, a: 'Интерстеллар', w: ['Начало', 'Гравитация', 'Марсианин'], info: 'Hans Zimmer — Cornfield Chase, 2014' },
+      { media: 'live/audio/c2-06.mp4', gain: 5.62, a: 'Форрест Гамп', w: ['Зелёная миля', 'Побег из Шоушенка', 'Изгой'], info: 'Alan Silvestri — Feather Theme, 1994' },
+      { media: 'live/audio/c2-07.mp4', gain: 1.41, a: 'Терминатор', w: ['Робокоп', 'Хищник', 'Чужие'], info: 'Brad Fiedel — The Terminator Theme, 1984' },
+      { media: 'live/audio/c2-08.mp4', gain: 1.2, a: 'Хороший, плохой, злой', w: ['Великолепная семёрка', 'Джанго освобождённый', 'За пригоршню долларов'], info: 'Ennio Morricone — Main Title, 1966' },
+      { media: 'live/audio/c2-09.mp4', gain: 3.8, a: 'Один дома', w: ['Гринч — похититель Рождества', 'Эльф', 'Полярный экспресс'], info: 'John Williams — Somewhere in My Memory, 1990' },
+      { media: 'live/audio/c2-10.mp4', gain: 1.08, a: 'Игра престолов', w: ['Викинги', 'Ведьмак', 'Властелин колец: Кольца власти'], info: 'Ramin Djawadi — Main Title, 2011' },
+    ],
+  },
+  {
+    id: 'ourfilm', kind: 'audio', title: 'Наше кино',
+    rule: 'Звучит песня из советского или российского фильма — угадай фильм.',
+    prompt: 'Из какого фильма эта песня?',
+    questions: [
+      { media: 'live/audio/c3-01.mp4', gain: 1.97, a: 'Бриллиантовая рука', w: ['Кавказская пленница', 'Операция «Ы»', 'Джентльмены удачи'], info: 'Юрий Никулин — «Песня про зайцев», 1968' },
+      { media: 'live/audio/c3-02.mp4', gain: 1.22, a: 'Кавказская пленница', w: ['Бриллиантовая рука', 'Иван Васильевич меняет профессию', 'Джентльмены удачи'], info: 'Аида Ведищева — «Песенка о медведях», 1967' },
+      { media: 'live/audio/c3-03.mp4', gain: 1.17, a: 'Иван Васильевич меняет профессию', w: ['Бриллиантовая рука', 'Не может быть!', 'Двенадцать стульев'], info: 'Валерий Золотухин — «Разговор со счастьем», 1973' },
+      { media: 'live/audio/c3-04.mp4', gain: 1.51, a: 'Гардемарины, вперёд!', w: ['Д\'Артаньян и три мушкетёра', 'Гусарская баллада', 'Тот самый Мюнхгаузен'], info: 'Дмитрий Харатьян, Олег Анофриев — «Не вешать нос», 1987' },
+      { media: 'live/audio/c3-05.mp4', gain: 1.48, a: 'Д\'Артаньян и три мушкетёра', w: ['Гардемарины, вперёд!', 'Собака на сене', 'Тот самый Мюнхгаузен'], info: '«Песня мушкетёров» (Пора-пора-порадуемся), 1979' },
+      { media: 'live/audio/c3-06.mp4', gain: 1.6, a: 'Приключения Электроника', w: ['Гостья из будущего', 'Чучело', 'Усатый нянь'], info: '«Крылатые качели», 1979' },
+      { media: 'live/audio/c3-07.mp4', gain: 3.67, a: 'Служебный роман', w: ['Гараж', 'Москва слезам не верит', 'Ирония судьбы, или С лёгким паром!'], info: 'Алиса Фрейндлих — «Моей душе покоя нет», 1977' },
+      { media: 'live/audio/c3-08.mp4', gain: 0.44, a: 'Мимино', w: ['Кин-дза-дза!', 'Не горюй!', 'Джентльмены удачи'], info: 'Вахтанг Кикабидзе — «Чито-грито», 1977' },
+      { media: 'live/audio/c3-09.mp4', gain: 1.08, a: 'Белое солнце пустыни', w: ['Неуловимые мстители', 'Свой среди чужих, чужой среди своих', 'Офицеры'], info: 'Павел Луспекаев — «Ваше благородие, госпожа Удача», 1970' },
+      { media: 'live/audio/c3-10.mp4', gain: 2.45, a: 'Брат', w: ['Бумер', 'Жмурки', 'Война'], info: 'Наутилус Помпилиус — «Крылья», 1997' },
+    ],
+  },
+];
+
 // Games the host can open. The first one is the default.
 export const SETS = [
+  { id: 'cinema', title: 'Музыка в кино', rounds: CINEMA_ROUNDS },
   { id: 'main', title: 'Основная игра', rounds: ROUNDS },
   { id: 'romantic', title: 'Romantic Collection', rounds: ROMANTIC_ROUNDS },
 ];
