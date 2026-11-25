@@ -547,9 +547,11 @@ main { min-height: 0; display: grid; }
         h('div', { class: 'answer' }, h('h2', {}, R.a), R.info ? h('p', {}, R.info) : null),
         optTiles(st, true)
       ),
+      // The standings stay hidden until the final, to keep the suspense
       h('div', { class: 'rv-right' },
-        h('span', { class: 'eyebrow' }, 'Таблица'),
-        rows(st.board, 7),
+        h('span', { class: 'eyebrow' }, 'Ответили верно'),
+        h('div', { style: 'font:800 calc(var(--u)*9)/1 var(--display)' }, h('span', { class: 'grad-text' }, R.right), h('span', { style: 'font-size:.4em;color:var(--muted)' }, ` из ${st.players.length}`)),
+        h('p', { style: 'color:var(--muted);font-size:calc(var(--u)*1.7)' }, 'Таблица — в конце игры 🤫'),
         h('div', { style: 'margin-top:calc(var(--u)*1.4)' }, primaryBtn(st))
       )
     ));
