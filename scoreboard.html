@@ -123,6 +123,8 @@ let revealed = 0;
 // on screen, the next clicks reveal the names in the same order (3, then 2, then 1)
 const MASK_TOP = 3;
 let maskedIds = [];
+// Only for the final table: before the last round is in, the board opens as usual
+let isFinal = false;
 let cols = [];
 let pollTimer = null;
 
@@ -151,6 +153,7 @@ function render(keep = 0) {
   $('footnote').textContent = '';
   rowEls = [];
   revealed = 0;
+  isFinal = false;
   if (!hasData) return;
 
   cols = Scoreboard.columns(roundsWithData);
@@ -185,6 +188,7 @@ function render(keep = 0) {
 
   const last = roundsWithData[roundsWithData.length - 1];
   const total = Scoreboard.roundsOf(state);
+  isFinal = last === total;
   $('footnote').textContent = last === total ? `Итоговый рейтинг после ${total}-го тура` : `Рейтинг после ${last}-го тура`;
   fit();
 }
@@ -235,7 +239,7 @@ function showNext() {
   }
   const idx = rowEls.length - 1 - revealed;
   const row = rowEls[idx];
-  if (idx < MASK_TOP) { maskName(row); maskedIds.push(row.dataset.id); }
+  if (isFinal && idx < MASK_TOP) { maskName(row); maskedIds.push(row.dataset.id); }
   row.style.transition = 'none';
   row.style.opacity = '0';
   row.style.transform = 'translateY(50px)';
