@@ -6,7 +6,7 @@
 // `logo` is a path on the site (square picture, shown in a circle).
 export const PRIZES = [
   { text: 'Кальян на выбор в @shadow.berlin', logo: 'live/prizes/shadow-berlin.png' },
-  { text: 'Gutschein на 20 € в баре @kvartira62', logo: 'live/prizes/kvartira62.png' },
+  { text: 'Сет закусок Tapas Teller + 2 пива', logo: 'live/prizes/kvartira62.png' },
   { text: 'Порция пельменей от @pelmennaia__berlin' },
 ];
 
