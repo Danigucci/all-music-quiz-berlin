@@ -235,7 +235,8 @@ input:focus { border-color: var(--pink); outline: none; }
       h('div', { class: 'lobby-right' },
         h('span', { class: 'eyebrow' }, 'Голосование открыто'),
         h('h1', {}, st.title ? st.title : ['Наведи камеру на QR ', h('span', { class: 'grad-text' }, 'и голосуй')]),
-        h('div', { class: 'count', id: 'count' }, voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали')))
+        h('div', { class: 'count', id: 'count' }, voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали'))),
+        h('ul', { class: 'qlist' }, st.questions.map((q) => h('li', {}, q.text)))
       )
     ));
   }
