@@ -171,7 +171,7 @@ function renderSeasonInfo(season, playedCount) {
         <div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3"><i class="fa-solid fa-flag-checkered text-brand-yellow mr-2"></i>${finalText}</div>
         <div class="bg-white/5 border border-white/10 rounded-xl px-4 py-3"><i class="fa-solid fa-gamepad text-brand-yellow mr-2"></i>Сыграно игр: ${playedCount}${total ? ' из ' + total : ''}</div>
       </div>
-      <p class="mt-4 text-sm text-white/70"><i class="fa-solid fa-trophy text-brand-yellow mr-2"></i>${finished ? 'Сезон завершён — победитель получает суперприз.' : 'Лучшая команда сезона получит суперприз в финальной игре.'}</p>
+      ${finished ? '' : '<p class="mt-4 text-sm text-white/70"><i class="fa-solid fa-trophy text-brand-yellow mr-2"></i>Лучшая команда сезона получит суперприз в финальной игре.</p>'}
     </div>`;
 }
 
