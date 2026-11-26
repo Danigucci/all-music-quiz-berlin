@@ -63,7 +63,8 @@ h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
 .cell-total{ font-weight:800; color:var(--yellow); }
 .cell-place{ font-weight:800; }
 .cell-team.masked{ color:rgba(255,255,255,.45); letter-spacing:.25em; }
-.cell-team.name-in{ animation:name-in .9s ease; }
+.cell-team.name-in, .cell-c.name-in{ animation:name-in .9s ease; }
+.masked-n{ color:rgba(255,255,255,.45); }
 @keyframes name-in{ from{ opacity:0; transform:scale(.85); } to{ opacity:1; transform:none; } }
 [data-edit]{ cursor:text; border-radius:.3em; }
 [data-edit]:hover{ background:rgba(255,255,255,.1); }
@@ -162,12 +163,14 @@ function render(keep = 0) {
       <div class="cell-c">Место</div><div class="cell-team" style="font-weight:800">Команда</div>
       ${cols.map((c) => `<div class="cell-c">${esc(c.label)}</div>`).join('')}
     </div>`;
+  // In the final reveal, only the last round and the total stay visible for places 1-3
+  const lastGroup = Scoreboard.groupOf(Math.max(...roundsWithData));
   const body = rows.map((row) => `<div class="grow-row body-row" data-id="${row.id}" style="grid-template-columns:${template}">
       <div class="cell-c cell-place">${row.place}</div>
       <div class="cell-team" data-edit="team" title="${esc(row.team)}">${esc(row.team)}</div>
       ${cols.map((c) => c.kind === 'round'
-        ? `<div class="cell-c" data-edit="round" data-r="${c.r}">${cellValue(c, row)}</div>`
-        : `<div class="cell-c ${c.kind === 'total' ? 'cell-total' : ''}">${cellValue(c, row)}</div>`).join('')}
+        ? `<div class="cell-c" data-edit="round" data-r="${c.r}"${Scoreboard.groupOf(c.r) !== lastGroup ? ' data-mask="1"' : ''}>${cellValue(c, row)}</div>`
+        : `<div class="cell-c ${c.kind === 'total' ? 'cell-total' : ''}"${c.kind !== 'total' ? ' data-mask="1"' : ''}>${cellValue(c, row)}</div>`).join('')}
     </div>`).join('');
   $('board').innerHTML = head + body;
 
@@ -218,6 +221,7 @@ function maskName(row) {
   cell.dataset.name = cell.textContent;
   cell.textContent = '? ? ?';
   cell.removeAttribute('title');
+  row.querySelectorAll('[data-mask]').forEach((c) => { c.dataset.val = c.textContent; c.textContent = '?'; c.classList.add('masked-n'); });
   cell.classList.add('masked');
 }
 
@@ -226,6 +230,11 @@ function unmaskName(row, animate) {
   if (!cell.classList.contains('masked')) return;
   cell.textContent = cell.dataset.name;
   cell.title = cell.dataset.name;
+  row.querySelectorAll('[data-mask]').forEach((c) => {
+    if (!c.classList.contains('masked-n')) return;
+    c.textContent = c.dataset.val; c.classList.remove('masked-n');
+    if (animate) { c.classList.remove('name-in'); void c.offsetWidth; c.classList.add('name-in'); }
+  });
   cell.classList.remove('masked');
   if (animate) { cell.classList.remove('name-in'); void cell.offsetWidth; cell.classList.add('name-in'); }
 }
