@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Голосование — ведущий • KAIFZEIT Berlin</title>
+<meta name="robots" content="noindex">
+<style>
+@font-face { font-family: 'Baloo 2'; font-style: normal; font-weight: 500 800; font-display: swap; src: url('fonts/baloo2-latin-variable.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('fonts/manrope-latin-variable.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+:root {
+  color-scheme: dark;
+  --navy: #09070f; --navy-deep: #050409; --navy-ink: #0b0929;
+  --yellow: #ffb3d9; --pink: #ff4fa3; --orange: #22d6e8;
+  --text: #f4f2ff; --muted: #aeaad6; --line: rgba(255, 255, 255, 0.12);
+  --card: rgba(255, 255, 255, 0.06); --bad: #ff5d6c; --good: #3ddc97;
+  --grad: linear-gradient(135deg, var(--pink) 0%, var(--orange) 100%);
+  --display: 'Baloo 2', 'Manrope', system-ui, sans-serif;
+  --body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --u: min(1vw, 1.78vh);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--navy-deep); color: var(--text); font: 500 16px/1.5 var(--body);
+  background-image: radial-gradient(70rem 50rem at 110% -10%, rgba(255, 79, 163, 0.16), transparent 60%), linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 60%);
+  -webkit-font-smoothing: antialiased;
+}
+.stage { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; gap: calc(var(--u) * 2); padding: calc(var(--u) * 2.4) calc(var(--u) * 3.4); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.top img { width: calc(var(--u) * 5.5); height: calc(var(--u) * 5.5); min-width: 44px; min-height: 44px; border-radius: 50%; }
+.top-right { font: 700 calc(var(--u) * 1.7)/1 var(--body); color: var(--muted); }
+.top-right b { color: var(--text); font-size: 1.4em; }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.05; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+p { margin: 0; }
+.eyebrow { font: 800 calc(var(--u) * 1.4)/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+.grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.muted { color: var(--muted); }
+.btn { appearance: none; border: 0; cursor: pointer; font: 800 17px/1 var(--body); color: #fff; background: var(--grad); border-radius: 999px; padding: 16px 28px; box-shadow: 0 10px 30px -10px rgba(255, 79, 163, 0.7); }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn.ghost { background: transparent; box-shadow: none; border: 1.5px solid var(--line); color: var(--muted); }
+.btn.ghost:hover { color: var(--text); background: var(--card); }
+.btn.small { font-size: 14px; padding: 10px 16px; }
+.btn.danger:hover { color: var(--bad); border-color: var(--bad); }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; opacity: .6; transition: opacity .2s; }
+.tools:hover { opacity: 1; }
+
+/* login */
+.login { max-width: 380px; margin: 12vh auto 0; display: grid; gap: 14px; text-align: center; }
+input, textarea { font: 600 17px/1.3 var(--body); color: var(--text); background: rgba(0,0,0,.25); border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 15px; width: 100%; }
+input:focus { border-color: var(--pink); outline: none; }
+.err { color: var(--bad); font-weight: 700; min-height: 1.4em; }
+
+/* editor */
+.editor { max-width: 860px; width: 100%; margin: 0 auto; display: grid; gap: 18px; align-content: start; }
+.ed-head { display: grid; gap: 10px; }
+.qcard { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: grid; gap: 10px; }
+.qcard .row { display: flex; gap: 8px; align-items: center; }
+.qcard .row input { flex: 1; }
+.qcard .qn { font: 800 13px/1 var(--body); color: var(--yellow); letter-spacing: .1em; text-transform: uppercase; }
+.qcard .opts { display: grid; gap: 8px; padding-left: 18px; border-left: 2px solid var(--line); }
+.x { appearance: none; border: 1.5px solid var(--line); background: transparent; color: var(--muted); border-radius: 12px; width: 44px; height: 44px; font-size: 20px; cursor: pointer; flex: none; }
+.x:hover { color: var(--bad); border-color: var(--bad); }
+.ed-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.saved { color: var(--good); font-weight: 700; }
+
+/* open: QR + counter */
+.lobby { display: grid; grid-template-columns: auto 1fr; gap: calc(var(--u) * 5); align-items: center; }
+.qr { background: #fff; border-radius: calc(var(--u) * 2.4); padding: calc(var(--u) * 1.6); display: grid; gap: calc(var(--u) * .8); justify-items: center; }
+.qr img { width: calc(var(--u) * 32); height: calc(var(--u) * 32); display: block; }
+.qr p { color: var(--navy-ink); font: 800 calc(var(--u) * 1.8)/1 var(--body); }
+.lobby-right { display: grid; gap: calc(var(--u) * 1.8); align-content: center; }
+.lobby-right h1 { font-size: calc(var(--u) * 4.4); }
+.count { font: 800 calc(var(--u) * 7.5)/1 var(--display); }
+.count small { display: block; font: 700 calc(var(--u) * 1.9)/1.2 var(--body); color: var(--muted); margin-top: calc(var(--u) * .6); }
+.qlist { display: grid; gap: calc(var(--u) * .6); font: 700 calc(var(--u) * 1.7)/1.3 var(--body); color: var(--muted); padding: 0; margin: 0; list-style: none; }
+.qlist li::before { content: '•'; color: var(--pink); margin-right: .5em; }
+
+/* results */
+/* --k shrinks everything on this screen until it fits without scrolling */
+.results { --k: 1; display: grid; gap: calc(var(--u) * 2.4 * var(--k)); align-content: start; }
+.results-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.results-head h1 { font-size: calc(var(--u) * 5 * var(--k)); }
+.rgrid { display: grid; gap: calc(var(--u) * 2.2 * var(--k)); }
+.rcard { background: var(--card); border: 1px solid var(--line); border-radius: calc(var(--u) * 2 * var(--k)); padding: calc(var(--u) * 2 * var(--k)); display: grid; gap: calc(var(--u) * 1.2 * var(--k)); align-content: start; }
+.rcard h3 { font-size: calc(var(--u) * 2.6 * var(--k)); }
+.rcard .meta { font: 700 calc(var(--u) * 1.4 * var(--k))/1 var(--body); color: var(--muted); }
+.bars { display: grid; gap: calc(var(--u) * .8 * var(--k)); }
+.bar { position: relative; border-radius: calc(var(--u) * 1 * var(--k)); overflow: hidden; background: rgba(0,0,0,.28); border: 1px solid var(--line); padding: calc(var(--u) * 1 * var(--k)) calc(var(--u) * 1.4 * var(--k)); display: flex; justify-content: space-between; gap: 12px; font: 700 calc(var(--u) * 1.9 * var(--k))/1.2 var(--body); }
+.bar .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255,255,255,.12); transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+.bar.top { border-color: var(--pink); }
+.bar.top .fill { background: var(--grad); opacity: .6; }
+.bar > span { position: relative; }
+.bar .pc { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar .pc small { color: var(--muted); font-size: .75em; margin-left: .5em; }
+@media (max-width: 800px) { .lobby { grid-template-columns: 1fr; justify-items: center; text-align: center; } .qr img { width: 60vw; height: 60vw; } }
+@media (prefers-reduced-motion: reduce) { .bar .fill { transition: none; } }
+</style>
+<link rel="icon" type="image/png" href="brand/music-favicon.png">
+<link rel="apple-touch-icon" href="brand/music-apple-touch-icon.png">
+</head>
+<body>
+<div class="stage">
+  <header class="top">
+    <img src="brand/kaifzeit-music-logo.png" alt="KAIFZEIT">
+    <div class="top-right" id="top-right"></div>
+  </header>
+  <main id="app"></main>
+  <footer class="foot" id="foot" hidden>
+    <div class="tools">
+      <button class="btn ghost small" type="button" id="fs">Во весь экран</button>
+      <button class="btn ghost small danger" type="button" id="close">Закрыть голосование</button>
+      <button class="btn ghost small" type="button" id="logout">Выйти</button>
+    </div>
+    <div id="primary-slot"></div>
+  </footer>
+</div>
+<script>
+(() => {
+  const API = '/api/poll/admin/';
+  const app = document.getElementById('app');
+  const foot = document.getElementById('foot');
+  const topRight = document.getElementById('top-right');
+  const primarySlot = document.getElementById('primary-slot');
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') el.className = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else if (k === 'value') el.value = v;
+      else if (v !== false && v != null) el.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(kid));
+    return el;
+  };
+  const show = (...nodes) => app.replaceChildren(...nodes);
+  const plural = (n, one, few, many) => {
+    const a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+  };
+
+  let password = '', S = null, shown = '', busy = false, timer = null;
+
+  async function api(action, body = {}) {
+    const res = await fetch(API + action, { method: 'POST', headers: { 'x-admin-password': password, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    if (res.status === 401) { logout('Неверный пароль'); throw new Error('unauthorized'); }
+    if (res.status === 503) { logout('На сервере не задан пароль ведущего (LIVE_ADMIN_PASSWORD)'); throw new Error('not_configured'); }
+    if (!res.ok) throw new Error('http ' + res.status);
+    return res.json();
+  }
+  async function act(action, body) {
+    if (busy) return;
+    busy = true;
+    try { render(await api(action, body)); }
+    catch (e) { if (e.message.startsWith('http')) alert('Не получилось, попробуй ещё раз'); }
+    finally { busy = false; }
+  }
+
+  // ---------- editor (voting closed) ----------
+  let draft = [], draftTitle = '';
+  const blankQuestion = () => ({ text: '', options: ['', ''] });
+
+  function renderEditor(st) {
+    draft = (st.draft && st.draft.length ? st.draft : [blankQuestion()]).map((q) => ({ id: q.id, text: q.text, options: [...q.options] }));
+    draftTitle = st.draftTitle || '';
+    topRight.replaceChildren('Голосование закрыто');
+    primarySlot.replaceChildren();
+    drawEditor();
+  }
+
+  function collect() {
+    return draft.map((q) => ({ id: q.id, text: q.text.trim(), options: q.options.map((o) => o.trim()).filter(Boolean) }));
+  }
+  function problems() {
+    const qs = collect();
+    if (!qs.some((q) => q.text)) return 'Добавь хотя бы один вопрос';
+    for (const [i, q] of qs.entries()) {
+      if (!q.text && q.options.length) return `У вопроса ${i + 1} нет текста`;
+      if (q.text && q.options.length < 2) return `У вопроса ${i + 1} нужно минимум 2 варианта`;
+    }
+    return '';
+  }
+
+  function drawEditor() {
+    const status = h('p', { class: 'err', role: 'status' });
+    const markDirty = () => { status.className = 'err'; status.textContent = ''; };
+    const cards = draft.map((q, qi) => h('div', { class: 'qcard' },
+      h('div', { class: 'row' },
+        h('span', { class: 'qn' }, `Вопрос ${qi + 1}`),
+        h('span', { style: 'flex:1' }),
+        draft.length > 1 ? h('button', { class: 'btn ghost small danger', type: 'button', onclick: () => { draft.splice(qi, 1); drawEditor(); } }, 'Удалить вопрос') : null),
+      h('input', { value: q.text, maxlength: 200, placeholder: 'Например: Какой тур понравился больше всего?', oninput: (e) => { q.text = e.target.value; markDirty(); } }),
+      h('div', { class: 'opts' },
+        q.options.map((o, oi) => h('div', { class: 'row' },
+          h('input', { value: o, maxlength: 120, placeholder: `Вариант ${oi + 1}`, oninput: (e) => { q.options[oi] = e.target.value; markDirty(); } }),
+          q.options.length > 2 ? h('button', { class: 'x', type: 'button', title: 'Убрать вариант', 'aria-label': 'Убрать вариант', onclick: () => { q.options.splice(oi, 1); drawEditor(); } }, '×') : null)),
+        q.options.length < 10 ? h('div', {}, h('button', { class: 'btn ghost small', type: 'button', onclick: () => { q.options.push(''); drawEditor(); } }, '+ вариант')) : null
+      )
+    ));
+    const save = async () => {
+      const p = problems();
+      if (p) { status.className = 'err'; status.textContent = p; return false; }
+      try {
+        const st = await api('save', { questions: collect(), title: draftTitle });
+        draft = st.draft.map((q) => ({ id: q.id, text: q.text, options: [...q.options] }));
+        status.className = 'saved'; status.textContent = 'Сохранено ✓';
+        return true;
+      } catch (e) { status.className = 'err'; status.textContent = 'Не получилось сохранить'; return false; }
+    };
+    show(h('div', { class: 'editor' },
+      h('div', { class: 'ed-head' },
+        h('span', { class: 'eyebrow' }, 'Голосование'),
+        h('h2', { style: 'font-size:34px' }, 'Вопросы для гостей'),
+        h('p', { class: 'muted' }, 'Гости увидят все вопросы сразу и выберут по одному варианту в каждом. Результаты появятся на экране только по кнопке «Показать результаты».')),
+      h('input', { value: draftTitle, maxlength: 80, placeholder: 'Заголовок (необязательно), например: Как вам игра?', oninput: (e) => { draftTitle = e.target.value; markDirty(); } }),
+      cards,
+      draft.length < 20 ? h('div', {}, h('button', { class: 'btn ghost', type: 'button', onclick: () => { draft.push(blankQuestion()); drawEditor(); } }, '+ Добавить вопрос')) : null,
+      h('div', { class: 'ed-actions' },
+        h('button', { class: 'btn ghost', type: 'button', onclick: save }, 'Сохранить'),
+        h('button', { class: 'btn', type: 'button', onclick: async () => { if (await save()) act('open'); } }, 'Открыть голосование')),
+      status
+    ));
+  }
+
+  // ---------- voting open: QR + live counter ----------
+  function renderOpen(st) {
+    const voters = st.voters || 0;
+    topRight.replaceChildren('Проголосовали: ', h('b', {}, voters));
+    primarySlot.replaceChildren(h('button', { class: 'btn', type: 'button', onclick: () => act('results') }, 'Показать результаты'));
+    show(h('div', { class: 'lobby' },
+      h('div', { class: 'qr' }, h('img', { src: 'qr/poll.svg', alt: 'QR-код: kaifzeit.com/poll.html' }), h('p', {}, 'kaifzeit.com/poll.html')),
+      h('div', { class: 'lobby-right' },
+        h('span', { class: 'eyebrow' }, 'Голосование открыто'),
+        h('h1', {}, st.title ? st.title : ['Наведи камеру на QR ', h('span', { class: 'grad-text' }, 'и голосуй')]),
+        h('div', { class: 'count', id: 'count' }, voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали'))),
+        h('ul', { class: 'qlist' }, st.questions.map((q) => h('li', {}, q.text)))
+      )
+    ));
+  }
+  function updateOpen(st) {
+    const voters = st.voters || 0;
+    topRight.replaceChildren('Проголосовали: ', h('b', {}, voters));
+    const c = document.getElementById('count');
+    if (c) c.replaceChildren(voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали')));
+  }
+
+  // ---------- results ----------
+  function renderResults(st) {
+    const rs = st.results || [];
+    topRight.replaceChildren('Проголосовали: ', h('b', {}, st.voters || 0));
+    primarySlot.replaceChildren(h('button', { class: 'btn ghost', type: 'button', onclick: () => act('resume') }, 'Вернуться к голосованию'));
+    const n = rs.length;
+    const cols = n <= 1 ? 1 : n <= 4 ? 2 : 3;
+    const grid = h('div', { class: 'rgrid', style: `grid-template-columns:repeat(${cols}, minmax(0, 1fr))` },
+      rs.map((r) => {
+        const max = Math.max(...r.counts);
+        return h('div', { class: 'rcard' },
+          h('span', { class: 'meta' }, `${r.total} ${plural(r.total, 'голос', 'голоса', 'голосов')}`),
+          h('h3', {}, r.text),
+          h('div', { class: 'bars' }, r.options.map((o, oi) => {
+            const pc = r.total ? Math.round(r.counts[oi] * 100 / r.total) : 0;
+            return h('div', { class: 'bar' + (max > 0 && r.counts[oi] === max ? ' top' : '') },
+              h('i', { class: 'fill', 'data-w': pc }),
+              h('span', {}, o),
+              h('span', { class: 'pc' }, `${pc}%`, h('small', {}, r.counts[oi])));
+          })));
+      }));
+    show(h('div', { class: 'results' },
+      h('div', { class: 'results-head' },
+        h('div', { style: 'display:grid;gap:10px' }, h('span', { class: 'eyebrow' }, 'Результаты'), h('h1', {}, st.title || 'Итоги голосования'))),
+      grid));
+    fitResults();
+    requestAnimationFrame(() => requestAnimationFrame(() => app.querySelectorAll('.fill').forEach((f) => { f.style.width = f.dataset.w + '%'; })));
+  }
+  function fitResults() {
+    const box = app.querySelector('.results');
+    if (!box) return;
+    let k = 1;
+    box.style.setProperty('--k', k);
+    while (k > 0.4 && document.documentElement.scrollHeight > window.innerHeight) {
+      k = Math.round((k - 0.05) * 100) / 100;
+      box.style.setProperty('--k', k);
+    }
+  }
+  window.addEventListener('resize', fitResults);
+
+  function render(st) {
+    S = st;
+    foot.hidden = false;
+    document.getElementById('close').hidden = st.phase === 'off';
+    const key = st.phase === 'off' ? 'off' : st.phase === 'results' ? 'results:' + JSON.stringify((st.results || []).map((r) => r.counts)) : 'open:' + JSON.stringify(st.questions.map((q) => q.id));
+    if (key === shown) { if (st.phase === 'open') updateOpen(st); return; }
+    shown = key;
+    if (st.phase === 'off') renderEditor(st);
+    else if (st.phase === 'open') renderOpen(st);
+    else renderResults(st);
+  }
+
+  async function refresh() {
+    clearTimeout(timer);
+    // The editor is not refreshed, so typing is never interrupted
+    if (S && S.phase !== 'off') {
+      try { render(await api('status')); } catch (e) {}
+    }
+    timer = setTimeout(refresh, 2500);
+  }
+
+  function renderLogin(msg) {
+    foot.hidden = true; topRight.replaceChildren(); clearTimeout(timer);
+    const input = h('input', { type: 'password', autocomplete: 'current-password', placeholder: 'Пароль ведущего', 'aria-label': 'Пароль ведущего' });
+    show(h('form', { class: 'login', onsubmit: (e) => { e.preventDefault(); if (input.value) login(input.value); } },
+      h('span', { class: 'eyebrow' }, 'Экран ведущего'),
+      h('h2', { style: 'font-size:34px' }, 'Голосование'),
+      input,
+      h('button', { class: 'btn', type: 'submit' }, 'Войти'),
+      h('p', { class: 'err', role: 'alert' }, msg || '')));
+    input.focus();
+  }
+  async function login(pw) {
+    password = pw;
+    try {
+      const st = await api('status');
+      try { sessionStorage.setItem('kz_poll_pw', pw); } catch (e) {}
+      shown = ''; render(st); refresh();
+    } catch (e) { if (e.message.startsWith('http')) renderLogin('Сервер не отвечает, попробуй ещё раз'); }
+  }
+  function logout(msg) {
+    password = ''; S = null; shown = '';
+    try { sessionStorage.removeItem('kz_poll_pw'); } catch (e) {}
+    renderLogin(msg);
+  }
+
+  document.getElementById('logout').addEventListener('click', () => logout());
+  document.getElementById('close').addEventListener('click', () => {
+    if (confirm('Закрыть голосование? Голоса удалятся, гости увидят, что голосование закрыто. Вопросы останутся для следующего раза.')) act('close');
+  });
+  document.getElementById('fs').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+  });
+
+  let saved = '';
+  try { saved = sessionStorage.getItem('kz_poll_pw') || ''; } catch (e) {}
+  if (saved) login(saved); else renderLogin();
+})();
+</script>
+</body>
+</html>

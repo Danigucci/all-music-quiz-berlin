@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Голосование • KAIFZEIT Berlin</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050409">
+<style>
+@font-face { font-family: 'Baloo 2'; font-style: normal; font-weight: 500 800; font-display: swap; src: url('fonts/baloo2-latin-variable.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('fonts/manrope-latin-variable.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122; }
+@font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('fonts/manrope-cyrillic-variable.woff2') format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+:root {
+  color-scheme: dark;
+  --navy: #09070f; --navy-deep: #050409; --navy-ink: #0b0929;
+  --yellow: #ffb3d9; --pink: #ff4fa3; --orange: #22d6e8;
+  --text: #f4f2ff; --muted: #aeaad6; --line: rgba(255, 255, 255, 0.12);
+  --card: rgba(255, 255, 255, 0.06); --card-hi: rgba(255, 255, 255, 0.1);
+  --good: #3ddc97; --bad: #ff5d6c;
+  --grad: linear-gradient(135deg, var(--pink) 0%, var(--orange) 100%);
+  --display: 'Baloo 2', 'Manrope', system-ui, sans-serif;
+  --body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+html, body { min-height: 100%; }
+body {
+  margin: 0; background: var(--navy-deep);
+  background-image: radial-gradient(60rem 40rem at 110% -10%, rgba(255, 79, 163, 0.18), transparent 60%), linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 55%);
+  background-attachment: fixed; color: var(--text); font: 500 16px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+}
+.wrap { max-width: 520px; margin: 0 auto; box-sizing: border-box; min-height: 100dvh; padding: max(12px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 20px; }
+.top { display: flex; align-items: center; gap: 10px; font: 800 16px/1.05 var(--body); }
+.top img { width: 44px; height: 44px; border-radius: 50%; }
+.top span span { display: block; color: var(--yellow); }
+h1, h2 { font-family: var(--display); font-weight: 800; line-height: 1.05; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 { font-size: clamp(32px, 9vw, 44px); }
+h2 { font-size: 22px; line-height: 1.15; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.eyebrow { font: 800 12px/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+.screen { display: grid; gap: 18px; animation: in .3s ease both; }
+@keyframes in { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.center { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 10vh 12px; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px 16px; display: grid; gap: 12px; }
+.q .num { font: 800 12px/1 var(--body); color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.opt { appearance: none; text-align: left; cursor: pointer; font: 700 16px/1.25 var(--body); color: var(--text); background: rgba(0,0,0,.22); border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; gap: 12px; align-items: center; width: 100%; }
+.opt .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); flex: none; box-sizing: border-box; }
+.opt.on { border-color: var(--pink); background: rgba(255, 79, 163, .14); }
+.opt.on .dot { border: 6px solid var(--pink); }
+.btn { appearance: none; border: 0; cursor: pointer; font: 800 17px/1 var(--body); color: #fff; background: var(--grad); border-radius: 999px; padding: 18px 28px; width: 100%; box-shadow: 0 10px 30px -10px rgba(255, 79, 163, 0.7); }
+.btn:disabled { opacity: .5; box-shadow: none; }
+.note { text-align: center; font: 700 15px/1.3 var(--body); min-height: 1.3em; }
+.note.ok { color: var(--good); }
+.note.err { color: var(--bad); }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+.res { display: grid; gap: 8px; }
+.bar { position: relative; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,.25); border: 1px solid var(--line); padding: 11px 14px; display: flex; justify-content: space-between; gap: 12px; font: 700 15px/1.25 var(--body); }
+.bar .fill { position: absolute; inset: 0 auto 0 0; background: rgba(255,255,255,.1); z-index: 0; transition: width .8s ease; }
+.bar.top .fill { background: var(--grad); opacity: .55; }
+.bar.mine { border-color: var(--yellow); }
+.bar > span { position: relative; z-index: 1; }
+.bar .pc { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pulse { width: 76px; height: 76px; border-radius: 24px; display: grid; place-items: center; background: var(--grad); font-size: 34px; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .screen, .pulse { animation: none; } .bar .fill { transition: none; } }
+</style>
+<link rel="icon" type="image/png" href="brand/music-favicon.png">
+<link rel="apple-touch-icon" href="brand/music-apple-touch-icon.png">
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><img src="brand/kaifzeit-music-logo.png" alt=""><span>KAIFZEIT<span>Голосование</span></span></div>
+  <main id="app"></main>
+</div>
+<script>
+(() => {
+  const API = '/api/poll/';
+  const app = document.getElementById('app');
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') el.className = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else if (v !== false && v != null) el.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(kid));
+    return el;
+  };
+  const show = (...nodes) => app.replaceChildren(h('section', { class: 'screen' }, ...nodes));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  let pid = store.get('kz_poll_pid', '');
+  if (!/^[A-Za-z0-9-]{8,64}$/.test(pid)) {
+    pid = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
+    store.set('kz_poll_pid', pid);
+  }
+
+  let S = null, shown = '', picks = {}, sending = false;
+
+  function renderOff() {
+    show(h('div', { class: 'center' },
+      h('div', { class: 'pulse', 'aria-hidden': 'true' }, '🗳️'),
+      h('h1', {}, 'Голосование скоро начнётся'),
+      h('p', { class: 'muted' }, 'Не закрывай страницу — вопросы появятся здесь сами.')
+    ));
+  }
+
+  function renderVote(st) {
+    picks = { ...(st.mine || {}) };
+    const qs = st.questions;
+    const note = h('p', { class: 'note' + (st.mine ? ' ok' : '') }, st.mine ? 'Голос принят ✓ Можно изменить, пока голосование открыто' : '');
+    const btn = h('button', { class: 'btn', type: 'button' }, st.mine ? 'Изменить голос' : 'Проголосовать');
+    const refresh = () => {
+      const done = qs.filter((q) => Number.isInteger(picks[q.id])).length;
+      btn.disabled = sending || done < qs.length;
+      if (!st.mine && !note.classList.contains('err')) note.textContent = done < qs.length ? `Ответь на все вопросы: ${done} из ${qs.length}` : '';
+    };
+    const cards = qs.map((q, qi) => {
+      const btns = q.options.map((o, oi) => {
+        const b = h('button', { class: 'opt' + (picks[q.id] === oi ? ' on' : ''), type: 'button', 'aria-pressed': String(picks[q.id] === oi), onclick: () => {
+          picks[q.id] = oi;
+          btns.forEach((x, i) => { x.classList.toggle('on', i === oi); x.setAttribute('aria-pressed', String(i === oi)); });
+          if (note.classList.contains('err')) note.className = 'note';
+          refresh();
+        } }, h('span', { class: 'dot' }), h('span', {}, o));
+        return b;
+      });
+      return h('div', { class: 'q' }, qs.length > 1 ? h('span', { class: 'num' }, `Вопрос ${qi + 1} из ${qs.length}`) : null, h('h2', {}, q.text), btns);
+    });
+    btn.addEventListener('click', async () => {
+      sending = true; refresh();
+      try {
+        const res = await fetch(API + 'vote', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pid, session: st.session, answers: picks }) });
+        if (res.status === 409) { note.className = 'note err'; note.textContent = 'Голосование уже закрыто'; poll(); return; }
+        if (!res.ok) throw new Error('http ' + res.status);
+        st.mine = { ...picks };
+        note.className = 'note ok'; note.textContent = 'Голос принят ✓ Можно изменить, пока голосование открыто';
+        btn.textContent = 'Изменить голос';
+      } catch (e) {
+        note.className = 'note err'; note.textContent = 'Не получилось отправить, попробуй ещё раз';
+      } finally { sending = false; refresh(); }
+    });
+    show(
+      h('div', { style: 'display:grid;gap:8px' }, h('span', { class: 'eyebrow' }, 'Голосование'), h('h1', {}, st.title || 'Твой выбор')),
+      cards, btn, note
+    );
+    refresh();
+  }
+
+  function renderResults(st) {
+    const mine = st.mine || {};
+    const cards = st.results.map((r, qi) => {
+      const max = Math.max(...r.counts);
+      return h('div', { class: 'q' },
+        st.results.length > 1 ? h('span', { class: 'num' }, `Вопрос ${qi + 1} · ${r.total} ${plural(r.total, 'голос', 'голоса', 'голосов')}`) : h('span', { class: 'num' }, `${r.total} ${plural(r.total, 'голос', 'голоса', 'голосов')}`),
+        h('h2', {}, r.text),
+        h('div', { class: 'res' }, r.options.map((o, oi) => {
+          const pc = r.total ? Math.round(r.counts[oi] * 100 / r.total) : 0;
+          return h('div', { class: 'bar' + (max > 0 && r.counts[oi] === max ? ' top' : '') + (mine[r.id] === oi ? ' mine' : '') },
+            h('i', { class: 'fill', style: `width:${pc}%` }),
+            h('span', {}, o + (mine[r.id] === oi ? ' · твой голос' : '')),
+            h('span', { class: 'pc' }, `${pc}%`));
+        }))
+      );
+    });
+    show(h('div', { style: 'display:grid;gap:8px' }, h('span', { class: 'eyebrow' }, 'Результаты'), h('h1', {}, st.title || 'Итоги голосования')), cards);
+  }
+
+  const plural = (n, one, few, many) => {
+    const a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+  };
+
+  function render(st) {
+    S = st;
+    const key = st.phase === 'off' ? 'off' : st.phase + ':' + st.session + (st.phase === 'results' ? ':' + JSON.stringify(st.results.map((r) => r.counts)) : '');
+    if (key === shown) return;
+    // Don't wipe a half-filled ballot just because the poll refreshed
+    shown = key;
+    if (st.phase === 'off') renderOff();
+    else if (st.phase === 'open') renderVote(st);
+    else renderResults(st);
+  }
+
+  let timer = null;
+  async function poll() {
+    clearTimeout(timer);
+    try {
+      const res = await fetch(API + 'state?pid=' + encodeURIComponent(pid), { cache: 'no-store' });
+      if (res.ok) render(await res.json());
+    } catch (e) {}
+    timer = setTimeout(poll, document.hidden ? 8000 : 3000);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+  renderOff();
+  poll();
+})();
+</script>
+</body>
+</html>
