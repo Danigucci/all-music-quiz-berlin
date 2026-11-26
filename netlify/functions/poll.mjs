@@ -51,6 +51,7 @@ export default async (req) => {
     if (action === 'save') return json(200, await poll.saveDraft(data));
     if (action === 'open') return json(200, await poll.open(data));
     if (action === 'results') return json(200, await poll.showResults());
+    if (action === 'pause') return json(200, await poll.pause());
     if (action === 'resume') return json(200, await poll.resume());
     if (action === 'close') return json(200, await poll.close());
   }

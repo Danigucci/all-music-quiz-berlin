@@ -107,6 +107,14 @@ p { margin: 0; }
     ));
   }
 
+  function renderClosed(st) {
+    show(h('div', { class: 'center' },
+      h('div', { class: 'pulse', 'aria-hidden': 'true' }, '⏸️'),
+      h('h1', {}, 'Голосование закрыто'),
+      h('p', { class: 'muted' }, st.mine ? 'Твой голос учтён. Результаты скоро покажем на экране.' : 'Результаты скоро покажем на экране.')
+    ));
+  }
+
   function renderVote(st) {
     picks = { ...(st.mine || {}) };
     const qs = st.questions;
@@ -181,6 +189,7 @@ p { margin: 0; }
     shown = key;
     if (st.phase === 'off') renderOff();
     else if (st.phase === 'open') renderVote(st);
+    else if (st.phase === 'closed') renderClosed(st);
     else renderResults(st);
   }
 

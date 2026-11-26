@@ -97,16 +97,24 @@ export function createPoll(store) {
 
   async function showResults() {
     const state = await readState();
-    if (state.phase === 'open') await writeState({ ...state, phase: 'results' });
+    if (state.phase === 'open' || state.phase === 'closed') await writeState({ ...state, phase: 'results' });
+    return hostStatus();
+  }
+
+  // Stop taking votes but keep them and stay on the same screen
+  async function pause() {
+    const state = await readState();
+    if (state.phase === 'open') await writeState({ ...state, phase: 'closed' });
     return hostStatus();
   }
 
   async function resume() {
     const state = await readState();
-    if (state.phase === 'results') await writeState({ ...state, phase: 'open' });
+    if (state.phase === 'results' || state.phase === 'closed') await writeState({ ...state, phase: 'open' });
     return hostStatus();
   }
 
+  // Back to the question editor: the votes are deleted, the questions stay
   async function close() {
     const prev = await readState();
     await writeState({ phase: 'off', session: null, questions: [] });
@@ -119,5 +127,5 @@ export function createPoll(store) {
     await Promise.all(blobs.map((b) => store.delete(b.key)));
   }
 
-  return { view, vote, hostStatus, saveDraft, open, showResults, resume, close };
+  return { view, vote, hostStatus, saveDraft, open, showResults, pause, resume, close };
 }

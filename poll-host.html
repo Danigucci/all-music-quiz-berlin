@@ -112,7 +112,7 @@ input:focus { border-color: var(--pink); outline: none; }
   <footer class="foot" id="foot" hidden>
     <div class="tools">
       <button class="btn ghost small" type="button" id="fs">Во весь экран</button>
-      <button class="btn ghost small danger" type="button" id="close">Закрыть голосование</button>
+      <button class="btn ghost small danger" type="button" id="edit">Изменить вопросы</button>
       <button class="btn ghost small" type="button" id="logout">Выйти</button>
     </div>
     <div id="primary-slot"></div>
@@ -226,17 +226,22 @@ input:focus { border-color: var(--pink); outline: none; }
   }
 
   // ---------- voting open: QR + live counter ----------
+  // The QR screen, both while votes are taken and after the host closed the vote
   function renderOpen(st) {
     const voters = st.voters || 0;
+    const isOpen = st.phase === 'open';
     topRight.replaceChildren('Проголосовали: ', h('b', {}, voters));
-    primarySlot.replaceChildren(h('button', { class: 'btn', type: 'button', onclick: () => act('results') }, 'Показать результаты'));
+    primarySlot.replaceChildren(h('div', { style: 'display:flex;gap:10px;flex-wrap:wrap' },
+      isOpen
+        ? h('button', { class: 'btn ghost', type: 'button', onclick: () => act('pause') }, 'Закрыть голосование')
+        : h('button', { class: 'btn ghost', type: 'button', onclick: () => act('resume') }, 'Открыть голосование'),
+      h('button', { class: 'btn', type: 'button', onclick: () => act('results') }, 'Показать результаты')));
     show(h('div', { class: 'lobby' },
       h('div', { class: 'qr' }, h('img', { src: 'qr/poll.svg', alt: 'QR-код: kaifzeit.com/poll.html' }), h('p', {}, 'kaifzeit.com/poll.html')),
       h('div', { class: 'lobby-right' },
-        h('span', { class: 'eyebrow' }, 'Голосование открыто'),
+        h('span', { class: 'eyebrow', style: isOpen ? null : 'color:var(--muted)' }, isOpen ? 'Голосование открыто' : 'Голосование закрыто'),
         h('h1', {}, st.title ? st.title : ['Наведи камеру на QR ', h('span', { class: 'grad-text' }, 'и голосуй')]),
-        h('div', { class: 'count', id: 'count' }, voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали'))),
-        h('ul', { class: 'qlist' }, st.questions.map((q) => h('li', {}, q.text)))
+        h('div', { class: 'count', id: 'count' }, voters, h('small', {}, plural(voters, 'гость проголосовал', 'гостя проголосовали', 'гостей проголосовали')))
       )
     ));
   }
@@ -290,12 +295,12 @@ input:focus { border-color: var(--pink); outline: none; }
   function render(st) {
     S = st;
     foot.hidden = false;
-    document.getElementById('close').hidden = st.phase === 'off';
-    const key = st.phase === 'off' ? 'off' : st.phase === 'results' ? 'results:' + JSON.stringify((st.results || []).map((r) => r.counts)) : 'open:' + JSON.stringify(st.questions.map((q) => q.id));
-    if (key === shown) { if (st.phase === 'open') updateOpen(st); return; }
+    document.getElementById('edit').hidden = st.phase === 'off';
+    const key = st.phase === 'off' ? 'off' : st.phase === 'results' ? 'results:' + JSON.stringify((st.results || []).map((r) => r.counts)) : st.phase + ':' + JSON.stringify(st.questions.map((q) => q.id));
+    if (key === shown) { if (st.phase === 'open' || st.phase === 'closed') updateOpen(st); return; }
     shown = key;
     if (st.phase === 'off') renderEditor(st);
-    else if (st.phase === 'open') renderOpen(st);
+    else if (st.phase === 'open' || st.phase === 'closed') renderOpen(st);
     else renderResults(st);
   }
 
@@ -334,8 +339,8 @@ input:focus { border-color: var(--pink); outline: none; }
   }
 
   document.getElementById('logout').addEventListener('click', () => logout());
-  document.getElementById('close').addEventListener('click', () => {
-    if (confirm('Закрыть голосование? Голоса удалятся, гости увидят, что голосование закрыто. Вопросы останутся для следующего раза.')) act('close');
+  document.getElementById('edit').addEventListener('click', () => {
+    if (confirm('Перейти к редактору вопросов? Собранные голоса удалятся, вопросы останутся.')) act('close');
   });
   document.getElementById('fs').addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
