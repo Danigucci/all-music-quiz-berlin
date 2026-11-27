@@ -4,7 +4,7 @@ const GAME_HOURS = 3; // length of the calendar event
 const GAMES = {
   "07.10.26": { title: "Осенняя серия игр", time: "19:00", place: PLACE, price: "12 €", closeAt: "2026-10-07T18:00:00+02:00" },
   "18.11.26": { title: "День рождения квиза: нам ровно год!", time: "19:00", place: PLACE, price: "15 €", closeAt: "2026-11-18T19:00:00+01:00" },
-  "15.12.26": { title: "Новогодний движ", time: "19:00", place: PLACE, price: "12 €", closeAt: "2026-12-15T19:00:00+01:00" },
+  "15.12.26": { title: "Новогодняя игра про футбол и спорт", time: "19:00", place: PLACE, price: "12 €", closeAt: "2026-12-15T19:00:00+01:00" },
 };
 
 export default async (req) => {
